@@ -1,12 +1,7 @@
 package com.kubeiwu.DisLrucache;
 
-import com.kubeiwu.DisLrucache.R;
-import com.kubeiwu.DisLrucache.R.id;
-import com.kubeiwu.DisLrucache.R.layout;
-import com.kubeiwu.DisLrucache.R.menu;
-
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 

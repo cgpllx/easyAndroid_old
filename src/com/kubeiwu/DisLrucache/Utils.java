@@ -1,5 +1,10 @@
 package com.kubeiwu.DisLrucache;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -10,11 +15,6 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class Utils {
 	public static int getAppVersion1(Context context) {

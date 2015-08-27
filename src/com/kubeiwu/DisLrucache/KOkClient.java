@@ -15,15 +15,6 @@
  */
 package com.kubeiwu.DisLrucache;
 
-import android.text.TextUtils;
-
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.ResponseBody;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,9 +26,15 @@ import retrofit.client.Client;
 import retrofit.client.Header;
 import retrofit.client.Request;
 import retrofit.client.Response;
-import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
+import android.text.TextUtils;
+
+import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.ResponseBody;
 
 /** Retrofit client that uses OkHttp for communication. */
 public class KOkClient implements Client {
