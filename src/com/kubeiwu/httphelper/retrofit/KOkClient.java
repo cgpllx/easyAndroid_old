@@ -91,7 +91,6 @@ public class KOkClient implements Client {
 	@Override
 	public Response execute(Request request) throws IOException {
 
-		// com.squareup.okhttp.Response t = client.newCall(createRequest(request)).execute();
 
 		// 请求模式只能通过herder传过来 又因为header中重写了equals方法，只要比较key和value就可以了
 		// List<Header> lists=request.getHeaders();
