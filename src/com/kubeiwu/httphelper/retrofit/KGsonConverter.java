@@ -24,16 +24,15 @@ import java.lang.reflect.Type;
 import retrofit.converter.ConversionException;
 import retrofit.converter.Converter;
 import retrofit.mime.MimeUtil;
+import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import com.kubeiwu.httphelper.cache.IOUtils;
 import com.kubeiwu.httphelper.cache.KOkhttpCache;
-import com.kubeiwu.httphelper.cache.Utils;
-import com.kubeiwu.httphelper.text.JsonResult;
-import com.squareup.okhttp.internal.Util;
+import com.kubeiwu.httphelper.cache.volley.Cache.Entry;
+import com.kubeiwu.httphelper.cache.volley.DiskBasedCache;
 
 /**
  * A {@link Converter} which uses GSON for serialization and deserialization of entities.
@@ -42,20 +41,20 @@ import com.squareup.okhttp.internal.Util;
  */
 public class KGsonConverter implements Converter {
 	private final Gson gson;
-	private final KOkhttpCache kOkhttpCache;
+	private final DiskBasedCache kOkhttpCache;
 	private String charset;
 
 	/**
 	 * Create an instance using the supplied {@link Gson} object for conversion. Encoding to JSON and decoding from JSON (when no charset is specified by a header) will use UTF-8.
 	 */
-	public KGsonConverter(Gson gson, KOkhttpCache kOkhttpCache) {
+	public KGsonConverter(Gson gson, DiskBasedCache kOkhttpCache) {
 		this(gson, kOkhttpCache, "UTF-8");
 	}
 
 	/**
 	 * Create an instance using the supplied {@link Gson} object for conversion. Encoding to JSON and decoding from JSON (when no charset is specified by a header) will use the specified charset.
 	 */
-	public KGsonConverter(Gson gson, KOkhttpCache kOkhttpCache, String charset) {
+	public KGsonConverter(Gson gson, DiskBasedCache kOkhttpCache, String charset) {
 		this.gson = gson;
 		this.charset = charset;
 		this.kOkhttpCache = kOkhttpCache;
@@ -71,15 +70,11 @@ public class KGsonConverter implements Converter {
 
 		try {
 			isr = new InputStreamReader(body.in(), charset);
-			// gson.f
 			KResult j = gson.fromJson(isr, type);
 			if (j.isSuccess()) {
 				System.out.println("成功");
 				// kOkhttpCache.put(url, body);
 				// 这里开始缓存
-				// gson.t
-				// Cache.put(typedInput)
-
 			}
 			return j;
 		} catch (IOException e) {
@@ -98,17 +93,21 @@ public class KGsonConverter implements Converter {
 
 	public Object fromBody(String url, TypedInput body, Type type) throws ConversionException {
 		String charset = this.charset;
-		System.out.println("body.mimeType()" + body.mimeType());
 		if (body.mimeType() != null) {
 			charset = MimeUtil.parseCharset(body.mimeType(), charset);
 		}
 		InputStreamReader isr = null;
-
 		try {
 			isr = new InputStreamReader(body.in(), charset);
 			KResult result = gson.fromJson(isr, type);
-			if (result != null && result.isSuccess()) {
-				kOkhttpCache.put(url, gson.toJson(result));
+			if (result != null && result.isSuccess()) {//保存
+				System.out.println("保存开始");
+				Entry entry = new Entry();
+				entry.data = gson.toJson(result).getBytes(charset);
+//				entry.responseHeaders = null;
+				entry.mimeType = body.mimeType();
+				kOkhttpCache.put(url, entry);
+				System.out.println("完成");
 			}
 			return result;
 		} catch (IOException e) {

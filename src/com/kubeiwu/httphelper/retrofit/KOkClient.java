@@ -19,7 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.http.HttpStatus;
 
 import okio.BufferedSink;
 import retrofit.client.Client;
@@ -29,16 +32,16 @@ import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
-import android.content.Context;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
-import com.kubeiwu.httphelper.cache.KOkhttpCache;
+import com.kubeiwu.httphelper.cache.volley.Cache.Entry;
+import com.kubeiwu.httphelper.cache.volley.DiskBasedCache;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
+import com.squareup.okhttp.internal.spdy.Http2;
 
 /** Retrofit client that uses OkHttp for communication. */
 public class KOkClient implements Client {
@@ -55,7 +58,7 @@ public class KOkClient implements Client {
 	// this(generateDefaultOkHttp());
 	// }
 
-	public KOkClient(KOkhttpCache kOkhttpCache, OkHttpClient client) throws IOException {
+	public KOkClient(DiskBasedCache kOkhttpCache, OkHttpClient client) throws IOException {
 		if (client == null)
 			throw new NullPointerException("client == null");
 		this.client = client;
@@ -63,7 +66,7 @@ public class KOkClient implements Client {
 
 	}
 
-	private final KOkhttpCache kOkhttpCache;// = new KOkhttpCache(context, 1);
+	private final DiskBasedCache kOkhttpCache;// = new KOkhttpCache(context, 1);
 
 	/**
 	 * 请求策越
@@ -71,11 +74,18 @@ public class KOkClient implements Client {
 	 * @author Administrator
 	 *
 	 */
-	public interface RequestMode {
+	interface RequestMode {
 		String LOAD_DEFAULT = "LOAD_DEFAULT";// 默认不处理
 		String LOAD_NETWORK_ONLY = "LOAD_NETWORK_ONLY";// 只从网络获取
 		String LOAD_NETWORK_ELSE_CACHE = "LOAD_NETWORK_ELSE_CACHE";// 先从网络获取，网络没有取本地
 		String LOAD_CACHE_ELSE_NETWORK = "LOAD_CACHE_ELSE_NETWORK";// 先从本地获取，本地没有取网络
+	}
+
+	public interface CacheMode {
+		String LOAD_DEFAULT = "RequestMode: " + RequestMode.LOAD_DEFAULT;
+		String LOAD_NETWORK_ONLY = "RequestMode: " + RequestMode.LOAD_NETWORK_ONLY;
+		String LOAD_NETWORK_ELSE_CACHE = "RequestMode: " + RequestMode.LOAD_NETWORK_ELSE_CACHE;
+		String LOAD_CACHE_ELSE_NETWORK = "RequestMode: " + RequestMode.LOAD_CACHE_ELSE_NETWORK;
 	}
 
 	@Override
@@ -90,24 +100,41 @@ public class KOkClient implements Client {
 		String headerValue = okhttpRequest.header("RequestMode");
 		if (!TextUtils.isEmpty(headerValue)) {
 			switch (headerValue) {
-				case RequestMode.LOAD_NETWORK_ELSE_CACHE:
-					Response response = null;
+				case RequestMode.LOAD_NETWORK_ELSE_CACHE:// 先网络然后再缓存
 					try {
-						response = parseResponse(client.newCall(okhttpRequest).execute());
+						return parseResponse(client.newCall(okhttpRequest).execute());
 						// response 不会为空，new出来的
 					} catch (Exception e) {
-						e.printStackTrace();
-						TypedInput typedInput = kOkhttpCache.getAsTypedInput(request.getUrl());
-						// -----------------------------------------------------这里应该是响应headers
-						response = new Response(request.getUrl(), 200, "cache", request.getHeaders(), typedInput);
+
+						Entry entry = kOkhttpCache.get(request.getUrl());// 充缓存中获取entry
+						if (entry != null && entry.data != null) {// 如果有数据就使用缓存
+							TypedInput typedInput = new TypedByteArray(entry.mimeType, entry.data);
+
+							Map<String, String> map = entry.responseHeaders;
+							List<Header> headers = new ArrayList<>();
+							if (map != null && !map.isEmpty()) {
+								for (String key : map.keySet()) {
+									headers.add(new Header(key, map.get(key)));
+								}
+							}
+							return new Response(request.getUrl(), 200, "cache", headers, typedInput);
+						}
 					}
-					System.out.println("--网络--缓存");
-					return response;
-				case RequestMode.LOAD_CACHE_ELSE_NETWORK:
-					byte[] bytes = kOkhttpCache.getAsBytes(request.getUrl());
-					if (bytes != null) {
-						TypedInput typedInput = new TypedByteArray("application/json;charset=UTF-8", kOkhttpCache.getAsBytes(request.getUrl()));
-						return new Response(request.getUrl(), 200, "cache", request.getHeaders(), typedInput);
+
+				case RequestMode.LOAD_CACHE_ELSE_NETWORK:// 先缓存再网络
+
+					Entry entry = kOkhttpCache.get(request.getUrl());// 充缓存中获取entry
+					if (entry != null && entry.data != null) {// 如果有数据就使用缓存
+						TypedInput typedInput = new TypedByteArray(entry.mimeType, entry.data);
+
+						Map<String, String> map = entry.responseHeaders;
+						List<Header> headers = new ArrayList<>();
+						if (map != null && !map.isEmpty()) {
+							for (String key : map.keySet()) {
+								headers.add(new Header(key, map.get(key)));
+							}
+						}
+						return new Response(request.getUrl(), 200, "cache", headers, typedInput);
 					} else {
 						return parseResponse(client.newCall(createRequest(request)).execute());
 					}

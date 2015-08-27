@@ -86,6 +86,7 @@ public class KOkhttpCache extends DiskLruCacheHelper {
 			long length = IOUtils.readLong(cis);// 暂时没有用到，先放在这里
 			byte[] data = streamToBytes(cis, (int) (snapshot.getLength(0) - cis.bytesRead));
 			System.out.println("data===" + data.length);
+			System.out.println("snapshot===" + snapshot.getLength(0));
 			System.out.println("length===" + length);
 			TypedByteArray typedByteArray = new TypedByteArray(mimeType, data);
 			return typedByteArray;

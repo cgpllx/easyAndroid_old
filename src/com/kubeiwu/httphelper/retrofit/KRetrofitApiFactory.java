@@ -9,8 +9,8 @@ import retrofit.KRestAdapter;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.kubeiwu.httphelper.cache.KOkhttpCache;
 import com.kubeiwu.httphelper.cache.Utils;
+import com.kubeiwu.httphelper.cache.volley.DiskBasedCache;
 import com.kubeiwu.httphelper.manager.cookiesmanager.PersistentCookieStore;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -33,8 +33,8 @@ public class KRetrofitApiFactory {
 	 * @throws IOException
 	 */
 	public void init(Context context) throws IOException {
-		KOkhttpCache kOkhttpCache = new KOkhttpCache(context.getApplicationContext(), 1);
-
+		DiskBasedCache kOkhttpCache = new DiskBasedCache(Utils.getDiskCacheDir(context.getApplicationContext(), "volleycache"));
+		kOkhttpCache.initialize();
 		OkHttpClient client = new OkHttpClient();
 		client.setConnectTimeout(15 * 1000, TimeUnit.MILLISECONDS);
 		client.setReadTimeout(20 * 1000, TimeUnit.MILLISECONDS);
