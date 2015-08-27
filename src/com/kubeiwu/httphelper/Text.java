@@ -8,7 +8,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-import com.kubeiwu.DisLrucache.manager.cookiesmanager.PersistentCookieStore;
+import com.kubeiwu.httphelper.manager.cookiesmanager.PersistentCookieStore;
 import com.squareup.okhttp.OkHttpClient;
 
 public class Text {

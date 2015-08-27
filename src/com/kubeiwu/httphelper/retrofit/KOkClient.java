@@ -26,11 +26,14 @@ import retrofit.client.Client;
 import retrofit.client.Header;
 import retrofit.client.Request;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
+import android.content.Context;
 import android.text.TextUtils;
 
-import com.kubeiwu.DisLrucache.cache.KOkhttpCache;
+import com.google.gson.Gson;
+import com.kubeiwu.httphelper.cache.KOkhttpCache;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -48,17 +51,19 @@ public class KOkClient implements Client {
 
 	private final OkHttpClient client;
 
-	public KOkClient() {
-		this(generateDefaultOkHttp());
-	}
+	// private KOkClient() {
+	// this(generateDefaultOkHttp());
+	// }
 
-	public KOkClient(OkHttpClient client) {
+	public KOkClient(KOkhttpCache kOkhttpCache, OkHttpClient client) throws IOException {
 		if (client == null)
 			throw new NullPointerException("client == null");
 		this.client = client;
+		this.kOkhttpCache = kOkhttpCache;
+
 	}
 
-	KOkhttpCache kOkhttpCache = null;
+	private final KOkhttpCache kOkhttpCache;// = new KOkhttpCache(context, 1);
 
 	/**
 	 * 请求策越
@@ -76,9 +81,8 @@ public class KOkClient implements Client {
 	@Override
 	public Response execute(Request request) throws IOException {
 
-//		com.squareup.okhttp.Response t = client.newCall(createRequest(request)).execute();
+		// com.squareup.okhttp.Response t = client.newCall(createRequest(request)).execute();
 
-		// Response r = new Response(request.getUrl(), 200, "cache", request.getHeaders(), body);
 		// 请求模式只能通过herder传过来 又因为header中重写了equals方法，只要比较key和value就可以了
 		// List<Header> lists=request.getHeaders();
 		com.squareup.okhttp.Request okhttpRequest = createRequest(request);
@@ -86,11 +90,6 @@ public class KOkClient implements Client {
 		String headerValue = okhttpRequest.header("RequestMode");
 		if (!TextUtils.isEmpty(headerValue)) {
 			switch (headerValue) {
-				case RequestMode.LOAD_DEFAULT:
-
-					break;
-				case RequestMode.LOAD_NETWORK_ONLY:
-					return parseResponse(client.newCall(okhttpRequest).execute());
 				case RequestMode.LOAD_NETWORK_ELSE_CACHE:
 					Response response = null;
 					try {
@@ -102,32 +101,22 @@ public class KOkClient implements Client {
 						// -----------------------------------------------------这里应该是响应headers
 						response = new Response(request.getUrl(), 200, "cache", request.getHeaders(), typedInput);
 					}
+					System.out.println("--网络--缓存");
 					return response;
 				case RequestMode.LOAD_CACHE_ELSE_NETWORK:
-					response = null;
-					try {
-						response = parseResponse(client.newCall(okhttpRequest).execute());
-						//
-					} catch (Exception e) {
-						e.printStackTrace();
-						TypedInput typedInput = kOkhttpCache.getAsTypedInput(request.getUrl());
-						// -----------------------------------------------------这里应该是响应headers
-						response = new Response(request.getUrl(), 200, "cache", request.getHeaders(), typedInput);
+					byte[] bytes = kOkhttpCache.getAsBytes(request.getUrl());
+					if (bytes != null) {
+						TypedInput typedInput = new TypedByteArray("application/json;charset=UTF-8", kOkhttpCache.getAsBytes(request.getUrl()));
+						return new Response(request.getUrl(), 200, "cache", request.getHeaders(), typedInput);
+					} else {
+						return parseResponse(client.newCall(createRequest(request)).execute());
 					}
-					break;
-
+				case RequestMode.LOAD_DEFAULT:
+				case RequestMode.LOAD_NETWORK_ONLY:
 				default:
-					break;
+					return parseResponse(client.newCall(okhttpRequest).execute());
 			}
 		}
-		// request.equals(o)
-		// if (缓存) {
-		// TypedInput typedInput = kOkhttpCache.getAsTypedInput(request.getUrl());
-		// p = new Response(request.getUrl(), 200, "cache", request.getHeaders(), typedInput);
-		// }
-		// if (网络) {
-		// p = parseResponse(client.newCall(createRequest(request)).execute());
-		// }
 
 		return parseResponse(client.newCall(createRequest(request)).execute());
 	}

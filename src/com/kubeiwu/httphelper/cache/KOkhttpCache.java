@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.kubeiwu.DisLrucache.cache.dislrucache.DiskLruCache;
+import com.kubeiwu.httphelper.cache.dislrucache.DiskLruCache;
 
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
@@ -28,8 +28,7 @@ public class KOkhttpCache extends DiskLruCacheHelper {
 		super(context, cacheVersion);
 	}
 
-	public KOkhttpCache(Context context, String dirName, int cacheVersion)
-			throws IOException {
+	public KOkhttpCache(Context context, String dirName, int cacheVersion) throws IOException {
 		super(context, dirName, cacheVersion);
 	}
 
@@ -76,8 +75,7 @@ public class KOkhttpCache extends DiskLruCacheHelper {
 	public TypedInput getAsTypedInput(String url) {
 		CountingInputStream cis = null;
 		try {
-			DiskLruCache.Snapshot snapshot = mDiskLruCache.get(Utils
-					.hashKeyForDisk(url));
+			DiskLruCache.Snapshot snapshot = mDiskLruCache.get(Utils.hashKeyForDisk(url));
 			if (snapshot == null) // not find entry , or entry.readable = false
 			{
 				Log.e(TAG, "not find cache file , or file.readable = false");
@@ -86,8 +84,9 @@ public class KOkhttpCache extends DiskLruCacheHelper {
 			cis = new CountingInputStream(snapshot.getInputStream(0));
 			String mimeType = IOUtils.readString(cis);
 			long length = IOUtils.readLong(cis);// 暂时没有用到，先放在这里
-			byte[] data = streamToBytes(cis, cis.available() - cis.bytesRead);
-
+			byte[] data = streamToBytes(cis, (int) (snapshot.getLength(0) - cis.bytesRead));
+			System.out.println("data===" + data.length);
+			System.out.println("length===" + length);
 			TypedByteArray typedByteArray = new TypedByteArray(mimeType, data);
 			return typedByteArray;
 
@@ -112,13 +111,11 @@ public class KOkhttpCache extends DiskLruCacheHelper {
 		byte[] bytes = new byte[length];
 		int count;
 		int pos = 0;
-		while (pos < length
-				&& ((count = in.read(bytes, pos, length - pos)) != -1)) {
+		while (pos < length && ((count = in.read(bytes, pos, length - pos)) != -1)) {
 			pos += count;
 		}
 		if (pos != length) {
-			throw new IOException("Expected " + length + " bytes, read " + pos
-					+ " bytes");
+			throw new IOException("Expected " + length + " bytes, read " + pos + " bytes");
 		}
 		return bytes;
 	}
@@ -140,8 +137,7 @@ public class KOkhttpCache extends DiskLruCacheHelper {
 		}
 
 		@Override
-		public int read(byte[] buffer, int offset, int count)
-				throws IOException {
+		public int read(byte[] buffer, int offset, int count) throws IOException {
 			int result = super.read(buffer, offset, count);
 			if (result != -1) {
 				bytesRead += result;

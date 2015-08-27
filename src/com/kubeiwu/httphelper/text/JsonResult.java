@@ -1,17 +1,29 @@
-package com.kubeiwu.httphelper;
+package com.kubeiwu.httphelper.text;
+
+import com.kubeiwu.httphelper.retrofit.KResult;
 
 /**
  * 用来解析登录的返回结果
  * 
  * @author Administrator
+ * @param <T>
  *
  * @param <T>
  * 
  */
-public class JsonResult {
+public class JsonResult<T> implements KResult {
 
 	private String code;
 	private String desc;
+	private T data;
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
 
 	public boolean isSuccess() {
 		return "C0000".equals(code);

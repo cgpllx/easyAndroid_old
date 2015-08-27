@@ -65,8 +65,7 @@ public class Utils {
 		int w = drawable.getIntrinsicWidth();
 		int h = drawable.getIntrinsicHeight();
 		// 取 drawable 的颜色格式
-		Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-				: Bitmap.Config.RGB_565;
+		Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
 		// 建立对应 bitmap
 		Bitmap bitmap = Bitmap.createBitmap(w, h, config);
 		// 建立对应 bitmap 的画布
@@ -89,15 +88,14 @@ public class Utils {
 		bd.setTargetDensity(bm.getDensity());
 		return new BitmapDrawable(bm);
 	}
+
 	// =======================================
 	// ============== 序列化 数据 读写 =============
 	// =======================================
 
 	public static File getDiskCacheDir(Context context, String uniqueName) {
 		String cachePath;
-		if (Environment.MEDIA_MOUNTED.equals(Environment
-				.getExternalStorageState())
-				|| !Environment.isExternalStorageRemovable()) {
+		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
 			cachePath = context.getExternalCacheDir().getPath();
 		} else {
 			cachePath = context.getCacheDir().getPath();

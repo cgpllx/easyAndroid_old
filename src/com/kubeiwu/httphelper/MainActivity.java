@@ -1,6 +1,13 @@
 package com.kubeiwu.httphelper;
 
+import java.io.IOException;
+import java.util.List;
+
 import com.kubeiwu.DisLrucache.R;
+import com.kubeiwu.httphelper.retrofit.KRetrofitApiFactory;
+import com.kubeiwu.httphelper.text.Api;
+import com.kubeiwu.httphelper.text.AreaInfo;
+import com.kubeiwu.httphelper.text.JsonResult;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -13,6 +20,35 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		try {
+			KRetrofitApiFactory.getInstance().init(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		final Api api = KRetrofitApiFactory.getInstance().getApi(Api.class, "http://192.168.0.241/xinfang-xpt");
+		new Thread() {
+			public void run() {
+				System.out.println("开始");
+				try {
+					JsonResult<?> d = api.login();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					JsonResult<List<AreaInfo>> list=api.getCity();
+					
+					List<AreaInfo> areaInfos=list.getData();
+					for(AreaInfo areaInfo:areaInfos){
+						list.getData().get(0).getName();
+						System.out.println(areaInfo.getName());
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+//				System.out.println(d);
+			};
+		}.start();
 	}
 
 	@Override

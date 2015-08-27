@@ -38,25 +38,20 @@ public class DiskLruCacheHelper {
 
 	protected final DiskLruCache mDiskLruCache;
 
-	public DiskLruCacheHelper(Context context, int cacheVersion)
-			throws IOException {
-		this(context,DIR_NAME,cacheVersion);
+	public DiskLruCacheHelper(Context context, int cacheVersion) throws IOException {
+		this(context, DIR_NAME, cacheVersion);
 	}
 
 	public DiskLruCacheHelper(Context context) throws IOException {
-		this(context,DEFAULT_CACHE_VERSION);
+		this(context, DEFAULT_CACHE_VERSION);
 	}
 
-	public DiskLruCacheHelper(Context context, String dirName,int cacheVersion)
-			throws IOException {
-		mDiskLruCache = generateCache(context, dirName, cacheVersion,DEFAULT_VALUECOUNT,MAX_SIZE);
+	public DiskLruCacheHelper(Context context, String dirName, int cacheVersion) throws IOException {
+		mDiskLruCache = generateCache(context, dirName, cacheVersion, DEFAULT_VALUECOUNT, MAX_SIZE);
 	}
 
-
-	private DiskLruCache generateCache(Context context, String dirName,
-			int cacheVersion, int valueCount, long maxSize) throws IOException {
-		DiskLruCache diskLruCache = DiskLruCache.open(
-				Utils.getDiskCacheDir(context, dirName), //
+	private DiskLruCache generateCache(Context context, String dirName, int cacheVersion, int valueCount, long maxSize) throws IOException {
+		DiskLruCache diskLruCache = DiskLruCache.open(Utils.getDiskCacheDir(context, dirName), //
 				cacheVersion, valueCount, maxSize);
 		return diskLruCache;
 	}
@@ -250,18 +245,17 @@ public class DiskLruCacheHelper {
 		return (int) count;
 	}
 
-	public long copyLarge(InputStream input, OutputStream output)
-			throws IOException {
+	public long copyLarge(InputStream input, OutputStream output) throws IOException {
 		return copyLarge(input, output, new byte[256]);
 	}
 
-	public long copyLarge(InputStream input, OutputStream output, byte[] buffer)
-			throws IOException {
+	public long copyLarge(InputStream input, OutputStream output, byte[] buffer) throws IOException {
 		long count = 0L;
 		int n = 0;
 		while (-1 != (n = input.read(buffer))) {
 			output.write(buffer, 0, n);
 			count += n;
+			System.out.println("copyLarge="+count);
 		}
 		return count;
 	}
@@ -426,8 +420,7 @@ public class DiskLruCacheHelper {
 			DiskLruCache.Editor edit = mDiskLruCache.edit(key);
 			// edit maybe null :the entry is editing
 			if (edit == null) {
-				Log.w(TAG, "the entry spcified key:" + key
-						+ " is editing by other . ");
+				Log.w(TAG, "the entry spcified key:" + key + " is editing by other . ");
 			}
 			return edit;
 		} catch (IOException e) {
@@ -440,8 +433,7 @@ public class DiskLruCacheHelper {
 	// basic get
 	public InputStream get(String key) {
 		try {
-			DiskLruCache.Snapshot snapshot = mDiskLruCache.get(Utils
-					.hashKeyForDisk(key));
+			DiskLruCache.Snapshot snapshot = mDiskLruCache.get(Utils.hashKeyForDisk(key));
 			if (snapshot == null) // not find entry , or entry.readable = false
 			{
 				Log.e(TAG, "not find entry , or entry.readable = false");
