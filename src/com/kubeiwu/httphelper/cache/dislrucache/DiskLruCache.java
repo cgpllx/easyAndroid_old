@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.httphelper.cache.dislrucache;
 
 import java.io.BufferedWriter;
 import java.io.Closeable;

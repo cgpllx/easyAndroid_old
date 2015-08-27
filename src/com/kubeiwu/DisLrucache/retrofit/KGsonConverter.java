@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.DisLrucache.retrofit;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,6 +29,7 @@ import retrofit.mime.TypedOutput;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import com.kubeiwu.httphelper.JsonResult;
 
 /**
  * A {@link Converter} which uses GSON for serialization and deserialization of entities.

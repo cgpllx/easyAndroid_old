@@ -1,4 +1,4 @@
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.httphelper.retrofit;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -7,16 +7,18 @@ import retrofit.RestAdapter;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.kubeiwu.DisLrucache.cookiesmanager.PersistentCookieStore;
+import com.kubeiwu.DisLrucache.cache.Utils;
+import com.kubeiwu.DisLrucache.manager.cookiesmanager.PersistentCookieStore;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
-public class KRetrofitManager {
-	private final KRetrofitManager kRetrofitManager = new KRetrofitManager();
+public class KRetrofitApiFactory {
+	public static final String UNIQUENAME = "okhttpdefault";
+	private final KRetrofitApiFactory kRetrofitManager = new KRetrofitApiFactory();
 
-	private KOkClient kOkClient;
+	private KOkClient kclient;
 
-	public KRetrofitManager getInstance() {
+	public KRetrofitApiFactory getInstance() {
 		return kRetrofitManager;
 	}
 
@@ -28,9 +30,9 @@ public class KRetrofitManager {
 	public void init(Context context) {
 		OkHttpClient client = new OkHttpClient();
 		client.setCookieHandler(new CookieManager(new PersistentCookieStore(context.getApplicationContext()), CookiePolicy.ACCEPT_ORIGINAL_SERVER));
-		client.setCache(new Cache(Utils.getDiskCacheDir(context.getApplicationContext(), "okhttpdefault"), 10 * 1024 * 1024));
+		client.setCache(new Cache(Utils.getDiskCacheDir(context.getApplicationContext(), UNIQUENAME), 10 * 1024 * 1024));
 
-		kOkClient = new KOkClient(client);
+		kclient = new KOkClient(client);
 	}
 
 	/**
@@ -40,11 +42,11 @@ public class KRetrofitManager {
 	 * @param endpoint
 	 * @return
 	 */
-	public <T> T getAPI(Class<T> clazz, String endpoint) {
+	public <T> T getApi(Class<T> clazz, String endpoint) {
 		RestAdapter restAdapter = new RestAdapter.Builder()//
 				.setEndpoint(endpoint)//
 				.setConverter(new KGsonConverter(new Gson()))//
-				.setClient(kOkClient)//
+				.setClient(kclient)//
 				.build();
 		T api = restAdapter.create(clazz);
 		return api;

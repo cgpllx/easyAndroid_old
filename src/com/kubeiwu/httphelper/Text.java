@@ -1,4 +1,4 @@
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.httphelper;
 
 import java.io.IOException;
 import java.net.CookieHandler;
@@ -8,7 +8,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-import com.kubeiwu.DisLrucache.cookiesmanager.PersistentCookieStore;
+import com.kubeiwu.DisLrucache.manager.cookiesmanager.PersistentCookieStore;
 import com.squareup.okhttp.OkHttpClient;
 
 public class Text {

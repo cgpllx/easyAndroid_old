@@ -1,4 +1,4 @@
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.httphelper.cache;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -19,6 +19,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+
+import com.kubeiwu.httphelper.cache.dislrucache.DiskLruCache;
 
 /**
  * 缓存辅助类

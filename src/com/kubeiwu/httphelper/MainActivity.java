@@ -1,4 +1,6 @@
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.httphelper;
+
+import com.kubeiwu.DisLrucache.R;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

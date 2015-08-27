@@ -1,4 +1,4 @@
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.DisLrucache.cache;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,17 +17,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Environment;
 
 public class Utils {
-	public static int getAppVersion1(Context context) {
-		try {
-			PackageInfo info = context.getPackageManager().getPackageInfo(
-					context.getPackageName(), 0);
-			return info.versionCode;
-		} catch (PackageManager.NameNotFoundException e) {
-			e.printStackTrace();
-		}
-		return 1;
-	}
-
 	public static String hashKeyForDisk(String key) {
 		String cacheKey;
 		try {

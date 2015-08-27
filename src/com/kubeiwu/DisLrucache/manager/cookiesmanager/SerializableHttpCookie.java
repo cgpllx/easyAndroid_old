@@ -1,4 +1,4 @@
-package com.kubeiwu.DisLrucache.cookiesmanager;
+package com.kubeiwu.DisLrucache.manager.cookiesmanager;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

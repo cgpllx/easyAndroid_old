@@ -1,9 +1,11 @@
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.DisLrucache.cache;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import com.kubeiwu.DisLrucache.cache.dislrucache.DiskLruCache;
 
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;

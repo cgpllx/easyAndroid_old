@@ -1,4 +1,4 @@
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.DisLrucache.cache;
 
 import java.io.EOFException;
 import java.io.FilterInputStream;

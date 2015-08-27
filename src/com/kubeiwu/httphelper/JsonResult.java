@@ -1,4 +1,4 @@
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.httphelper;
 
 /**
  * 用来解析登录的返回结果

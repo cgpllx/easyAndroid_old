@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.DisLrucache.cache.dislrucache;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;

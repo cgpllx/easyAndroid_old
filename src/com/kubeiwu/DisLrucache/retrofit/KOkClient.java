@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kubeiwu.DisLrucache;
+package com.kubeiwu.DisLrucache.retrofit;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +30,7 @@ import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
 import android.text.TextUtils;
 
+import com.kubeiwu.DisLrucache.cache.KOkhttpCache;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;

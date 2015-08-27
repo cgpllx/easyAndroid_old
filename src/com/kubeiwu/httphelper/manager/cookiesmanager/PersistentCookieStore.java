@@ -1,4 +1,4 @@
-package com.kubeiwu.DisLrucache.cookiesmanager;
+package com.kubeiwu.httphelper.manager.cookiesmanager;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
