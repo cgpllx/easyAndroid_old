@@ -348,7 +348,7 @@ public class KRestAdapter {
 						Object convert;
 						if (converter instanceof KGsonConverter) {
 							KGsonConverter kGsonConverter = (KGsonConverter) converter;
-							convert = kGsonConverter.fromBody(url, body, type);
+							convert = kGsonConverter.fromBody(response, type);
 						} else {
 							convert = converter.fromBody(wrapped, type);
 						}

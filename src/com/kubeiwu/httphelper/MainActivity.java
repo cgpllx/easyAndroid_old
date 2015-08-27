@@ -29,15 +29,11 @@ public class MainActivity extends ActionBarActivity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		final Api api = KRetrofitApiFactory.getInstance().getApi(Api.class, "http://192.168.0.241/xinfang-xpt");
+		final Api api = KRetrofitApiFactory.getInstance().getApi(Api.class, "http://xf.qfang.com");
 		new Thread() {
 			public void run() {
 				System.out.println("开始");
-				try {
-					JsonResult<?> d = api.login();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		
 				try {
 					JsonResult<List<AreaInfo>> list = api.getCity();
 
@@ -46,16 +42,22 @@ public class MainActivity extends ActionBarActivity {
 						list.getData().get(0).getName();
 						System.out.println(areaInfo.getName());
 					}
-					runOnUiThread(new   Runnable() {
-						public void run() {
-							hello.setText(new Gson().toJson(areaInfos));	
-						}
-					});
+				
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				// System.out.println(d);
+				try {
+					final JsonResult<?> d = api.login();
+					runOnUiThread(new   Runnable() {
+						public void run() {
+							hello.setText(new Gson().toJson(d));	
+						}
+					});
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			};
 		}.start();
 	}

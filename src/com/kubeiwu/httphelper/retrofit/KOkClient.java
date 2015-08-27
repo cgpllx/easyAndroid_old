@@ -91,9 +91,8 @@ public class KOkClient implements Client {
 	@Override
 	public Response execute(Request request) throws IOException {
 
-
-		// 请求模式只能通过herder传过来 又因为header中重写了equals方法，只要比较key和value就可以了
-		// List<Header> lists=request.getHeaders();
+		// 请求模式只能通过herder传过来 key为RequestMode 
+		
 		com.squareup.okhttp.Request okhttpRequest = createRequest(request);
 
 		String headerValue = okhttpRequest.header("RequestMode");
@@ -109,14 +108,7 @@ public class KOkClient implements Client {
 						if (entry != null && entry.data != null) {// 如果有数据就使用缓存
 							TypedInput typedInput = new TypedByteArray(entry.mimeType, entry.data);
 
-							Map<String, String> map = entry.responseHeaders;
-							List<Header> headers = new ArrayList<>();
-							if (map != null && !map.isEmpty()) {
-								for (String key : map.keySet()) {
-									headers.add(new Header(key, map.get(key)));
-								}
-							}
-							return new Response(request.getUrl(), 200, "cache", headers, typedInput);
+							return new Response(request.getUrl(), 200, "cache", convertToList(entry.responseHeaders), typedInput);
 						}
 					}
 
@@ -126,25 +118,28 @@ public class KOkClient implements Client {
 					if (entry != null && entry.data != null) {// 如果有数据就使用缓存
 						TypedInput typedInput = new TypedByteArray(entry.mimeType, entry.data);
 
-						Map<String, String> map = entry.responseHeaders;
-						List<Header> headers = new ArrayList<>();
-						if (map != null && !map.isEmpty()) {
-							for (String key : map.keySet()) {
-								headers.add(new Header(key, map.get(key)));
-							}
-						}
-						return new Response(request.getUrl(), 200, "cache", headers, typedInput);
+						return new Response(request.getUrl(), 200, "cache", convertToList(entry.responseHeaders), typedInput);
 					} else {
 						return parseResponse(client.newCall(createRequest(request)).execute());
 					}
 				case RequestMode.LOAD_DEFAULT:
 				case RequestMode.LOAD_NETWORK_ONLY:
 				default:
-					return parseResponse(client.newCall(okhttpRequest).execute());
+					break;//直接跳出
 			}
 		}
 
 		return parseResponse(client.newCall(createRequest(request)).execute());
+	}
+
+	private List<Header>  convertToList(Map<String, String> map) {
+		List<Header> headers = new ArrayList<>();
+		if (map != null && !map.isEmpty()) {
+			for (String key : map.keySet()) {
+				headers.add(new Header(key, map.get(key)));
+			}
+		}
+		return headers;
 	}
 
 	static com.squareup.okhttp.Request createRequest(Request request) {
