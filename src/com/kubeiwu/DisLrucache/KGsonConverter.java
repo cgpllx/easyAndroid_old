@@ -35,21 +35,21 @@ import com.google.gson.JsonParseException;
  *
  * @author Jake Wharton (jw@squareup.com)
  */
-public class XptGsonConverter implements Converter {
+public class KGsonConverter implements Converter {
 	private final Gson gson;
 	private String charset;
 
 	/**
 	 * Create an instance using the supplied {@link Gson} object for conversion. Encoding to JSON and decoding from JSON (when no charset is specified by a header) will use UTF-8.
 	 */
-	public XptGsonConverter(Gson gson) {
+	public KGsonConverter(Gson gson) {
 		this(gson, "UTF-8");
 	}
 
 	/**
 	 * Create an instance using the supplied {@link Gson} object for conversion. Encoding to JSON and decoding from JSON (when no charset is specified by a header) will use the specified charset.
 	 */
-	public XptGsonConverter(Gson gson, String charset) {
+	public KGsonConverter(Gson gson, String charset) {
 		this.gson = gson;
 		this.charset = charset;
 	}

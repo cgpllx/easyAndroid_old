@@ -15,17 +15,13 @@ import com.squareup.okhttp.OkHttpClient;
 public class KRetrofitManager {
 	public static void init(Context context) {
 		OkHttpClient client = new OkHttpClient();
-		client.setCookieHandler(new CookieManager(new PersistentCookieStore(
-				context), CookiePolicy.ACCEPT_ORIGINAL_SERVER));
+		client.setCookieHandler(new CookieManager(new PersistentCookieStore(context), CookiePolicy.ACCEPT_ORIGINAL_SERVER));
 		int cacheSize = 10 * 1024 * 1024; // 10 MiB
-		client.setCache(new Cache(Utils.getDiskCacheDir(context,
-				"okhttpdefault"), cacheSize));
+		client.setCache(new Cache(Utils.getDiskCacheDir(context, "okhttpdefault"), cacheSize));
 
 		KOkClient kOkClient = new KOkClient(client);
-		RestAdapter restAdapter = new RestAdapter.Builder()
-				.setEndpoint("http://www.baidu.com")
-				.setConverter(new GsonConverter(new Gson()))
-				.setClient(kOkClient).build();
+		RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://www.baidu.com")//
+				.setConverter(new KGsonConverter(new Gson())).setClient(kOkClient).build();
 		// restAdapter.
 		// Create an instance of our GitHub API interface.
 		// Api github = restAdapter.create(Api.class);
@@ -33,15 +29,15 @@ public class KRetrofitManager {
 
 	public RestAdapter restAdapter;
 	private KRetrofitManager kRetrofitManager;
-	
-	public KRetrofitManager getInstance(){
-		if(kRetrofitManager==null){
-			kRetrofitManager=new KRetrofitManager();
+
+	public KRetrofitManager getInstance() {
+		if (kRetrofitManager == null) {
+			kRetrofitManager = new KRetrofitManager();
 		}
 		return kRetrofitManager;
 	}
-	
-	public <T> T getAPI(Class<T> clazz) {
+
+	public <T> T getAPI(Class<T> clazz, String endpoint) {
 		T api = restAdapter.create(clazz);
 		return api;
 	}
