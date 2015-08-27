@@ -86,22 +86,23 @@ import retrofit.mime.TypedOutput;
  * @author Bob Lee (bob@squareup.com)
  * @author Jake Wharton (jw@squareup.com)
  */
+// 此类修改了第349行，主要把URL传到解析器中，作为保存的key
 public class KRestAdapter {
 	static final String THREAD_PREFIX = "Retrofit-";
 	static final String IDLE_THREAD_NAME = THREAD_PREFIX + "Idle";
 
 	/** Simple logging abstraction for debug messages. */
-//	public interface Log {
-//		/** Log a debug message to the appropriate console. */
-//		void log(String message);
-//
-//		/** A {@link Log} implementation which does not log anything. */
-//		Log NONE = new Log() {
-//			@Override
-//			public void log(String message) {
-//			}
-//		};
-//	}
+	// public interface Log {
+	// /** Log a debug message to the appropriate console. */
+	// void log(String message);
+	//
+	// /** A {@link Log} implementation which does not log anything. */
+	// Log NONE = new Log() {
+	// @Override
+	// public void log(String message) {
+	// }
+	// };
+	// }
 
 	/** Controls the level of logging. */
 	public enum LogLevel {
