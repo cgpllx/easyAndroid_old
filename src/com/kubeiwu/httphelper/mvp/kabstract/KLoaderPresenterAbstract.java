@@ -7,7 +7,7 @@ import android.support.v4.content.Loader;
 
 import com.kubeiwu.httphelper.mvp.view.ISimpleLoaderView;
 
-public abstract class KLoaderPresenterAbstract<M, T> extends KPresenter<ISimpleLoaderView<M, T>> implements LoaderCallbacks<M> {
+public abstract class KLoaderPresenterAbstract<T> extends KPresenter<ISimpleLoaderView<T>> implements LoaderCallbacks<T> {
 
 	public void loadData(LoaderManager loaderManager, Bundle bundle) {
 		loaderManager.initLoader(presenterId, bundle, this);
@@ -18,21 +18,21 @@ public abstract class KLoaderPresenterAbstract<M, T> extends KPresenter<ISimpleL
 	}
 
 	@Override
-	public Loader<M> onCreateLoader(int arg0, Bundle bundle) {
+	public Loader<T> onCreateLoader(int arg0, Bundle bundle) {
 		iView.showLoading(presenterId);
 		return iView.onCreateLoader(arg0, bundle);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<M> arg0, M arg1) {
+	public void onLoadFinished(Loader<T> arg0, T arg1) {
 		deliverResult(arg1);
 		iView.hideLoading(presenterId);
 	}
 
-	protected abstract void deliverResult(M arg1);
+	protected abstract void deliverResult(T arg1);
 
 	@Override
-	public void onLoaderReset(Loader<M> arg0) {
+	public void onLoaderReset(Loader<T> arg0) {
 
 	}
 

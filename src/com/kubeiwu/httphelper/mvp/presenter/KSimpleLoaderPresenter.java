@@ -9,7 +9,7 @@ import com.kubeiwu.httphelper.mvp.kabstract.KLoaderPresenterAbstract;
  *
  * @param <T>
  */
-public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<T, T> {
+public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<T> {
 
 	@Override
 	protected void deliverResult(T result) {
