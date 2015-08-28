@@ -15,6 +15,9 @@ public class KSimpleThreadPresenter<T> extends KPresenter<ISimpleThreadView<T>> 
 	@Override
 	public void destroy() {
 		RxUtils.unsubscribe(subscriber);
+//		CompositeSubscription d=new CompositeSubscription();
+//		d.
+//		AppObservable d;
 	}
 
 	private Observable<T> myObservable = Observable.create(new Observable.OnSubscribe<T>() {
