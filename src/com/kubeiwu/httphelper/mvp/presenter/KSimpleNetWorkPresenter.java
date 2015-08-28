@@ -1,14 +1,13 @@
 package com.kubeiwu.httphelper.mvp.presenter;
 
 import rx.Observable;
-import rx.Subscriber;
 
-import com.kubeiwu.httphelper.mvp.kabstract.KPresenter;
+import com.kubeiwu.httphelper.mvp.kabstract.KRxJavaPresenter;
 import com.kubeiwu.httphelper.mvp.utils.RxUtils;
 import com.kubeiwu.httphelper.mvp.view.ISimpleView;
 
-public class KSimpleNetWorkPresenter<T> extends KPresenter<ISimpleView<T>> {
-	private KSubscriber subscriber;
+public class KSimpleNetWorkPresenter<T> extends KRxJavaPresenter<ISimpleView<T>> {
+	private KSubscriber<T> subscriber;
 
 	@Override
 	public void destroy() {
@@ -19,31 +18,7 @@ public class KSimpleNetWorkPresenter<T> extends KPresenter<ISimpleView<T>> {
 	public void loadData(Observable<T> observable1) {
 
 		RxUtils.unsubscribe(subscriber);
-		subscriber = new KSubscriber();
+		subscriber = new KSubscriber<T>(iView);
 		observable1.subscribe(subscriber);
-	}
-
-	class KSubscriber extends Subscriber<T> {
-		@Override
-		public void onStart() {
-			super.onStart();
-			iView.showLoading(presenterId);
-		}
-
-		@Override
-		public void onNext(T s) {
-			iView.deliverResult(presenterId, s);
-		}
-
-		@Override
-		public void onCompleted() {
-			iView.hideLoading(presenterId);
-		}
-
-		@Override
-		public void onError(Throwable e) {
-			iView.handleError(presenterId, "服务器或网络异常");
-			iView.hideLoading(presenterId);
-		}
 	}
 }
