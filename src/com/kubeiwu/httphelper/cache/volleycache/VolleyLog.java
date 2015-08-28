@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kubeiwu.httphelper.cache.volley;
+package com.kubeiwu.httphelper.cache.volleycache;
 
 import android.os.SystemClock;
 import android.util.Log;

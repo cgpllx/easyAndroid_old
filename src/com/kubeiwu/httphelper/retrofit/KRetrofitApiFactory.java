@@ -10,7 +10,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.kubeiwu.httphelper.cache.Utils;
-import com.kubeiwu.httphelper.cache.volley.DiskBasedCache;
+import com.kubeiwu.httphelper.cache.volleycache.DiskBasedCache;
 import com.kubeiwu.httphelper.manager.cookiesmanager.PersistentCookieStore;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;

@@ -35,8 +35,8 @@ import retrofit.mime.TypedOutput;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import com.kubeiwu.httphelper.cache.volley.Cache.Entry;
-import com.kubeiwu.httphelper.cache.volley.DiskBasedCache;
+import com.kubeiwu.httphelper.cache.volleycache.DiskBasedCache;
+import com.kubeiwu.httphelper.cache.volleycache.Cache.Entry;
 
 /**
  * A {@link Converter} which uses GSON for serialization and deserialization of

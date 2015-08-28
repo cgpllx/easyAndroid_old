@@ -35,8 +35,8 @@ import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
 import android.text.TextUtils;
 
-import com.kubeiwu.httphelper.cache.volley.Cache.Entry;
-import com.kubeiwu.httphelper.cache.volley.DiskBasedCache;
+import com.kubeiwu.httphelper.cache.volleycache.DiskBasedCache;
+import com.kubeiwu.httphelper.cache.volleycache.Cache.Entry;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
