@@ -18,6 +18,7 @@ package com.kubeiwu.httphelper.retrofit;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -91,8 +92,8 @@ public class KOkClient implements Client {
 	@Override
 	public Response execute(Request request) throws IOException {
 
-		// 请求模式只能通过herder传过来 key为RequestMode 
-		
+		// 请求模式只能通过herder传过来 key为RequestMode
+
 		com.squareup.okhttp.Request okhttpRequest = createRequest(request);
 
 		String headerValue = okhttpRequest.header("RequestMode");
@@ -103,36 +104,41 @@ public class KOkClient implements Client {
 						return parseResponse(client.newCall(okhttpRequest).execute());
 						// response 不会为空，new出来的
 					} catch (Exception e) {
-
-						Entry entry = kOkhttpCache.get(request.getUrl());// 充缓存中获取entry
-						if (entry != null && entry.data != null) {// 如果有数据就使用缓存
-							TypedInput typedInput = new TypedByteArray(entry.mimeType, entry.data);
-
-							return new Response(request.getUrl(), 200, "cache", convertToList(entry.responseHeaders), typedInput);
+						Response response = execCacheRequest(request);
+						if (response != null) {
+							return response;
+						} else {
+							return new Response(request.getUrl(), 200, "Not in the cache", new ArrayList<Header>(), null);
 						}
 					}
-
 				case RequestMode.LOAD_CACHE_ELSE_NETWORK:// 先缓存再网络
 
-					Entry entry = kOkhttpCache.get(request.getUrl());// 充缓存中获取entry
-					if (entry != null && entry.data != null) {// 如果有数据就使用缓存
-						TypedInput typedInput = new TypedByteArray(entry.mimeType, entry.data);
-
-						return new Response(request.getUrl(), 200, "cache", convertToList(entry.responseHeaders), typedInput);
-					} else {
-						return parseResponse(client.newCall(createRequest(request)).execute());
+					Response response = execCacheRequest(request);
+					if (response != null) {
+						return response;
 					}
+					// 如果缓存没有就跳出，执行网络请求
 				case RequestMode.LOAD_DEFAULT:
 				case RequestMode.LOAD_NETWORK_ONLY:
 				default:
-					break;//直接跳出
+					break;// 直接跳出
 			}
 		}
 
-		return parseResponse(client.newCall(createRequest(request)).execute());
+		return parseResponse(client.newCall(okhttpRequest).execute());
 	}
 
-	private List<Header>  convertToList(Map<String, String> map) {
+	private Response execCacheRequest(Request request) {
+		Entry entry = kOkhttpCache.get(request.getUrl());// 充缓存中获取entry
+		if (entry != null && entry.data != null) {// 如果有数据就使用缓存
+			TypedInput typedInput = new TypedByteArray(entry.mimeType, entry.data);
+
+			return new Response(request.getUrl(), 200, "cache", convertToList(entry.responseHeaders), typedInput);
+		}
+		return null;
+	}
+
+	private List<Header> convertToList(Map<String, String> map) {
 		List<Header> headers = new ArrayList<>();
 		if (map != null && !map.isEmpty()) {
 			for (String key : map.keySet()) {
