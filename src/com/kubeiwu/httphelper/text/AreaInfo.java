@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class AreaInfo implements Serializable {
 	private int id;// 2500
 	private String name;// =罗湖区
+	
 	private int pid;// =236;
 
 	public int getId() {
