@@ -61,7 +61,7 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 		return presenterId;
 	}
 
-	void initDeliverResultType(V iView) {
+	private void initDeliverResultType(V iView) {
 		Method[] methods = iView.getClass().getMethods();
 		for (Method method : methods) {
 			if ("deliverResult".equals(method.getName())) {
