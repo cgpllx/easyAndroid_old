@@ -2,11 +2,31 @@ package com.kubeiwu.httphelper.mvp.kabstract;
 
 import rx.Subscriber;
 
+import com.kubeiwu.httphelper.mvp.utils.RxUtils;
 import com.kubeiwu.httphelper.mvp.view.ISimpleView;
-import com.kubeiwu.httphelper.mvp.view.IView;
 
-public abstract class KRxJavaPresenter<V extends IView> extends KPresenter<V> {
+public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPresenter<V, T> {
 
+	protected KSubscriber<T> subscriber;
+	
+	@Override
+	protected void onCancel() {
+		super.onCancel();
+		unsubscribe();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unsubscribe();
+		
+	}
+	private void unsubscribe() {
+		RxUtils.unsubscribe(subscriber);
+	}
+	
+	
+	
 	public class KSubscriber<D> extends Subscriber<D> {
 		ISimpleView<D> mIView;
 

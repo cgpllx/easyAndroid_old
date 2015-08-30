@@ -16,6 +16,7 @@ import com.kubeiwu.httphelper.mvp.view.ISimpleView;
 import com.kubeiwu.httphelper.mvp.view.IView;
 import com.kubeiwu.httphelper.retrofit.KRetrofitApiFactory;
 import com.kubeiwu.httphelper.text.Api;
+import com.kubeiwu.httphelper.text.ApiPrivider;
 import com.kubeiwu.httphelper.text.AreaInfo;
 import com.kubeiwu.httphelper.text.JsonResult;
 
@@ -35,7 +36,7 @@ public class MainActivity extends ActionBarActivity implements ISimpleView<JsonR
 			e.printStackTrace();
 		}
 		presenter.setView(this);
-		final Api api = KRetrofitApiFactory.getInstance().getApi(Api.class, "http://xf.qfang.com");
+		final Api api = ApiPrivider.getInstance();
 		new Thread() {
 			public void run() {
 				System.out.println("开始");

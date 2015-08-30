@@ -6,19 +6,15 @@ import com.kubeiwu.httphelper.mvp.kabstract.KRxJavaPresenter;
 import com.kubeiwu.httphelper.mvp.utils.RxUtils;
 import com.kubeiwu.httphelper.mvp.view.ISimpleView;
 
-public class KSimpleNetWorkPresenter<T> extends KRxJavaPresenter<ISimpleView<T>> {
-	private KSubscriber<T> subscriber;
+public class KSimpleNetWorkPresenter<T> extends KRxJavaPresenter<ISimpleView<T>, T> {
 
-	@Override
-	public void destroy() {
-		RxUtils.unsubscribe(subscriber);
-	}
 
-	// observable.cache() //cache会回调多次，但是只会调用一次网络
-	public void loadData(Observable<T> observable1) {
-
-		RxUtils.unsubscribe(subscriber);
+	// observable.cache() //观察者 会回调多次，但是只会调用一次网络
+	public void loadData(Observable<T> observable) {
+		onCancel();//先取消之前的事件
 		subscriber = new KSubscriber<T>(iView);
-		observable1.subscribe(subscriber);
+		observable.subscribe(subscriber);
 	}
+
+
 }

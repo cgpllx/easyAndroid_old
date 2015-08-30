@@ -1,13 +1,6 @@
 package com.kubeiwu.httphelper.mvp;
 
+public interface PresenterLoader<T> {
 
-public class PresenterLoader<T> {
-	
-	public PresenterLoader() {
-	}
-
-	public T loadInBackground() throws Exception {
-//throw new Exception();
-		return null;
-	}
+	public T loadInBackground() throws Exception;
 }

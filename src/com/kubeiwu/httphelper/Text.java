@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kubeiwu.httphelper.manager.cookiesmanager.PersistentCookieStore;
+import com.kubeiwu.httphelper.mvp.presenter.KSimpleThreadPresenter;
 import com.squareup.okhttp.OkHttpClient;
 
 public class Text {
@@ -31,5 +32,8 @@ public class Text {
 //		client.setAuthenticator(authenticator)
 //		client.setRetryOnConnectionFailure(retryOnConnectionFailure);
 //		client.set
+	}
+	<T> KSimpleThreadPresenter<T> getKSimpleThreadPresenter(){
+		return new KSimpleThreadPresenter<T>();
 	}
 }

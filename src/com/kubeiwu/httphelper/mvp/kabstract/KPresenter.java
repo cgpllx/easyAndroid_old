@@ -3,9 +3,9 @@ package com.kubeiwu.httphelper.mvp.kabstract;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-import com.kubeiwu.httphelper.mvp.view.IView;
+import com.kubeiwu.httphelper.mvp.view.ISimpleView;
 
-public abstract class KPresenter<V extends IView> {
+public abstract class KPresenter<V extends ISimpleView<T>, T> implements Presenter<V> {
 	protected V iView;
 
 	public void setView(V view) {
@@ -13,16 +13,44 @@ public abstract class KPresenter<V extends IView> {
 		initDeliverResultType(view);
 	}
 
-	public void initialize() {
+	public final void initialize() {
+		onInitialize();
 	}
 
-	public void resume() {
+	public final void resume() {
+		onResume();
 	}
 
-	public void pause() {
+	public final void pause() {
+		onPause();
 	}
 
-	public void destroy() {
+	public final void destroy() {
+		onDestroy();
+	}
+
+	public void cancel() {
+		onCancel();
+	}
+
+	protected void onCancel() {
+
+	}
+
+	protected void onPause() {
+
+	}
+
+	protected void onInitialize() {
+
+	}
+
+	protected void onResume() {
+
+	}
+
+	protected void onDestroy() {
+
 	}
 
 	protected Type mType;
