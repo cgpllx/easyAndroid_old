@@ -30,9 +30,9 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 	public abstract Observable<T> creatObservable();
 
 	public class KSubscriber extends Subscriber<T> {
-		Controller<T> mController;
+		IController<T> mController;
 
-		public KSubscriber(Controller<T> controller) {
+		public KSubscriber(IController<T> controller) {
 			this.mController = controller;
 		}
 

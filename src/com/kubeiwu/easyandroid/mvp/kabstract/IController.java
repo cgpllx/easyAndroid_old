@@ -1,6 +1,6 @@
 package com.kubeiwu.easyandroid.mvp.kabstract;
 
-public interface Controller<T> {
+public interface IController<T> {
 	/**
      * @hide
      */
