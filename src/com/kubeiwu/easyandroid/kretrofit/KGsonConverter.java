@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kubeiwu.easyandroid.retrofit;
+package com.kubeiwu.easyandroid.kretrofit;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

@@ -6,7 +6,7 @@ import retrofit.http.GET;
 import retrofit.http.Headers;
 import rx.Observable;
 
-import com.kubeiwu.easyandroid.retrofit.KOkClient.CacheMode;
+import com.kubeiwu.easyandroid.kretrofit.KOkClient.CacheMode;
 
 public interface Api {
 	// http://192.168.0.241/xinfang-xpt/xpt/loginProcess?j_username=13530145721&j_password=1234567&appType=android

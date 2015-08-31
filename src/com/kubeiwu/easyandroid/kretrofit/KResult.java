@@ -1,4 +1,4 @@
-package com.kubeiwu.easyandroid.retrofit;
+package com.kubeiwu.easyandroid.kretrofit;
 
 /**
  * 

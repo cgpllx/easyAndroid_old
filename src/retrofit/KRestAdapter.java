@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
-import com.kubeiwu.easyandroid.retrofit.KGsonConverter;
+import com.kubeiwu.easyandroid.kretrofit.KGsonConverter;
 
 import retrofit.Profiler.RequestInformation;
 import retrofit.RestAdapter.Log;
