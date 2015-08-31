@@ -7,7 +7,7 @@ import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 
 public abstract class KPresenter<V extends ISimpleView<T>, T> implements Presenter<V> {
 	protected V iView;
-	protected final Controller<T> mController = new Controller<T>() {
+	protected final IController<T> mController = new IController<T>() {
 
 		@Override
 		public void showLoading() {
