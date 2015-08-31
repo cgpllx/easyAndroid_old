@@ -58,7 +58,7 @@ import com.squareup.okhttp.Response;
  * Created by zhy on 15/8/17.
  */
 public class OkHttpClientManager {
-	private static final String TAG = "OkHttpClientManager";
+	public static final String TAG = "OkHttpClientManager";
 
 	private static OkHttpClientManager mInstance;
 	private OkHttpClient mOkHttpClient;
@@ -153,7 +153,7 @@ public class OkHttpClientManager {
 		return getInstance().getGetDelegate().getAsString(url);
 	}
 
-	public static void getAsyn(String url, ResultCallback callback) {
+	public static void getAsyn(String url, ResultCallback<?> callback) {
 		getInstance().getGetDelegate().getAsyn(url, callback);
 	}
 
@@ -168,19 +168,19 @@ public class OkHttpClientManager {
 		return getInstance().getPostDelegate().postAsString(url, params);
 	}
 
-	public static void postAsyn(String url, Param[] params, final ResultCallback callback) {
+	public static void postAsyn(String url, Param[] params, final ResultCallback<?> callback) {
 		getInstance().getPostDelegate().postAsyn(url, params, callback);
 	}
 
-	public static void postAsyn(String url, Map<String, String> params, final ResultCallback callback) {
+	public static void postAsyn(String url, Map<String, String> params, final ResultCallback<?> callback) {
 		getInstance().getPostDelegate().postAsyn(url, params, callback);
 	}
 
-	public static void postAsyn(String url, String bodyStr, final ResultCallback callback) {
+	public static void postAsyn(String url, String bodyStr, final ResultCallback<?> callback) {
 		getInstance().getPostDelegate().postAsyn(url, bodyStr, callback);
 	}
 
-	public static void post(String url, String bodyStr, final ResultCallback callback) throws IOException {
+	public static void post(String url, String bodyStr, final ResultCallback<?> callback) throws IOException {
 		getInstance().getPostDelegate().post(url, bodyStr);
 	}
 
@@ -213,10 +213,10 @@ public class OkHttpClientManager {
 		return res;
 	}
 
-	private void deliveryResult(ResultCallback callback, Request request) {
+	private void deliveryResult(ResultCallback<?> callback, Request request) {
 		if (callback == null)
 			callback = DEFAULT_RESULT_CALLBACK;
-		final ResultCallback resCallBack = callback;
+		final ResultCallback<?> resCallBack = callback;
 		// UI thread
 		callback.onBefore();
 		mOkHttpClient.newCall(request).enqueue(new Callback() {
@@ -247,7 +247,7 @@ public class OkHttpClientManager {
 		});
 	}
 
-	private void sendFailedStringCallback(final Request request, final Exception e, final ResultCallback callback) {
+	private void sendFailedStringCallback(final Request request, final Exception e, final ResultCallback<?> callback) {
 		mDelivery.post(new Runnable() {
 			@Override
 			public void run() {
@@ -418,14 +418,14 @@ public class OkHttpClientManager {
 		/**
 		 * 直接将bodyStr以写入请求体
 		 */
-		public void postAsyn(String url, String bodyStr, final ResultCallback callback) {
+		public void postAsyn(String url, String bodyStr, final ResultCallback<?> callback) {
 			postAsyn(url, bodyStr, MediaType.parse("text/plain;charset=utf-8"), callback);
 		}
 
 		/**
 		 * 直接将bodyStr以写入请求体
 		 */
-		public void postAsyn(String url, String bodyStr, MediaType type, final ResultCallback callback) {
+		public void postAsyn(String url, String bodyStr, MediaType type, final ResultCallback<?> callback) {
 			RequestBody body = RequestBody.create(type, bodyStr);
 			Request request = buildPostRequest(url, body);
 			deliveryResult(callback, request);
@@ -434,14 +434,14 @@ public class OkHttpClientManager {
 		/**
 		 * 直接将bodyFile以写入请求体
 		 */
-		public void postAsyn(String url, File bodyFile, final ResultCallback callback) {
+		public void postAsyn(String url, File bodyFile, final ResultCallback<?> callback) {
 			postAsyn(url, bodyFile, MediaType.parse("application/octet-stream;charset=utf-8"), callback);
 		}
 
 		/**
 		 * 直接将bodyFile以写入请求体
 		 */
-		public void postAsyn(String url, File bodyFile, MediaType type, final ResultCallback callback) {
+		public void postAsyn(String url, File bodyFile, MediaType type, final ResultCallback<?> callback) {
 			RequestBody body = RequestBody.create(type, bodyFile);
 			Request request = new Request.Builder().url(url).post(body).build();
 			deliveryResult(callback, request);
@@ -450,14 +450,14 @@ public class OkHttpClientManager {
 		/**
 		 * 直接将bodyBytes以写入请求体
 		 */
-		public void postAsyn(String url, byte[] bodyBytes, final ResultCallback callback) {
+		public void postAsyn(String url, byte[] bodyBytes, final ResultCallback<?> callback) {
 			postAsyn(url, bodyBytes, MediaType.parse("application/octet-stream;charset=utf-8"), callback);
 		}
 
 		/**
 		 * 直接将bodyBytes以写入请求体
 		 */
-		public void postAsyn(String url, byte[] bodyBytes, MediaType type, final ResultCallback callback) {
+		public void postAsyn(String url, byte[] bodyBytes, MediaType type, final ResultCallback<?> callback) {
 			RequestBody body = RequestBody.create(type, bodyBytes);
 			Request request = new Request.Builder().url(url).post(body).build();
 			deliveryResult(callback, request);
@@ -603,7 +603,7 @@ public class OkHttpClientManager {
 		/**
 		 * 异步基于post的文件上传:主方法
 		 */
-		public void postAsyn(String url, String[] fileKeys, File[] files, Param[] params, ResultCallback callback) {
+		public void postAsyn(String url, String[] fileKeys, File[] files, Param[] params, ResultCallback<?> callback) {
 			Request request = buildMultipartFormRequest(url, files, fileKeys, params);
 			deliveryResult(callback, request);
 		}
@@ -611,14 +611,14 @@ public class OkHttpClientManager {
 		/**
 		 * 异步基于post的文件上传:单文件不带参数上传
 		 */
-		public void postAsyn(String url, String fileKey, File file, ResultCallback callback) throws IOException {
+		public void postAsyn(String url, String fileKey, File file, ResultCallback<?> callback) throws IOException {
 			postAsyn(url, new String[] { fileKey }, new File[] { file }, null, callback);
 		}
 
 		/**
 		 * 异步基于post的文件上传，单文件且携带其他form参数上传
 		 */
-		public void postAsyn(String url, String fileKey, File file, Param[] params, ResultCallback callback) {
+		public void postAsyn(String url, String fileKey, File file, Param[] params, ResultCallback<?> callback) {
 			postAsyn(url, new String[] { fileKey }, new File[] { file }, params, callback);
 		}
 

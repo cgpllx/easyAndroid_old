@@ -1,11 +1,10 @@
 package com.kubeiwu.easyandroid.text;
 
-import java.io.Serializable;
 
-public class AreaInfo implements Serializable {
+public class AreaInfo {
 	private int id;// 2500
 	private String name;// =罗湖区
-	
+
 	private int pid;// =236;
 
 	public int getId() {
