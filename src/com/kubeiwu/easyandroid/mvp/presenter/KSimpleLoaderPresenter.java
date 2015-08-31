@@ -5,7 +5,6 @@ import android.support.v4.content.Loader;
 
 import com.kubeiwu.easyandroid.mvp.kabstract.KLoaderPresenterAbstract;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleLoaderView;
-import com.kubeiwu.easyandroid.mvp.presenter.KSimpleLoaderPresenter.View;;
 
 /**
  * loader线程的返回值
@@ -15,9 +14,9 @@ import com.kubeiwu.easyandroid.mvp.presenter.KSimpleLoaderPresenter.View;;
  * @param <T>
  * @param <D>
  */
-public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<View<T>, T> {
+public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<ISimpleLoaderView<T>, T> {
 	@Override
-	public void setView(View<T> view) {
+	public void setView(ISimpleLoaderView<T> view) {
 		super.setView(view);
 
 	}
@@ -25,10 +24,7 @@ public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<View<T>,
 	@Override
 	public Loader<T> onCreateLoader(int arg0, Bundle bundle) {
 		mController.showLoading();
-		return iView.onCreateLoader(arg0, bundle);
+		return getView().onCreateLoader(arg0, bundle);
 	}
 
-	public interface View<D> extends ISimpleLoaderView<D> {
-
-	}
 }

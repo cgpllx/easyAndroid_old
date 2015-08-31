@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 
 public abstract class KPresenter<V extends ISimpleView<T>, T> implements Presenter<V> {
-	protected V iView;
+	private V iView;
 	protected final IController<T> mController = new IController<T>() {
 
 		@Override
@@ -35,6 +35,10 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 		initDeliverResultType(view);
 	}
 
+	public V getView() {
+		return iView;
+	}
+
 	public final void initialize() {
 		onInitialize();
 	}
@@ -51,7 +55,7 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 		onDestroy();
 	}
 
-	public void cancel() {
+	public final void cancel() {
 		onCancel();
 	}
 
