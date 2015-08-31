@@ -44,7 +44,6 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 
 		@Override
 		public void onNext(T s) {
-			// deliverResult(s);
 			this.mController.deliverResult(s);
 		}
 
@@ -58,25 +57,5 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 			this.mController.handleError("服务器或网络异常");
 			this.mController.hideLoading();
 		}
-	}
-
-	@Override
-	protected void onShowLoading() {
-		iView.showLoading(presenterId);
-	}
-
-	@Override
-	protected void onHideLoading() {
-		iView.hideLoading(presenterId);
-	}
- 
-	@Override
-	protected void onHandleError(String errorDesc) {
-		iView.handleError(presenterId, errorDesc);
-	}
-
-	@Override
-	protected void onDeliverResult(T results) {
-		iView.deliverResult(presenterId, results);
 	}
 }

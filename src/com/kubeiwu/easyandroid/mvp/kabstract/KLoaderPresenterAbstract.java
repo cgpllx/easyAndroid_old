@@ -19,7 +19,7 @@ public   class KLoaderPresenterAbstract<T> extends KPresenter<ISimpleLoaderView<
 
 	@Override
 	public Loader<T> onCreateLoader(int arg0, Bundle bundle) {
-		onShowLoading();
+		mController.showLoading();
 		return iView.onCreateLoader(arg0, bundle);
 	}
 
@@ -37,27 +37,4 @@ public   class KLoaderPresenterAbstract<T> extends KPresenter<ISimpleLoaderView<
 	public void destroyData(LoaderManager loaderManager) {
 		loaderManager.destroyLoader(presenterId);
 	}
- 
-	@Override
-	protected void onShowLoading() {
-		iView.showLoading(presenterId);
-	}
- 
-	@Override
-	protected void onHideLoading() {
-		iView.hideLoading(presenterId);
-	}
- 
-	@Override
-	protected void onHandleError(String errorDesc) {
-
-	}
-	/**
-     * @hide
-     */
-	@Override
-	protected void onDeliverResult(T result) {
-		iView.deliverResult(presenterId, result);
-	}
-
 }
