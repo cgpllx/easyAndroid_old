@@ -11,5 +11,5 @@ import com.kubeiwu.easyandroid.mvp.kabstract.KLoaderPresenterAbstract;
  */
 public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<T> {
 
-
+  public void text(){}
 }
