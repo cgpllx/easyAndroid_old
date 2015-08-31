@@ -75,19 +75,19 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 
 	}
 
-	protected void onShowLoading() {
+	private void onShowLoading() {
 		iView.showLoading(presenterId);
 	}
 
-	protected void onHideLoading() {
+	private void onHideLoading() {
 		iView.hideLoading(presenterId);
 	}
 
-	protected void onHandleError(String errorDesc) {
+	private void onHandleError(String errorDesc) {
 		iView.handleError(presenterId, errorDesc);
 	}
 
-	protected void onDeliverResult(final T results) {
+	private void onDeliverResult(final T results) {
 		iView.deliverResult(presenterId, results);
 	}
 
