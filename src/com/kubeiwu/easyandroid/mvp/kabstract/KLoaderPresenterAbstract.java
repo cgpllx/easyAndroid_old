@@ -7,7 +7,7 @@ import android.support.v4.content.Loader;
 
 import com.kubeiwu.easyandroid.mvp.view.ISimpleLoaderView;
 
-public abstract class KLoaderPresenterAbstract<T> extends KPresenter<ISimpleLoaderView<T>, T> implements LoaderCallbacks<T> {
+public   class KLoaderPresenterAbstract<T> extends KPresenter<ISimpleLoaderView<T>, T> implements LoaderCallbacks<T> {
 
 	public void loadData(LoaderManager loaderManager, Bundle bundle) {
 		loaderManager.initLoader(presenterId, bundle, this);
@@ -19,14 +19,14 @@ public abstract class KLoaderPresenterAbstract<T> extends KPresenter<ISimpleLoad
 
 	@Override
 	public Loader<T> onCreateLoader(int arg0, Bundle bundle) {
-		showLoading();
+		onShowLoading();
 		return iView.onCreateLoader(arg0, bundle);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<T> arg0, T arg1) {
-		deliverResult(arg1);
-		hideLoading();
+		onDeliverResult(arg1);
+		onHideLoading();
 	}
 
 	@Override
@@ -37,24 +37,26 @@ public abstract class KLoaderPresenterAbstract<T> extends KPresenter<ISimpleLoad
 	public void destroyData(LoaderManager loaderManager) {
 		loaderManager.destroyLoader(presenterId);
 	}
-
+ 
 	@Override
-	public void showLoading() {
+	protected void onShowLoading() {
 		iView.showLoading(presenterId);
 	}
-
+ 
 	@Override
-	public void hideLoading() {
+	protected void onHideLoading() {
 		iView.hideLoading(presenterId);
 	}
-
+ 
 	@Override
-	public void handleError(String errorDesc) {
+	protected void onHandleError(String errorDesc) {
 
 	}
-
+	/**
+     * @hide
+     */
 	@Override
-	public void deliverResult(T result) {
+	protected void onDeliverResult(T result) {
 		iView.deliverResult(presenterId, result);
 	}
 

@@ -31,7 +31,7 @@ public class KSimpleThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadVie
 
 	public void loadData() {
 		onCancel();
-		subscriber = new KSubscriber(this);
+		subscriber = new KSubscriber(this.mController);
 		Observable<T> observable = creatObservable();
 		observable.subscribe(subscriber);
 	}

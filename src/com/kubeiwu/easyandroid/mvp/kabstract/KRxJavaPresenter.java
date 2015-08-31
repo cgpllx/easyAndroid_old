@@ -61,22 +61,22 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 	}
 
 	@Override
-	public void showLoading() {
+	protected void onShowLoading() {
 		iView.showLoading(presenterId);
 	}
 
 	@Override
-	public void hideLoading() {
+	protected void onHideLoading() {
 		iView.hideLoading(presenterId);
 	}
-
+ 
 	@Override
-	public void handleError(String errorDesc) {
+	protected void onHandleError(String errorDesc) {
 		iView.handleError(presenterId, errorDesc);
 	}
 
 	@Override
-	public void deliverResult(T results) {
+	protected void onDeliverResult(T results) {
 		iView.deliverResult(presenterId, results);
 	}
 }

@@ -14,7 +14,7 @@ public class KSimpleNetWorkPresenter<T> extends KRxJavaPresenter<ISimpleNetWorkV
 			throw new IllegalArgumentException("please Override onCreatObservable method, And can not be null，");
 		}
 		onCancel();// 先取消之前的事件
-		subscriber = new KSubscriber(this);
+		subscriber = new KSubscriber(this.mController);
 		observable.subscribe(subscriber);
 	}
 

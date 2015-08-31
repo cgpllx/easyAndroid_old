@@ -27,7 +27,7 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		hello = (TextView) findViewById(R.id.hello);
-
+//		presenter.handleError(errorDesc);
 		try {
 			KRetrofitApiFactory.getInstance().init(this);
 		} catch (IOException e) {
