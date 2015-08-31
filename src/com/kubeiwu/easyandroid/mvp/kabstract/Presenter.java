@@ -15,4 +15,7 @@ public interface Presenter<V extends IView> {
 	public void cancel();
 
 	public int getPresenterId() ;
+	
+ 
+
 }

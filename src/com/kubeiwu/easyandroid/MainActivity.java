@@ -3,20 +3,22 @@ package com.kubeiwu.easyandroid;
 import java.io.IOException;
 import java.util.List;
 
+import rx.Observable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.kubeiwu.easyandroid.kretrofit.KRetrofitApiFactory;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
+import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 import com.kubeiwu.easyandroid.text.Api;
 import com.kubeiwu.easyandroid.text.ApiPrivider;
 import com.kubeiwu.easyandroid.text.AreaInfo;
 import com.kubeiwu.easyandroid.text.JsonResult;
 
-public class MainActivity extends ActionBarActivity implements ISimpleView<JsonResult<List<AreaInfo>>> {
+public class MainActivity extends FragmentActivity implements ISimpleNetWorkView<JsonResult<List<AreaInfo>>> {
 	TextView hello;
 	KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>> presenter = new KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>>();
 
@@ -63,7 +65,7 @@ public class MainActivity extends ActionBarActivity implements ISimpleView<JsonR
 				}
 			};
 		}.start();
-		presenter.loadData(api.getCity1().cache());
+//		presenter.loadData(api.getCity1().cache());
 	}
 
 	@Override
@@ -87,5 +89,10 @@ public class MainActivity extends ActionBarActivity implements ISimpleView<JsonR
 	public void deliverResult(int presenterId, JsonResult<List<AreaInfo>> results) {
 		System.out.println("deliverResult");
 		System.out.println("deliverResult--results" + results.getData().size());
+	}
+
+	@Override
+	public Observable<JsonResult<List<AreaInfo>>> onCreatObservable() {
+		return null;
 	}
 }

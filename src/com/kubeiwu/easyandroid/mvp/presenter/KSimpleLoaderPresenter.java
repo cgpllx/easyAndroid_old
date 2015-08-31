@@ -11,10 +11,5 @@ import com.kubeiwu.easyandroid.mvp.kabstract.KLoaderPresenterAbstract;
  */
 public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<T> {
 
-	@Override
-	protected void deliverResult(T result) {
-		iView.deliverResult(presenterId, result);
-	}
-
 
 }
