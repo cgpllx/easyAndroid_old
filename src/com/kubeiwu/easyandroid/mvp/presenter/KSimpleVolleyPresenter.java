@@ -4,24 +4,27 @@ import java.util.Map;
 
 import com.kubeiwu.commontool.khttp.KRequestQueueManager;
 import com.kubeiwu.commontool.khttp.Request.Method;
+import com.kubeiwu.commontool.khttp.Request.RequestMode;
 import com.kubeiwu.commontool.khttp.Response;
 import com.kubeiwu.commontool.khttp.exception.VolleyError;
-import com.kubeiwu.commontool.khttp.krequestimpl.KGsonRequest;
+import com.kubeiwu.easyandroid.kretrofit.KResult;
+import com.kubeiwu.easyandroid.kvolley.KGsonRequest;
 import com.kubeiwu.easyandroid.mvp.kabstract.KPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 
-public class KSimpleVolleyPresenter<T> extends KPresenter<ISimpleView<T>, T> {
-	public static final String TAG = KSimpleVolleyPresenter.class.getSimpleName();
-	KGsonRequest<T> gsonRequest;
+public class KSimpleVolleyPresenter<T extends KResult> extends KPresenter<ISimpleView<T>, T> {
+	public final String TAG = hashCode() + "";
+	private KGsonRequest<T> gsonRequest;
+	private int mRequestMode = RequestMode.LOAD_NETWORK_ONLY;
 
 	public synchronized void loadData(int method, String url, Map<String, String> headers, Map<String, String> params) {
+		cancel();
 		mController.showLoading();
 		gsonRequest = new KGsonRequest<T>(method, url, headers, params, listener, errorListener);
-		// gsonRequest.setShouldAddCookiesToRequest(true);
+		gsonRequest.setShouldAddCookiesToRequest(true);
 		gsonRequest.setCache_Duration(1000 * 60 * 60 * 24 * 300l);// 300天
-//		 gsonRequest.setResponseType(mType);
-		// gsonRequest.setRequestMode(mRequestMode);// 请求缓存策越
-		// gsonRequest.setRequestMode(RequestMode.LOAD_CACHE_ELSE_NETWORK);
+		gsonRequest.setResponseType(mType);
+		gsonRequest.setRequestMode(mRequestMode);// 请求缓存策越
 		gsonRequest.setTag(TAG);
 		KRequestQueueManager.getRequestQueue().add(gsonRequest);
 	}
@@ -39,6 +42,11 @@ public class KSimpleVolleyPresenter<T> extends KPresenter<ISimpleView<T>, T> {
 			gsonRequest.cancel();
 		}
 	}
+
+	public synchronized void setRequestMode(int requestMode) {
+		mRequestMode = requestMode;
+	}
+
 	protected void onDestroy() {
 		cancel();
 	}
