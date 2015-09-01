@@ -37,7 +37,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache.Entry;
-
+  
 /**
  * A {@link Converter} which uses GSON for serialization and deserialization of
  * entities.
