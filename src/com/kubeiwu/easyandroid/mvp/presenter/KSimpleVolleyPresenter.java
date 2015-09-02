@@ -57,8 +57,8 @@ public class KSimpleVolleyPresenter<T extends KResult> extends KPresenter<ISimpl
 	Response.Listener<T> listener = new Response.Listener<T>() {
 		@Override
 		public void onResponse(T t) {
-			mController.deliverResult(t);
 			finishLoad();
+			mController.deliverResult(t);
 		}
 	};
 

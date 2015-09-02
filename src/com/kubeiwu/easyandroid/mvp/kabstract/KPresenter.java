@@ -1,6 +1,6 @@
 package com.kubeiwu.easyandroid.mvp.kabstract;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
@@ -104,12 +104,21 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 	}
 
 	private void initDeliverResultType(V iView) {
-		Method[] methods = iView.getClass().getMethods();
-		for (Method method : methods) {
-			if ("deliverResult".equals(method.getName())) {
-				mType = method.getGenericParameterTypes()[1];
-				return;
+		// Method[] methods = iView.getClass().getMethods();
+		// for (Method method : methods) {
+		// if ("deliverResult".equals(method.getName())) {
+		// mType = method.getGenericParameterTypes()[1];
+		// return;
+		// }
+		// }
+		ParameterizedType parameterizedType = (ParameterizedType) iView.getClass().getGenericSuperclass();
+		if (parameterizedType != null) {
+			Type[] types = parameterizedType.getActualTypeArguments();
+			if(types!=null&&types.length>0){
+				mType=types[0];
 			}
 		}
+
+//		System.out.println(dd.getActualTypeArguments()[0]);
 	}
 }
