@@ -105,7 +105,8 @@ class StrictLineReader implements Closeable {
    *
    * @throws IOException for errors when closing the underlying {@code InputStream}.
    */
-  public void close() throws IOException {
+  @Override
+public void close() throws IOException {
     synchronized (in) {
       if (buf != null) {
         buf = null;

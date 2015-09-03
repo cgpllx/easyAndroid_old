@@ -92,9 +92,14 @@ public class Utils {
 	// =======================================
 
 	public static File getDiskCacheDir(Context context, String uniqueName) {
-		String cachePath;
+		String cachePath = null;
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
-			cachePath = context.getExternalCacheDir().getPath();
+			File cacheFile=context.getExternalCacheDir();
+			if(cacheFile!=null&&!cacheFile.exists()){
+				cacheFile.mkdirs();
+			}
+			System.out.println("cacheFile="+cacheFile);
+			cachePath = cacheFile.getPath();
 		} else {
 			cachePath = context.getCacheDir().getPath();
 		}

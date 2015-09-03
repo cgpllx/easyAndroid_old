@@ -25,6 +25,7 @@ public class JsonResult<T> implements KResult {
 		this.data = data;
 	}
 
+	@Override
 	public boolean isSuccess() {
 		return "C0000".equals(code);
 	}

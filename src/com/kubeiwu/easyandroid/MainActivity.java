@@ -12,7 +12,6 @@ import com.google.gson.Gson;
 import com.kubeiwu.easyandroid.kretrofit.KRetrofitApiFactory;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
-import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 import com.kubeiwu.easyandroid.text.Api;
 import com.kubeiwu.easyandroid.text.ApiPrivider;
 import com.kubeiwu.easyandroid.text.AreaInfo;
@@ -21,24 +20,43 @@ import com.kubeiwu.easyandroid.text.JsonResult;
 public class MainActivity extends FragmentActivity implements ISimpleNetWorkView<JsonResult<List<AreaInfo>>> {
 	TextView hello;
 	KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>> presenter = new KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>>();
-
+	  Api api;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		hello = (TextView) findViewById(R.id.hello);
 //		presenter.handleError(errorDesc);
-		try {
-			KRetrofitApiFactory.getInstance().init(this);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		presenter.setView(this);
-		final Api api = ApiPrivider.getInstance();
+		 
+			try {
+				KRetrofitApiFactory.getInstance().init(this);
+				
+//				return;
+			} catch (IOException e1) {
+				 
+				e1.printStackTrace();
+			}
+			presenter.setView(this);
+			  api = ApiPrivider.getInstance();
+			System.out.println("111开始");
 		new Thread() {
+			@Override
 			public void run() {
-				System.out.println("开始");
-
+				System.out.println("1122开始");
+				try {
+					final JsonResult<?> d = api.login();
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							hello.setText(new Gson().toJson(d));
+							System.out.println("1122333开始");
+						}
+					});
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("1122333444开始");
+				}
+				
 				try {
 					JsonResult<List<AreaInfo>> list = api.getCity();
 
@@ -53,19 +71,10 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 					e.printStackTrace();
 				}
 				// System.out.println(d);
-				try {
-					final JsonResult<?> d = api.login();
-					runOnUiThread(new Runnable() {
-						public void run() {
-							hello.setText(new Gson().toJson(d));
-						}
-					});
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		
 			};
 		}.start();
-//		presenter.loadData(api.getCity1().cache());
+		presenter.loadData();
 	}
 
 	@Override
@@ -93,6 +102,6 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 
 	@Override
 	public Observable<JsonResult<List<AreaInfo>>> onCreatObservable() {
-		return null;
+		return api.getCity1();
 	}
 }

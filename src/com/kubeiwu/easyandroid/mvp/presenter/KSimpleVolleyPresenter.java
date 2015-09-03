@@ -37,6 +37,7 @@ public class KSimpleVolleyPresenter<T extends KResult> extends KPresenter<ISimpl
 		loadData(Method.GET, url, null, null);
 	}
 
+	@Override
 	protected void onCancel() {
 		if (gsonRequest != null && !gsonRequest.isCanceled()) {
 			gsonRequest.cancel();
@@ -47,6 +48,7 @@ public class KSimpleVolleyPresenter<T extends KResult> extends KPresenter<ISimpl
 		mRequestMode = requestMode;
 	}
 
+	@Override
 	protected void onDestroy() {
 		cancel();
 	}

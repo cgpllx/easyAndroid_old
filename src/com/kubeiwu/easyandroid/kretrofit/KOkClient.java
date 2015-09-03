@@ -18,12 +18,9 @@ package com.kubeiwu.easyandroid.kretrofit;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.http.HttpStatus;
 
 import okio.BufferedSink;
 import retrofit.client.Client;
@@ -42,7 +39,6 @@ import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
-import com.squareup.okhttp.internal.spdy.Http2;
 
 /** Retrofit client that uses OkHttp for communication. */
 public class KOkClient implements Client {

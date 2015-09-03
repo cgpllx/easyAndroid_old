@@ -39,22 +39,27 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 		return iView;
 	}
 
+	@Override
 	public final void initialize() {
 		onInitialize();
 	}
 
+	@Override
 	public final void resume() {
 		onResume();
 	}
 
+	@Override
 	public final void pause() {
 		onPause();
 	}
 
+	@Override
 	public final void destroy() {
 		onDestroy();
 	}
 
+	@Override
 	public final void cancel() {
 		onCancel();
 	}
@@ -99,11 +104,13 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 
 	public final int presenterId = hashCode();
 
+	@Override
 	public int getPresenterId() {
 		return presenterId;
 	}
 
 	private void initDeliverResultType(V iView) {
+		
 		// Method[] methods = iView.getClass().getMethods();
 		// for (Method method : methods) {
 		// if ("deliverResult".equals(method.getName())) {
@@ -111,14 +118,25 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 		// return;
 		// }
 		// }
-		ParameterizedType parameterizedType = (ParameterizedType) iView.getClass().getGenericSuperclass();
-		if (parameterizedType != null) {
-			Type[] types = parameterizedType.getActualTypeArguments();
-			if(types!=null&&types.length>0){
-				mType=types[0];
+//		ParameterizedType parameterizedType = (ParameterizedType) iView.getClass().getGenericSuperclass();
+//		if (parameterizedType != null) {
+//			Type[] types = parameterizedType.getActualTypeArguments();
+//			if (types != null && types.length > 0) {
+//				mType = types[0];
+//			}
+//		}
+		Type[] a = iView.getClass().getGenericInterfaces();
+		// interface
+		for (Type t : a) {
+			if(t.toString().startsWith(ISimpleView.class.getName())){
+				
+			}
+			Type[] types = ((ParameterizedType) t).getActualTypeArguments();
+			if (types != null && types.length > 0) {
+				mType = types[0];
 			}
 		}
 
-//		System.out.println(dd.getActualTypeArguments()[0]);
+		// System.out.println(dd.getActualTypeArguments()[0]);
 	}
 }

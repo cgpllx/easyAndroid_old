@@ -5,7 +5,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 
-import com.kubeiwu.easyandroid.mvp.view.ISimpleLoaderView;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 
 public abstract class KLoaderPresenterAbstract<V extends ISimpleView<T>, T> extends KPresenter<V, T> implements LoaderCallbacks<T> {

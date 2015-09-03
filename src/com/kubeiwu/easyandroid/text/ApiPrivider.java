@@ -4,7 +4,7 @@ import com.kubeiwu.easyandroid.kretrofit.KRetrofitApiFactory;
 
 public class ApiPrivider {
 	private static final Api API = KRetrofitApiFactory.getInstance().getApi(
-			Api.class, "http://xp.qfang.com");
+			Api.class, "http://xf.qfang.com");
 
 	public static Api getInstance() {
 		return API;
