@@ -17,13 +17,19 @@ public class KSimpleVolleyPresenter<T extends KResult> extends KPresenter<ISimpl
 	private KGsonRequest<T> gsonRequest;
 	private int mRequestMode = RequestMode.LOAD_NETWORK_ONLY;
 
+	@Override
+	public void attachView(ISimpleView<T> view) {
+		super.attachView(view);
+		checkTypeCorrectness();// 只有KSimpleVolleyPresenter 需要检查类型
+	}
+
 	public synchronized void loadData(int method, String url, Map<String, String> headers, Map<String, String> params) {
 		cancel();
 		mController.showLoading();
 		gsonRequest = new KGsonRequest<T>(method, url, headers, params, listener, errorListener);
 		gsonRequest.setShouldAddCookiesToRequest(true);
 		gsonRequest.setCache_Duration(1000 * 60 * 60 * 24 * 300l);// 300天
-		gsonRequest.setResponseType(mType);
+		gsonRequest.setResponseType(getDeliverResultType());
 		gsonRequest.setRequestMode(mRequestMode);// 请求缓存策越
 		gsonRequest.setTag(TAG);
 		KRequestQueueManager.getRequestQueue().add(gsonRequest);
@@ -79,4 +85,10 @@ public class KSimpleVolleyPresenter<T extends KResult> extends KPresenter<ISimpl
 		}
 
 	};
+
+	public void checkTypeCorrectness() {
+		if (getDeliverResultType() == null) {
+			throw new IllegalArgumentException("请设置type 类型");
+		}
+	}
 }

@@ -16,7 +16,7 @@ public class KSimpleThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadVie
 		@Override
 		public void call(Subscriber<? super T> sub) {
 			if (!sub.isUnsubscribed()) {
-				PresenterLoader<T> presenterLoader = getView().onCreatPresenterLoader(presenterId);
+				PresenterLoader<T> presenterLoader = getView().onCreatPresenterLoader(getPresenterId());
 				try {
 					T t = presenterLoader.loadInBackground();
 					sub.onNext(t);

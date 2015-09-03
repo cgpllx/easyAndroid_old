@@ -36,7 +36,7 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 				 
 				e1.printStackTrace();
 			}
-			presenter.setView(this);
+			presenter.attachView(this);
 			  api = ApiPrivider.getInstance();
 			System.out.println("111开始");
 		new Thread() {

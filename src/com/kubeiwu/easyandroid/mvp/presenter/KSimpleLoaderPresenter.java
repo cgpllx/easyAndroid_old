@@ -15,11 +15,6 @@ import com.kubeiwu.easyandroid.mvp.view.ISimpleLoaderView;
  * @param <D>
  */
 public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<ISimpleLoaderView<T>, T> {
-	@Override
-	public void setView(ISimpleLoaderView<T> view) {
-		super.setView(view);
-
-	}
 
 	@Override
 	public Loader<T> onCreateLoader(int arg0, Bundle bundle) {

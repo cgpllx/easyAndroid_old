@@ -10,11 +10,11 @@ import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 public abstract class KLoaderPresenterAbstract<V extends ISimpleView<T>, T> extends KPresenter<V, T> implements LoaderCallbacks<T> {
 
 	public void loadData(LoaderManager loaderManager, Bundle bundle) {
-		loaderManager.initLoader(presenterId, bundle, this);
+		loaderManager.initLoader(getPresenterId(), bundle, this);
 	}
 
 	public void restartLoadData(LoaderManager loaderManager, Bundle bundle) {
-		loaderManager.restartLoader(presenterId, bundle, this);
+		loaderManager.restartLoader(getPresenterId(), bundle, this);
 	}
 
 	@Override
@@ -29,6 +29,6 @@ public abstract class KLoaderPresenterAbstract<V extends ISimpleView<T>, T> exte
 	}
 
 	public void destroyData(LoaderManager loaderManager) {
-		loaderManager.destroyLoader(presenterId);
+		loaderManager.destroyLoader(getPresenterId());
 	}
 }
