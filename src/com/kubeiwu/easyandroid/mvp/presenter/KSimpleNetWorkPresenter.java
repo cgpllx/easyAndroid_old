@@ -1,6 +1,8 @@
 package com.kubeiwu.easyandroid.mvp.presenter;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import com.kubeiwu.easyandroid.mvp.kabstract.KRxJavaPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
@@ -9,7 +11,8 @@ public class KSimpleNetWorkPresenter<T> extends KRxJavaPresenter<ISimpleNetWorkV
 
 	// observable.cache() //观察者 会回调多次，但是只会调用一次网络
 	public void loadData() {
-		Observable<T> observable = creatObservable();
+		Observable<T> observable = creatObservable().subscribeOn(Schedulers.io())//
+				.observeOn(AndroidSchedulers.mainThread());
 		if (observable == null) {
 			throw new IllegalArgumentException("please Override onCreatObservable method, And can not be null，");
 		}
