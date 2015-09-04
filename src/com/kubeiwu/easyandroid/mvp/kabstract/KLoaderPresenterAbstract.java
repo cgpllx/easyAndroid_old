@@ -30,5 +30,6 @@ public abstract class KLoaderPresenterAbstract<V extends ISimpleView<T>, T> exte
 
 	public void destroyData(LoaderManager loaderManager) {
 		loaderManager.destroyLoader(getPresenterId());
+		destroy();
 	}
 }

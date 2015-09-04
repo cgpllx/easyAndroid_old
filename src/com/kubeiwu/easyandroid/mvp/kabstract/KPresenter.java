@@ -98,19 +98,24 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 	}
 
 	private void onShowLoading() {
-		getView().showLoading(presenterId);
+		if (isViewAttached())
+			getView().showLoading(presenterId);
+
 	}
 
 	private void onHideLoading() {
-		getView().hideLoading(presenterId);
+		if (isViewAttached())
+			getView().hideLoading(presenterId);
 	}
 
 	private void onHandleError(String errorDesc) {
-		getView().handleError(presenterId, errorDesc);
+		if (isViewAttached())
+			getView().handleError(presenterId, errorDesc);
 	}
 
 	private void onDeliverResult(final T results) {
-		getView().deliverResult(presenterId, results);
+		if (isViewAttached())
+			getView().deliverResult(presenterId, results);
 	}
 
 	private Type mType;
@@ -154,6 +159,6 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 				}
 			}
 		}
- 
+
 	}
 }
