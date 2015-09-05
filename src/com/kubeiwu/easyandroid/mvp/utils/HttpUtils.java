@@ -14,7 +14,7 @@ import com.kubeiwu.commontool.khttp.toolbox.notused.RequestFuture;
 import com.kubeiwu.easyandroid.kretrofit.KResult;
 import com.kubeiwu.easyandroid.kvolley.KGsonRequest;
 
-public class VoleyToObservableUtil {
+public class HttpUtils {
 	public static <T> Observable<T> futureToObservable(Future<T> future) {
 		Observable<T> observable = Observable.from(future, Schedulers.io());
 		return observable;
