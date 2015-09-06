@@ -4,6 +4,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import android.os.Bundle;
 
 import com.kubeiwu.easyandroid.mvp.PresenterLoader;
 import com.kubeiwu.easyandroid.mvp.kabstract.KRxJavaPresenter;
@@ -32,12 +33,12 @@ public class KSimpleThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadVie
 	public void loadData() {
 		onCancel();
 		subscriber = new KSubscriber(this.mController);
-		Observable<T> observable = creatObservable();
+		Observable<T> observable = creatObservable(null);
 		observable.subscribe(subscriber);
 	}
 
 	@Override
-	public Observable<T> creatObservable() {
+	public Observable<T> creatObservable(Bundle bundle) {
 		return observable;
 	}
 }

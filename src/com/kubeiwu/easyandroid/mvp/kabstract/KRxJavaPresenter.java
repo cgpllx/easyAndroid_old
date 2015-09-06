@@ -2,6 +2,7 @@ package com.kubeiwu.easyandroid.mvp.kabstract;
 
 import rx.Observable;
 import rx.Subscriber;
+import android.os.Bundle;
 
 import com.kubeiwu.easyandroid.mvp.utils.RxUtils;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
@@ -20,14 +21,13 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 	protected void onDestroy() {
 		super.onDestroy();
 		unsubscribe();
-
 	}
 
 	private void unsubscribe() {
 		RxUtils.unsubscribe(subscriber);
 	}
 
-	public abstract Observable<T> creatObservable();
+	public abstract Observable<T> creatObservable(Bundle bundle);
 
 	public class KSubscriber extends Subscriber<T> {
 		IController<T> mController;

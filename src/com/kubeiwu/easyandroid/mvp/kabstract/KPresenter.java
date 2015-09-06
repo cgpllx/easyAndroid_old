@@ -139,7 +139,6 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 		if (this.mType != null) {
 			return;
 		}
-
 		Type[] interfacesTypes = iView.getClass().getGenericInterfaces();// 获取接口类型
 		for (Type t : interfacesTypes) {
 			if (t instanceof ParameterizedType) {// 判断接口的类型是否是ParameterizedType类型，因为只有泛型的接口才是ParameterizedType的类型
