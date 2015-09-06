@@ -4,6 +4,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import android.os.Bundle;
 
 import com.kubeiwu.easyandroid.mvp.utils.RxUtils;
