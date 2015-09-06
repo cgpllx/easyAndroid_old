@@ -37,7 +37,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache.Entry;
-  
+
 /**
  * A {@link Converter} which uses GSON for serialization and deserialization of
  * entities.
@@ -70,8 +70,7 @@ public class KGsonConverter implements Converter {
 	}
 
 	@Override
-	public Object fromBody(TypedInput body, Type type)
-			throws ConversionException {
+	public Object fromBody(TypedInput body, Type type) throws ConversionException {
 		String charset = this.charset;
 		if (body.mimeType() != null) {
 			charset = MimeUtil.parseCharset(body.mimeType(), charset);
@@ -101,26 +100,40 @@ public class KGsonConverter implements Converter {
 		}
 	}
 
-	public Object fromBody1(String url, TypedInput body, Type type)
-			throws ConversionException {
+	public Object fromBody(Response response, Type type) throws ConversionException {
 		String charset = this.charset;
+
+		TypedInput body = response.getBody();
+		String url = response.getUrl();
+		List<Header> headers = response.getHeaders();
+
+		Map<String, String> headerMap = convertToMap(headers);
+
 		if (body.mimeType() != null) {
 			charset = MimeUtil.parseCharset(body.mimeType(), charset);
 		}
 		InputStreamReader isr = null;
 		try {
 			isr = new InputStreamReader(body.in(), charset);
-			KResult result = gson.fromJson(isr, type);
-			if (result != null && result.isSuccess()) {// 保存
-				System.out.println("保存开始");
-				Entry entry = new Entry();
-				entry.data = gson.toJson(result).getBytes(charset);
-				// entry.responseHeaders = null;
-				entry.mimeType = body.mimeType();
-				kOkhttpCache.put(url, entry);
-				System.out.println("完成");
+			Object resultObject = null;
+			try {
+				resultObject = gson.fromJson(isr, type);
+				if (resultObject != null && resultObject instanceof KResult) {
+					KResult result = (KResult) resultObject;
+					if (result != null && result.isSuccess()) {// 保存
+						Entry entry = new Entry();
+						entry.data = gson.toJson(result).getBytes(charset);
+						entry.responseHeaders = headerMap;
+						entry.mimeType = body.mimeType();
+						kOkhttpCache.put(url, entry);
+					}
+				}
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+				otherParse(gson,isr);
+				// 这里可以执行没有登陆的判断(用登陆的格式解析，解析成功就执行登陆的操作)
 			}
-			return result;
+			return resultObject;
 		} catch (IOException e) {
 			throw new ConversionException(e);
 		} catch (JsonParseException e) {
@@ -135,51 +148,9 @@ public class KGsonConverter implements Converter {
 		}
 	}
 
-	public Object fromBody(Response response, Type type)
-			throws ConversionException {
-		String charset = this.charset;
+	private void otherParse(Gson gson, InputStreamReader isr) {
 		 
-		TypedInput body = response.getBody();
-		String url = response.getUrl();
-		List<Header> headers = response.getHeaders();
 		
-		Map<String, String> headerMap = convertToMap(headers);
-
-		if (body.mimeType() != null) {
-			charset = MimeUtil.parseCharset(body.mimeType(), charset);
-		}
-		InputStreamReader isr = null;
-		try {
-			isr = new InputStreamReader(body.in(), charset);
-			KResult result = null;
-			try {
-				result = gson.fromJson(isr, type);
-			} catch (JsonParseException e) {
-				e.printStackTrace();
-				//这里可以执行没有登陆的判断
-			}
-			
-			if (result != null && result.isSuccess()) {// 保存
-				Entry entry = new Entry();
-				entry.data = gson.toJson(result).getBytes(charset);
-				entry.responseHeaders = headerMap;
-				entry.mimeType = body.mimeType();
-				kOkhttpCache.put(url, entry);
-			}
-			
-			return result;
-		} catch (IOException e) {
-			throw new ConversionException(e);
-		} catch (JsonParseException e) {
-			throw new ConversionException(e);
-		} finally {
-			if (isr != null) {
-				try {
-					isr.close();
-				} catch (IOException ignored) {
-				}
-			}
-		}
 	}
 
 	private Map<String, String> convertToMap(List<Header> headers) {
@@ -197,8 +168,7 @@ public class KGsonConverter implements Converter {
 	@Override
 	public TypedOutput toBody(Object object) {
 		try {
-			return new JsonTypedOutput(gson.toJson(object).getBytes(charset),
-					charset);
+			return new JsonTypedOutput(gson.toJson(object).getBytes(charset), charset);
 		} catch (UnsupportedEncodingException e) {
 			throw new AssertionError(e);
 		}

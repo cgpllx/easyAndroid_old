@@ -12,33 +12,28 @@ import com.kubeiwu.easyandroid.mvp.view.ISimpleThreadView;
 
 public class KSimpleThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadView<T>, T> {
 
-	private Observable<T> observable = Observable.create(new Observable.OnSubscribe<T>() {
-
-		@Override
-		public void call(Subscriber<? super T> sub) {
-			if (!sub.isUnsubscribed()) {
-				PresenterLoader<T> presenterLoader = getView().onCreatPresenterLoader(getPresenterId());
-				try {
-					T t = presenterLoader.loadInBackground();
-					sub.onNext(t);
-					sub.onCompleted();
-				} catch (Exception e) {
-					sub.onError(e);
-				}
-			}
-		}
-	}).subscribeOn(Schedulers.io())//
-			.observeOn(AndroidSchedulers.mainThread());
-
-	public void loadData() {
-		onCancel();
-		subscriber = new KSubscriber(this.mController);
-		Observable<T> observable = creatObservable(null);
-		observable.subscribe(subscriber);
-	}
-
 	@Override
 	public Observable<T> creatObservable(Bundle bundle) {
-		return observable;
+		return getObservable(bundle);
+	}
+
+	protected Observable<T> getObservable(final Bundle bundle) {
+		return Observable.create(new Observable.OnSubscribe<T>() {
+
+			@Override
+			public void call(Subscriber<? super T> sub) {
+				if (!sub.isUnsubscribed()) {
+					PresenterLoader<T> presenterLoader = getView().onCreatPresenterLoader(getPresenterId(), bundle);
+					try {
+						T t = presenterLoader.loadInBackground();
+						sub.onNext(t);
+						sub.onCompleted();
+					} catch (Exception e) {
+						sub.onError(e);
+					}
+				}
+			}
+		}).subscribeOn(Schedulers.io())//
+				.observeOn(AndroidSchedulers.mainThread());
 	}
 }
