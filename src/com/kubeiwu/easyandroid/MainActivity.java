@@ -101,7 +101,7 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 	}
 
 	@Override
-	public Observable<JsonResult<List<AreaInfo>>> onCreatObservable() {
+	public Observable<JsonResult<List<AreaInfo>>> onCreatObservable(Bundle bundle) {
 		return api.getCity1();
 	}
 }
