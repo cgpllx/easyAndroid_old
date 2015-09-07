@@ -57,7 +57,7 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 		@Override
 		public void onStart() {
 			super.onStart();
-			this.mController.showLoading();
+			this.mController.start();
 		}
 
 		@Override
@@ -67,13 +67,13 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 
 		@Override
 		public void onCompleted() {
-			this.mController.hideLoading();
+			this.mController.completed();
 		}
 
 		@Override
 		public void onError(Throwable e) {
-			this.mController.handleError("服务器或网络异常");
-			this.mController.hideLoading();
+			this.mController.error("服务器或网络异常");
+			// this.mController.hideLoading();
 		}
 	}
 }

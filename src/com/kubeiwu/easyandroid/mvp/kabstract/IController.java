@@ -4,15 +4,15 @@ public interface IController<T> {
 	/**
      * @hide
      */
-	void showLoading();
+	void start();
 	/**
      * @hide
      */
-	void hideLoading();
+	void completed();
 	/**
      * @hide
      */
-	void handleError(String errorDesc);
+	void error(String errorDesc);
 	/**
      * @hide
      */

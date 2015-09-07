@@ -12,17 +12,17 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 	protected final IController<T> mController = new IController<T>() {
 
 		@Override
-		public void showLoading() {
+		public void start() {
 			onShowLoading();
 		}
 
 		@Override
-		public void hideLoading() {
+		public void completed() {
 			onHideLoading();
 		}
 
 		@Override
-		public void handleError(String errorDesc) {
+		public void error(String errorDesc) {
 			onHandleError(errorDesc);
 		}
 
@@ -99,18 +99,18 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 
 	private void onShowLoading() {
 		if (isViewAttached())
-			getView().showLoading(presenterId);
+			getView().onStart(presenterId);
 
 	}
 
 	private void onHideLoading() {
 		if (isViewAttached())
-			getView().hideLoading(presenterId);
+			getView().onCompleted(presenterId);
 	}
 
 	private void onHandleError(String errorDesc) {
 		if (isViewAttached())
-			getView().handleError(presenterId, errorDesc);
+			getView().onError(presenterId, errorDesc);
 	}
 
 	private void onDeliverResult(final T results) {

@@ -78,18 +78,18 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 	}
 
 	@Override
-	public void showLoading(int presenterId) {
+	public void onStart(int presenterId) {
 		System.out.println("showLoading");
 	}
 
 	@Override
-	public void hideLoading(int presenterId) {
+	public void onCompleted(int presenterId) {
 		System.out.println("hideLoading");
 
 	}
 
 	@Override
-	public void handleError(int presenterId, String errorDesc) {
+	public void onError(int presenterId, String errorDesc) {
 		System.out.println("handleError");
 
 	}

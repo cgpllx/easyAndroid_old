@@ -18,7 +18,7 @@ public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<ISimpleL
 
 	@Override
 	public Loader<T> onCreateLoader(int arg0, Bundle bundle) {
-		mController.showLoading();
+		mController.start();
 		return getView().onCreateLoader(arg0, bundle);
 	}
 

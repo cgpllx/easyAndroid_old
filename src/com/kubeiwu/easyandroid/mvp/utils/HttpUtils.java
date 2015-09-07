@@ -2,9 +2,14 @@ package com.kubeiwu.easyandroid.mvp.utils;
 
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import rx.Observable;
+import rx.Observable.OnSubscribe;
+import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 import com.kubeiwu.commontool.khttp.KRequestQueueManager;
@@ -33,8 +38,26 @@ public class HttpUtils {
 	}
 
 	public static <T extends KResult> Observable<T> executeHttpRequestToObservable(final int method, final String url, final Map<String, String> headers, final Map<String, String> params, final Type type, final int requestMode) {
-		Future<T> future = voleyToFuture(method, url, headers, params, type, requestMode);
-		return futureToObservable(future);
+		Observable<T> observable = Observable.create(new OnSubscribe<T>() {
+			@Override
+			public void call(Subscriber<? super T> subscriber) {
+				Future<T> future = voleyToFuture(method, url, headers, params, type, requestMode);
+				try {
+					T t = future.get(20, TimeUnit.SECONDS);
+					if (t != null && t.isSuccess()) {
+						subscriber.onNext(t);
+						subscriber.onCompleted();
+					} else {
+						subscriber.onError(new Exception("响应数据不正确"));
+					}
+				} catch (InterruptedException | ExecutionException | TimeoutException e) {
+					e.printStackTrace();
+					subscriber.onError(e);
+				}
+			}
+		});
+
+		return observable;
 	}
 
 	public static <T extends KResult> Observable<T> executeHttpRequestToObservable(String url, Map<String, String> params, Type type, int requestMode) {

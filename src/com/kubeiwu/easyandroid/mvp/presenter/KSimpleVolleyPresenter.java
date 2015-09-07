@@ -25,7 +25,7 @@ public class KSimpleVolleyPresenter<T extends KResult> extends KPresenter<ISimpl
 
 	public synchronized void loadData(int method, String url, Map<String, String> headers, Map<String, String> params) {
 		cancel();
-		mController.showLoading();
+		mController.start();
 		gsonRequest = new KGsonRequest<T>(method, url, headers, params, listener, errorListener);
 		gsonRequest.setShouldAddCookiesToRequest(true);
 		gsonRequest.setCache_Duration(1000 * 60 * 60 * 24 * 300l);// 300天
@@ -71,7 +71,7 @@ public class KSimpleVolleyPresenter<T extends KResult> extends KPresenter<ISimpl
 	};
 
 	private void finishLoad() {
-		mController.hideLoading();
+		mController.completed();
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class KSimpleVolleyPresenter<T extends KResult> extends KPresenter<ISimpl
 	Response.ErrorListener errorListener = new Response.ErrorListener() {
 		@Override
 		public void onErrorResponse(VolleyError error) {
-			mController.handleError("服务器或网络异常");
+			mController.error("服务器或网络异常");
 			finishLoad();
 		}
 
