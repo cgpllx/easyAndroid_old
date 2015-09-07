@@ -12,5 +12,5 @@ public class KSimpleNetWorkPresenter<T> extends KRxJavaPresenter<ISimpleNetWorkV
 	public Observable<T> creatObservable(Bundle bundle) {
 		return getView().onCreatObservable(getPresenterId(), bundle);
 	}
-
+	
 }
