@@ -36,4 +36,4 @@ public class KSimpleThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadVie
 		}).subscribeOn(Schedulers.io())//
 				.observeOn(AndroidSchedulers.mainThread());
 	}
-}
+}  
