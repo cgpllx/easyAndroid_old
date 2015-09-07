@@ -18,6 +18,7 @@ import com.kubeiwu.commontool.khttp.Request.RequestMode;
 import com.kubeiwu.commontool.khttp.toolbox.notused.RequestFuture;
 import com.kubeiwu.easyandroid.kretrofit.KResult;
 import com.kubeiwu.easyandroid.kvolley.KGsonRequest;
+import com.kubeiwu.easyandroid.mvp.exception.MvpException;
 
 public class HttpUtils {
 
@@ -48,11 +49,11 @@ public class HttpUtils {
 						subscriber.onNext(t);
 						subscriber.onCompleted();
 					} else {
-						subscriber.onError(new Exception("响应数据不正确"));
+						subscriber.onError(new MvpException(t != null ? t.getFailureDesc() : "服务器或网络异常"));
 					}
 				} catch (InterruptedException | ExecutionException | TimeoutException e) {
 					e.printStackTrace();
-					subscriber.onError(e);
+					subscriber.onError(new MvpException("服务器或网络异常"));
 				}
 			}
 		});

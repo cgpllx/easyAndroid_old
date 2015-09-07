@@ -7,8 +7,8 @@ import java.lang.reflect.Type;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 
 public abstract class KPresenter<V extends ISimpleView<T>, T> implements Presenter<V> {
-	// private V iView;
-	private WeakReference<V> viewRef;
+	 private V iView;
+//	private WeakReference<V> viewRef;
 	protected final IController<T> mController = new IController<T>() {
 
 		@Override
@@ -33,16 +33,16 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 	};
 
 	public void attachView(V view) {
-		this.viewRef = new WeakReference<V>(view);
+		this.iView = view;
 		initDeliverResultType(view);
 	}
 
 	protected boolean isViewAttached() {
-		return viewRef != null && viewRef.get() != null;
+		return iView != null;
 	}
 
 	public V getView() {
-		return viewRef == null ? null : viewRef.get();
+		return iView;
 	}
 
 	@Override
@@ -91,9 +91,8 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 	}
 
 	public void detachView() {
-		if (viewRef != null) {
-			viewRef.clear();
-			viewRef = null;
+		if (iView != null) {
+			iView = null;
 		}
 	}
 

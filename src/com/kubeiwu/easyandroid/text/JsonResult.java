@@ -46,4 +46,10 @@ public class JsonResult<T> implements KResult {
 		this.desc = desc;
 	}
 
+	@Override
+	public String getFailureDesc() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -6,6 +6,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import android.os.Bundle;
 
+import com.kubeiwu.easyandroid.mvp.exception.MvpException;
 import com.kubeiwu.easyandroid.mvp.utils.RxUtils;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 
@@ -72,7 +73,11 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 
 		@Override
 		public void onError(Throwable e) {
-			this.mController.error("服务器或网络异常");
+			if (e != null && e instanceof MvpException) {
+				this.mController.error(e.getMessage());
+			} else {
+				this.mController.error("服务器或网络异常");
+			}
 			// this.mController.hideLoading();
 		}
 	}
