@@ -1,14 +1,22 @@
 package com.kubeiwu.easyandroid;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import rx.Observable;
+import android.app.Notification.Action;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.kubeiwu.easyandroid.kretrofit.KResult;
 import com.kubeiwu.easyandroid.kretrofit.KRetrofitApiFactory;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
@@ -98,8 +106,50 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 	public void deliverResult(int presenterId, JsonResult<List<AreaInfo>> results) {
 		System.out.println("deliverResult");
 		System.out.println("deliverResult--results" + results.getData().size());
+		
+		 GsonBuilder gb = new GsonBuilder();
+		 Type type=null;
+	      gb.registerTypeAdapter(type, new CustomDeserializer());
+	      Gson customGson = gb.create();
 	}
+	public static class CustomDeserializer implements JsonDeserializer<KResult> {
 
+	      public KResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+
+	         if (json == null)
+	            return null;
+	         else {
+//	            JsonElement e = json.getAsJsonObject().get("specialStr");
+	            
+	            JsonElement ee= json.getAsJsonObject().get("code");
+	            
+	            if(ee!=null&&ee.isJsonPrimitive()&&ee.getAsString() instanceof String){
+	            	String code=ee.getAsString();
+	            	//如果code不为正确，就反悔父类，否则反悔子类
+	            	if("c0000".equals(code)){
+
+	            	}
+	            }
+//	            
+//	            if (e != null && e.isJsonPrimitive() && e.getAsString() instanceof String) {
+//	               CommandSpecific1 c = new CommandSpecific1();
+//	               c.specialStr = e.getAsString(); // do you need this?
+//	               return c;
+//	            }
+//
+//	            e = json.getAsJsonObject().get("specialInt");
+//	            if (e != null && e.isJsonPrimitive() && e.getAsNumber() instanceof Number) {
+//	               CommandSpecific2 c = new CommandSpecific2();
+//	               c.specialInt = e.getAsInt(); // do you need this?
+//	               return c;
+//	            }
+	            return null; // or throw an IllegalArgumentException
+
+	         }
+
+	      }
+
+	   }
 	@Override
 	public Observable<JsonResult<List<AreaInfo>>> onCreatObservable(int id,Bundle bundle) {
 		return api.getCity1();
