@@ -95,6 +95,7 @@ public class KGsonRequest<T extends KResult> extends KRequest<T> {
 				return Response.success(t, null);
 			} catch (JsonSyntaxException e) {
 				e.printStackTrace();
+				otherParse(mGson, json);
 				return Response.error(new ParseError(e));
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -104,6 +105,10 @@ public class KGsonRequest<T extends KResult> extends KRequest<T> {
 		} catch (Exception e) {
 			return Response.error(new ParseError(e));
 		}
+	}
+
+	protected void otherParse(Gson mgson2, String json) {
+		
 	}
 
 }

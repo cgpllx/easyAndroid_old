@@ -138,7 +138,7 @@ public class KRestAdapter {
 
 	private final Client.Provider clientProvider;
 	private final Profiler profiler;
-	private RxSupport rxSupport;
+	private KRxSupport rxSupport;
 
 	volatile LogLevel logLevel;
 
@@ -235,12 +235,12 @@ public class KRestAdapter {
 			if (methodInfo.isObservable) {
 				if (rxSupport == null) {
 					if (Platform.HAS_RX_JAVA) {
-						rxSupport = new RxSupport(httpExecutor, errorHandler, requestInterceptor);
+						rxSupport = new KRxSupport(httpExecutor, errorHandler, requestInterceptor);
 					} else {
 						throw new IllegalStateException("Observable method found but no RxJava on classpath.");
 					}
 				}
-				return rxSupport.createRequestObservable(new RxSupport.Invoker() {
+				return rxSupport.createRequestObservable(new KRxSupport.Invoker() {
 					@Override
 					public ResponseWrapper invoke(RequestInterceptor requestInterceptor) {
 						return (ResponseWrapper) invokeRequest(requestInterceptor, methodInfo, args);
