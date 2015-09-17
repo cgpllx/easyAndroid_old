@@ -19,7 +19,7 @@ public interface Api {
 	@GET("/xpt/area/city")
 	JsonResult<List<AreaInfo>> getCity();
 	
-//	@Headers(CacheMode.LOAD_CACHE_ELSE_NETWORK)
+	@Headers(CacheMode.LOAD_CACHE_ELSE_NETWORK)
 	@GET("/xpt/area/city")
 	Observable<JsonResult<List<AreaInfo>>> getCity1();
 }
