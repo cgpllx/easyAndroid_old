@@ -66,9 +66,11 @@ public final class KGsonConverter<T> implements Converter<T> {
 
 	public T fromBody(ResponseBody value, Request request) throws IOException {
 		String string = value.string();
+		System.out.println("string==="+string);
 		Reader reader = new InputStreamReader((new ByteArrayInputStream(string.getBytes())), Util.UTF_8);
 		try {
 			T t = typeAdapter.fromJson(reader);
+			System.out.println("t======="+t);
 			if (t instanceof Result) {
 				KResult kResult = (KResult) t;
 				if (kResult != null && kResult.isSuccess()) {

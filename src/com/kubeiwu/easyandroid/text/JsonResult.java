@@ -48,8 +48,7 @@ public class JsonResult<T> implements KResult {
 
 	@Override
 	public String getFailureDesc() {
-		// TODO Auto-generated method stub
-		return null;
+		return desc;
 	}
 
 }

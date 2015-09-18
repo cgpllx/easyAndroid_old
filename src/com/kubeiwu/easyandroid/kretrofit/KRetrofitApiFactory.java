@@ -49,11 +49,12 @@ public class KRetrofitApiFactory {
 
 		client = new OkHttpClient();
 		client.setConnectTimeout(15 * 1000, TimeUnit.MILLISECONDS);
+		client.setFollowRedirects(true);
 		client.setReadTimeout(20 * 1000, TimeUnit.MILLISECONDS);
 		client.setCookieHandler(new CookieManager(new PersistentCookieStore(context.getApplicationContext()), CookiePolicy.ACCEPT_ORIGINAL_SERVER));
 		client.setCache(new Cache(Utils.getDiskCacheDir(context.getApplicationContext(), UNIQUENAME), 10 * 1024 * 1024));// OkHttpClient缓存
 
-		kGsonConverterFactory = KGsonConverterFactory.create(cache);
+		kGsonConverterFactory = KGsonConverterFactory.create(gson,cache);
 	}
 
 	public OkHttpClient getOkHttpClient() {

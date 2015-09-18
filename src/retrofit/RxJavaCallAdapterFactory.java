@@ -18,6 +18,9 @@ package retrofit;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import com.kubeiwu.easyandroid.core.KResult;
+import com.kubeiwu.easyandroid.mvp.exception.MvpException;
+
 import retrofit.CallAdapter;
 import rx.Observable;
 import rx.Subscriber;
@@ -53,8 +56,10 @@ public final class RxJavaCallAdapterFactory implements CallAdapter.Factory {
 
 		CallAdapter<Object> callAdapter = getCallAdapter(returnType);
 		if (isSingle) {
-			// Add Single-converter wrapper from a separate class. This defers classloading such that
-			// regular Observable operation can be leveraged without relying on this unstable RxJava API.
+			// Add Single-converter wrapper from a separate class. This defers
+			// classloading such that
+			// regular Observable operation can be leveraged without relying on
+			// this unstable RxJava API.
 			callAdapter = KSingleHelper.makeSingle(callAdapter);
 		}
 		return callAdapter;
@@ -94,7 +99,8 @@ public final class RxJavaCallAdapterFactory implements CallAdapter.Factory {
 			// Since Call is a one-shot type, clone it for each new subscriber.
 			final Call<T> call = originalCall.clone();
 
-			// Attempt to cancel the call if it is still in-flight on unsubscription.
+			// Attempt to cancel the call if it is still in-flight on
+			// unsubscription.
 			subscriber.add(Subscriptions.create(new Action0() {
 				@Override
 				public void call() {
@@ -109,6 +115,14 @@ public final class RxJavaCallAdapterFactory implements CallAdapter.Factory {
 						return;
 					}
 					try {
+						T t = response.body();
+						if (t != null && t instanceof KResult) {
+							KResult kResult = (KResult) t;
+							if (kResult == null || !kResult.isSuccess()) {
+								subscriber.onError(new MvpException(kResult != null ? kResult.getFailureDesc() : "服务器或网络异常"));
+								return;
+							}
+						}
 						subscriber.onNext(response);
 					} catch (Throwable t) {
 						subscriber.onError(t);
