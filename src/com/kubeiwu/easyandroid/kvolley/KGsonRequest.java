@@ -14,7 +14,7 @@ import com.kubeiwu.commontool.khttp.Response.Listener;
 import com.kubeiwu.commontool.khttp.exception.ParseError;
 import com.kubeiwu.commontool.khttp.krequestimpl.KRequest;
 import com.kubeiwu.commontool.khttp.toolbox.HttpHeaderParser;
-import com.kubeiwu.easyandroid.kretrofit.KResult;
+import com.kubeiwu.easyandroid.core.KResult;
 
 public class KGsonRequest<T extends KResult> extends KRequest<T> {
 

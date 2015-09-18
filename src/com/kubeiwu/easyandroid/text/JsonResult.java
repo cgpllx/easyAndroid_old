@@ -1,6 +1,6 @@
 package com.kubeiwu.easyandroid.text;
 
-import com.kubeiwu.easyandroid.kretrofit.KResult;
+import com.kubeiwu.easyandroid.core.KResult;
 
 /**
  * 用来解析登录的返回结果
@@ -48,8 +48,7 @@ public class JsonResult<T> implements KResult {
 
 	@Override
 	public String getFailureDesc() {
-		// TODO Auto-generated method stub
-		return null;
+		return desc;
 	}
 
 }
