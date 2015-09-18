@@ -15,192 +15,95 @@
  */
 package com.kubeiwu.easyandroid.kretrofit;
 
+import java.io.ByteArrayInputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.Charset;
 
-import retrofit.client.Header;
-import retrofit.client.Response;
-import retrofit.converter.ConversionException;
-import retrofit.converter.Converter;
-import retrofit.mime.MimeUtil;
-import retrofit.mime.TypedInput;
-import retrofit.mime.TypedOutput;
+import okio.Buffer;
+import retrofit.Converter;
+import retrofit.Result;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
-import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
+import com.google.gson.TypeAdapter;
+import com.kubeiwu.easyandroid.cache.volleycache.Cache;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache.Entry;
+import com.kubeiwu.easyandroid.core.KResult;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.ResponseBody;
+import com.squareup.okhttp.internal.Util;
 
-/**
- * A {@link Converter} which uses GSON for serialization and deserialization of
- * entities.
- *
- * @author Jake Wharton (jw@squareup.com)
- */
-public class KGsonConverter implements Converter {
-	private final Gson gson;
-	private final DiskBasedCache kOkhttpCache;
-	private String charset;
+public final class KGsonConverter<T> implements Converter<T> {
+	private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
+	private static final Charset UTF_8 = Charset.forName("UTF-8");
 
-	/**
-	 * Create an instance using the supplied {@link Gson} object for conversion.
-	 * Encoding to JSON and decoding from JSON (when no charset is specified by
-	 * a header) will use UTF-8.
-	 */
-	public KGsonConverter(Gson gson, DiskBasedCache kOkhttpCache) {
-		this(gson, kOkhttpCache, "UTF-8");
+	private final TypeAdapter<T> typeAdapter;
+	private final Cache cache;
+
+	KGsonConverter(TypeAdapter<T> adapter, Cache cache) {
+		this.typeAdapter = adapter;
+		this.cache = cache;
 	}
 
-	/**
-	 * Create an instance using the supplied {@link Gson} object for conversion.
-	 * Encoding to JSON and decoding from JSON (when no charset is specified by
-	 * a header) will use the specified charset.
-	 */
-	public KGsonConverter(Gson gson, DiskBasedCache kOkhttpCache, String charset) {
-		this.gson = gson;
-		this.charset = charset;
-		this.kOkhttpCache = kOkhttpCache;
+	public Cache getCache() {
+		return cache;
 	}
 
 	@Override
-	public Object fromBody(TypedInput body, Type type) throws ConversionException {
-		String charset = this.charset;
-		if (body.mimeType() != null) {
-			charset = MimeUtil.parseCharset(body.mimeType(), charset);
-		}
-		InputStreamReader isr = null;
-
+	public T fromBody(ResponseBody body) throws IOException {
+		Reader reader = body.charStream();
 		try {
-			isr = new InputStreamReader(body.in(), charset);
-			KResult j = gson.fromJson(isr, type);
-			if (j.isSuccess()) {
-				System.out.println("成功");
-				// kOkhttpCache.put(url, body);
-				// 这里开始缓存
-			}
-			return j;
-		} catch (IOException e) {
-			throw new ConversionException(e);
-		} catch (JsonParseException e) {
-			throw new ConversionException(e);
+			return typeAdapter.fromJson(reader);
 		} finally {
-			if (isr != null) {
-				try {
-					isr.close();
-				} catch (IOException ignored) {
-				}
-			}
+			closeQuietly(reader);
 		}
 	}
 
-	public Object fromBody(Response response, Type type) throws ConversionException {
-		String charset = this.charset;
-
-		TypedInput body = response.getBody();
-		String url = response.getUrl();
-		List<Header> headers = response.getHeaders();
-
-		Map<String, String> headerMap = convertToMap(headers);
-
-		if (body.mimeType() != null) {
-			charset = MimeUtil.parseCharset(body.mimeType(), charset);
-		}
-		InputStreamReader isr = null;
+	public T fromBody(ResponseBody value, Request request) throws IOException {
+		String string = value.string();
+		Reader reader = new InputStreamReader((new ByteArrayInputStream(string.getBytes())), Util.UTF_8);
 		try {
-			isr = new InputStreamReader(body.in(), charset);
-			Object resultObject = null;
-			try {
-				resultObject = gson.fromJson(isr, type);
-				if (resultObject != null && resultObject instanceof KResult) {
-					KResult result = (KResult) resultObject;
-					if (result != null && result.isSuccess()) {// 保存
-						Entry entry = new Entry();
-						entry.data = gson.toJson(result).getBytes(charset);
-						entry.responseHeaders = headerMap;
-						entry.mimeType = body.mimeType();
-						kOkhttpCache.put(url, entry);
-					}
+			T t = typeAdapter.fromJson(reader);
+			if (t instanceof Result) {
+				KResult kResult = (KResult) t;
+				if (kResult != null && kResult.isSuccess()) {
+					Entry entry = new Entry();
+
+					entry.data = string.getBytes("UTF-8");
+					entry.mimeType = value.contentType().toString();
+					cache.put(request.urlString(), entry);
 				}
-			} catch (JsonParseException e) {
-				e.printStackTrace();
-				otherParse(gson,isr);
-				// 这里可以执行没有登陆的判断(用登陆的格式解析，解析成功就执行登陆的操作)
 			}
-			return resultObject;
-		} catch (IOException e) {
-			throw new ConversionException(e);
-		} catch (JsonParseException e) {
-			throw new ConversionException(e);
+			return t;
 		} finally {
-			if (isr != null) {
-				try {
-					isr.close();
-				} catch (IOException ignored) {
-				}
-			}
+			closeQuietly(reader);
 		}
 	}
 
-	private void otherParse(Gson gson, InputStreamReader isr) {
-		 
-		
-	}
-
-	private Map<String, String> convertToMap(List<Header> headers) {
-
-		if (headers != null && headers.size() > 0) {
-			HashMap<String, String> map = new HashMap<String, String>();
-			for (Header header : headers) {
-				map.put(header.getName(), header.getValue());
-			}
-			return map;
+	static void closeQuietly(Closeable closeable) {
+		if (closeable == null)
+			return;
+		try {
+			closeable.close();
+		} catch (IOException ignored) {
 		}
-		return Collections.emptyMap();
 	}
 
 	@Override
-	public TypedOutput toBody(Object object) {
+	public RequestBody toBody(T value) {
+		Buffer buffer = new Buffer();
+		Writer writer = new OutputStreamWriter(buffer.outputStream(), UTF_8);
 		try {
-			return new JsonTypedOutput(gson.toJson(object).getBytes(charset), charset);
-		} catch (UnsupportedEncodingException e) {
-			throw new AssertionError(e);
+			typeAdapter.toJson(writer, value);
+			writer.flush();
+		} catch (IOException e) {
+			throw new AssertionError(e); // Writing to Buffer does no I/O.
 		}
-	}
-
-	private static class JsonTypedOutput implements TypedOutput {
-		private final byte[] jsonBytes;
-		private final String mimeType;
-
-		JsonTypedOutput(byte[] jsonBytes, String encode) {
-			this.jsonBytes = jsonBytes;
-			this.mimeType = "application/json; charset=" + encode;
-		}
-
-		@Override
-		public String fileName() {
-			return null;
-		}
-
-		@Override
-		public String mimeType() {
-			return mimeType;
-		}
-
-		@Override
-		public long length() {
-			return jsonBytes.length;
-		}
-
-		@Override
-		public void writeTo(OutputStream out) throws IOException {
-			out.write(jsonBytes);
-		}
+		return RequestBody.create(MEDIA_TYPE, buffer.readByteString());
 	}
 }

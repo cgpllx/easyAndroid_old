@@ -7,7 +7,7 @@ import com.kubeiwu.commontool.khttp.Request.Method;
 import com.kubeiwu.commontool.khttp.Request.RequestMode;
 import com.kubeiwu.commontool.khttp.Response;
 import com.kubeiwu.commontool.khttp.exception.VolleyError;
-import com.kubeiwu.easyandroid.kretrofit.KResult;
+import com.kubeiwu.easyandroid.core.KResult;
 import com.kubeiwu.easyandroid.kvolley.KGsonRequest;
 import com.kubeiwu.easyandroid.mvp.kabstract.KPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;

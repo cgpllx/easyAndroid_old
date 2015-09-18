@@ -5,7 +5,8 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.concurrent.TimeUnit;
 
-import retrofit.KRestAdapter;
+import retrofit.KRetrofit;
+import retrofit.RxJavaCallAdapterFactory;
 import android.content.Context;
 
 import com.google.gson.Gson;
@@ -16,12 +17,11 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
 public class KRetrofitApiFactory {
-	public static final String UNIQUENAME = "okhttpdefault";
+	public static final String UNIQUENAME = "okhttpcache";
 	private final static KRetrofitApiFactory kRetrofitManager = new KRetrofitApiFactory();
 
-	private KOkClient kclient;
-	private KGsonConverter kGsonConverter;
 	private OkHttpClient client;
+	KGsonConverterFactory kGsonConverterFactory;
 
 	public static KRetrofitApiFactory getInstance() {
 		return kRetrofitManager;
@@ -44,17 +44,16 @@ public class KRetrofitApiFactory {
 	 * @throws IOException
 	 */
 	public void init(Context context, Gson gson) throws IOException {
-		DiskBasedCache kOkhttpCache = new DiskBasedCache(Utils.getDiskCacheDir(context.getApplicationContext(), "volleycache"));
-		kOkhttpCache.initialize();
+		DiskBasedCache cache = new DiskBasedCache(Utils.getDiskCacheDir(context.getApplicationContext(), "volleycache"));// retrofit缓存
+		cache.initialize();
 
 		client = new OkHttpClient();
 		client.setConnectTimeout(15 * 1000, TimeUnit.MILLISECONDS);
 		client.setReadTimeout(20 * 1000, TimeUnit.MILLISECONDS);
 		client.setCookieHandler(new CookieManager(new PersistentCookieStore(context.getApplicationContext()), CookiePolicy.ACCEPT_ORIGINAL_SERVER));
-		client.setCache(new Cache(Utils.getDiskCacheDir(context.getApplicationContext(), UNIQUENAME), 10 * 1024 * 1024));
+		client.setCache(new Cache(Utils.getDiskCacheDir(context.getApplicationContext(), UNIQUENAME), 10 * 1024 * 1024));// OkHttpClient缓存
 
-		kclient = new KOkClient(kOkhttpCache, client);
-		kGsonConverter = new KGsonConverter(gson, kOkhttpCache);
+		kGsonConverterFactory = KGsonConverterFactory.create(cache);
 	}
 
 	public OkHttpClient getOkHttpClient() {
@@ -72,12 +71,13 @@ public class KRetrofitApiFactory {
 	 * @return
 	 */
 	public <T> T getApi(Class<T> clazz, String endpoint) {
-		KRestAdapter restAdapter = new KRestAdapter.Builder()//
-				.setEndpoint(endpoint)//
-				.setConverter(kGsonConverter)//
-				.setClient(kclient)//
-				.build();
-		T api = restAdapter.create(clazz);
+		KRetrofit retrofit = new KRetrofit.Builder()//
+				.client(client)//
+				.baseUrl(endpoint)//
+				.addConverterFactory(kGsonConverterFactory)//
+				.addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build();
+
+		T api = retrofit.create(clazz);
 		return api;
 	}
 }

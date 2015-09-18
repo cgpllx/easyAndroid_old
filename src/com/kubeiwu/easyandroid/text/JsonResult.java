@@ -1,6 +1,6 @@
 package com.kubeiwu.easyandroid.text;
 
-import com.kubeiwu.easyandroid.kretrofit.KResult;
+import com.kubeiwu.easyandroid.core.KResult;
 
 /**
  * 用来解析登录的返回结果
