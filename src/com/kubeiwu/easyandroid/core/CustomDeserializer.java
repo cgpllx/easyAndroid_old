@@ -34,7 +34,7 @@ public class CustomDeserializer implements JsonDeserializer<JsonResult<?>> {
 					return jsonResult;
 				}
 			}
-			return null;
+			return null;  
 		}
 	}
 }
