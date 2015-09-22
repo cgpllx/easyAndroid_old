@@ -1,4 +1,4 @@
-package com.kubeiwu.easyandroid.utils;
+package com.kubeiwu.easyandroid.core;
 
 import java.lang.reflect.Type;
 
