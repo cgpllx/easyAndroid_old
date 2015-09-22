@@ -1,8 +1,10 @@
 package com.kubeiwu.easyandroid;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import okio.BufferedSource;
 import retrofit.Callback;
 import retrofit.Response;
 import rx.Observable;
@@ -21,6 +23,11 @@ import com.kubeiwu.easyandroid.text.Api;
 import com.kubeiwu.easyandroid.text.ApiPrivider;
 import com.kubeiwu.easyandroid.text.AreaInfo;
 import com.kubeiwu.easyandroid.text.JsonResult;
+import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.ResponseBody;
 
 public class MainActivity extends FragmentActivity implements ISimpleNetWorkView<JsonResult<List<AreaInfo>>> {
 	TextView hello;
@@ -92,6 +99,39 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 		// Type type=null;
 		// gb.registerTypeAdapter(type, new CustomDeserializer());
 		// Gson customGson = gb.create();
+//		ResponseBody file=new ResponseBody() {
+//			
+//			@Override
+//			public BufferedSource source() throws IOException {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+//			
+//			@Override
+//			public MediaType contentType() {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+//			
+//			@Override
+//			public long contentLength() throws IOException {
+//				// TODO Auto-generated method stub
+//				return 0;
+//			}
+//		};
+//		MultipartBuilder d=new MultipartBuilder();
+//		d..build();
+//		RequestBody.create(contentType, content)
+//		 RequestBody requestBody = new MultipartBuilder()
+//	      .type(MultipartBuilder.FORM)
+//	      .addPart(
+//	          Headers.of("Content-Disposition", "form-data; name=\"title\""),
+//	          RequestBody.create(null, "Square Logo"))
+//	      .addPart(
+//	          Headers.of("Content-Disposition", "form-data; name=\"image\""),
+//	          RequestBody.create(MEDIA_TYPE_PNG, new File("website/static/logo-square.png")))
+//	      .build();
+//		RequestBody photo=RequestBody .create(contentType, file);
 	}
 
 

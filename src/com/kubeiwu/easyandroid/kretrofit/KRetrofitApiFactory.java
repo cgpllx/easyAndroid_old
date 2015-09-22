@@ -54,7 +54,7 @@ public class KRetrofitApiFactory {
 		client.setCookieHandler(new CookieManager(new PersistentCookieStore(context.getApplicationContext()), CookiePolicy.ACCEPT_ORIGINAL_SERVER));
 		client.setCache(new Cache(Utils.getDiskCacheDir(context.getApplicationContext(), UNIQUENAME), 10 * 1024 * 1024));// OkHttpClient缓存
 
-		kGsonConverterFactory = KGsonConverterFactory.create(gson,cache);
+		kGsonConverterFactory = KGsonConverterFactory.create(gson, cache);
 	}
 
 	public OkHttpClient getOkHttpClient() {
@@ -76,9 +76,9 @@ public class KRetrofitApiFactory {
 				.client(client)//
 				.baseUrl(endpoint)//
 				.addConverterFactory(kGsonConverterFactory)//
-				.addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build();
+				.addCallAdapterFactory(RxJavaCallAdapterFactory.create())//
+				.build();
 
-		T api = retrofit.create(clazz);
-		return api;
+		return retrofit.create(clazz);
 	}
 }
