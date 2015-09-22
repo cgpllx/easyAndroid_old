@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import okio.Buffer;
@@ -69,40 +70,37 @@ public final class KGsonConverter<T> implements Converter<T> {
 		try {
 			T t = typeAdapter.fromJson(reader);
 			System.out.println("转换的最终对象：" + t);
-			System.out.println("request.cacheControl()=="+request.cacheControl());
-			System.out.println("request.maxAgeSeconds()=="+request.cacheControl().maxAgeSeconds());
-			System.out.println("request.maxStaleSeconds()=="+request.cacheControl().maxStaleSeconds());
-			System.out.println("request.minFreshSeconds()=="+request.cacheControl().minFreshSeconds());
-			System.out.println("request.sMaxAgeSeconds()=="+request.cacheControl().sMaxAgeSeconds());
-			System.out.println("request.isPrivate()=="+request.cacheControl().isPrivate());
-			System.out.println("request.isPublic()=="+request.cacheControl().isPublic());
-			System.out.println("request.mustRevalidate()=="+request.cacheControl().mustRevalidate());
-			System.out.println("request.noCache()=="+request.cacheControl().noCache());
-			System.out.println("request.noStore()=="+request.cacheControl().noStore());
-			System.out.println("request.noTransform()=="+request.cacheControl().noTransform());
-			System.out.println("request.onlyIfCached()=="+request.cacheControl().onlyIfCached());
- 
-//			if(){
-//				
-//			}
-			
-			if (t instanceof KResult) {
-				System.out.println("11111111111");
-				KResult kResult = (KResult) t;
-				if (kResult != null && kResult.isSuccess()) {
-					System.out.println("22222222222222");
-					Entry entry = new Entry();
-//					request.cacheControl().
-					System.out.println("request.cacheControl()=="+request.cacheControl());
-
-					entry.data = string.getBytes(UTF8);
-					entry.mimeType = value.contentType().toString();
-					cache.put(request.urlString(), entry);
-				}
-			}
+			String mimeType = value.contentType().toString();
+			parseCache(request, t, string, mimeType);
 			return t;
 		} finally {
 			closeQuietly(reader);
+		}
+	}
+
+	private void parseCache(Request request, T object, String string, String mimeType) throws UnsupportedEncodingException {
+		com.squareup.okhttp.CacheControl cacheControl = request.cacheControl();
+		if (cacheControl != null) {
+			if (!cacheControl.noCache() && !cacheControl.noStore()) {
+				if (object instanceof KResult) {
+					KResult kResult = (KResult) object;
+					if (kResult != null && kResult.isSuccess()) {
+						long now = System.currentTimeMillis();
+						long maxAge = cacheControl.maxAgeSeconds();
+						long softExpire = now + maxAge * 1000;
+						System.out.println("缓存时长:" + (softExpire - now) / 1000 + "秒");
+						Cache.Entry entry = new Cache.Entry();
+						entry.softTtl = softExpire;
+						entry.ttl = entry.softTtl;
+						// entry.serverDate = serverDate;
+						// entry.responseHeaders = headers;
+						entry.mimeType = mimeType;
+						System.out.println("request.cacheControl()==" + request.cacheControl());
+						entry.data = string.getBytes(UTF8);
+						cache.put(request.urlString(), entry);
+					}
+				}
+			}
 		}
 	}
 
