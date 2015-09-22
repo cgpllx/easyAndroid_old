@@ -46,7 +46,7 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 			// Type type=null;
 			gb.registerTypeAdapter(JsonResult.class, new CustomDeserializer());
 			Gson customGson = gb.create();
-//			KRetrofitApiFactory.getInstance().init(this  );
+			// KRetrofitApiFactory.getInstance().init(this );
 			KRetrofitApiFactory.getInstance().init(this, customGson);
 
 			// return;
@@ -99,41 +99,41 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 		// Type type=null;
 		// gb.registerTypeAdapter(type, new CustomDeserializer());
 		// Gson customGson = gb.create();
-//		ResponseBody file=new ResponseBody() {
-//			
-//			@Override
-//			public BufferedSource source() throws IOException {
-//				// TODO Auto-generated method stub
-//				return null;
-//			}
-//			
-//			@Override
-//			public MediaType contentType() {
-//				// TODO Auto-generated method stub
-//				return null;
-//			}
-//			
-//			@Override
-//			public long contentLength() throws IOException {
-//				// TODO Auto-generated method stub
-//				return 0;
-//			}
-//		};
-//		MultipartBuilder d=new MultipartBuilder();
-//		d..build();
-//		RequestBody.create(contentType, content)
-//		 RequestBody requestBody = new MultipartBuilder()
-//	      .type(MultipartBuilder.FORM)
-//	      .addPart(
-//	          Headers.of("Content-Disposition", "form-data; name=\"title\""),
-//	          RequestBody.create(null, "Square Logo"))
-//	      .addPart(
-//	          Headers.of("Content-Disposition", "form-data; name=\"image\""),
-//	          RequestBody.create(MEDIA_TYPE_PNG, new File("website/static/logo-square.png")))
-//	      .build();
-//		RequestBody photo=RequestBody .create(contentType, file);
+		// ResponseBody file=new ResponseBody() {
+		//
+		// @Override
+		// public BufferedSource source() throws IOException {
+		// // TODO Auto-generated method stub
+		// return null;
+		// }
+		//
+		// @Override
+		// public MediaType contentType() {
+		// // TODO Auto-generated method stub
+		// return null;
+		// }
+		//
+		// @Override
+		// public long contentLength() throws IOException {
+		// // TODO Auto-generated method stub
+		// return 0;
+		// }
+		// };
+		// MultipartBuilder d=new MultipartBuilder();
+		// d..build();
+		// RequestBody.create(contentType, content)
+		// RequestBody requestBody = new MultipartBuilder()
+		// .type(MultipartBuilder.FORM)
+		// .addPart(
+		// Headers.of("Content-Disposition", "form-data; name=\"title\""),
+		// RequestBody.create(null, "Square Logo"))
+		// .addPart(
+		// Headers.of("Content-Disposition", "form-data; name=\"image\""),
+		// RequestBody.create(MEDIA_TYPE_PNG, new
+		// File("website/static/logo-square.png")))
+		// .build();
+		// RequestBody photo=RequestBody .create(contentType, file);
 	}
-
 
 	@Override
 	public Observable<JsonResult<List<AreaInfo>>> onCreatObservable(int id, Bundle bundle) {

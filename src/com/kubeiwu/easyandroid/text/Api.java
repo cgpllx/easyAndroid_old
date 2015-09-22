@@ -8,6 +8,8 @@ import com.squareup.okhttp.RequestBody;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.Header;
+import retrofit.http.Headers;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
@@ -30,7 +32,9 @@ public interface Api {
 	@GET("/xpt/area/city")
 	JsonResult<List<AreaInfo>> getCity();
 
-	// @Headers(CacheMode.LOAD_CACHE_ELSE_NETWORK)
+
+//	@Headers("Cache-Control : max-stale=3600")
+	@Headers("Cache-Control: max-age=640000")
 	@GET("/xpt/area/city")
 	Observable<JsonResult<List<AreaInfo>>> getCity1();
 
@@ -39,9 +43,10 @@ public interface Api {
 	// Observable<JsonResult<List<AreaInfo>>> upload(@Part("fileContent")
 	// TypedFile file);
 
-	Observable<JsonResult<List<AreaInfo>>> upload(@Body RequestBody file);
-//	RequestBody photo=RequestBody .create(MediaType.parse(""), file);
-	@Multipart
-	@POST("/user/photo")
-	Call<String> updateUser(@Part("photo") RequestBody photo, @Part("description") RequestBody description);
+	// Observable<JsonResult<List<AreaInfo>>> upload(@Body RequestBody file);
+	// RequestBody photo=RequestBody .create(MediaType.parse(""), file);
+	// @Multipart
+	// @POST("/user/photo")
+	// Call<String> updateUser(@Part("photo") RequestBody photo,
+	// @Part("description") RequestBody description);
 }

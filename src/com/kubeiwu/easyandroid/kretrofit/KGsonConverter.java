@@ -22,7 +22,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.charset.Charset;
 
 import okio.Buffer;
 import retrofit.Converter;
@@ -40,8 +39,7 @@ import com.squareup.okhttp.internal.Util;
 
 public final class KGsonConverter<T> implements Converter<T> {
 	private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
-	private static final Charset UTF_8 = Charset.forName("UTF-8");
-
+	public static final String UTF8 = "UTF-8";
 	private final TypeAdapter<T> typeAdapter;
 	private final Cache cache;
 
@@ -66,17 +64,38 @@ public final class KGsonConverter<T> implements Converter<T> {
 
 	public T fromBody(ResponseBody value, Request request) throws IOException {
 		String string = value.string();
-		System.out.println("string==="+string);
-		Reader reader = new InputStreamReader((new ByteArrayInputStream(string.getBytes())), Util.UTF_8);
+		System.out.println("网络请求到的字符串:" + string);
+		Reader reader = new InputStreamReader((new ByteArrayInputStream(string.getBytes(UTF8))), Util.UTF_8);
 		try {
 			T t = typeAdapter.fromJson(reader);
-			System.out.println("t======="+t);
-			if (t instanceof Result) {
+			System.out.println("转换的最终对象：" + t);
+			System.out.println("request.cacheControl()=="+request.cacheControl());
+			System.out.println("request.maxAgeSeconds()=="+request.cacheControl().maxAgeSeconds());
+			System.out.println("request.maxStaleSeconds()=="+request.cacheControl().maxStaleSeconds());
+			System.out.println("request.minFreshSeconds()=="+request.cacheControl().minFreshSeconds());
+			System.out.println("request.sMaxAgeSeconds()=="+request.cacheControl().sMaxAgeSeconds());
+			System.out.println("request.isPrivate()=="+request.cacheControl().isPrivate());
+			System.out.println("request.isPublic()=="+request.cacheControl().isPublic());
+			System.out.println("request.mustRevalidate()=="+request.cacheControl().mustRevalidate());
+			System.out.println("request.noCache()=="+request.cacheControl().noCache());
+			System.out.println("request.noStore()=="+request.cacheControl().noStore());
+			System.out.println("request.noTransform()=="+request.cacheControl().noTransform());
+			System.out.println("request.onlyIfCached()=="+request.cacheControl().onlyIfCached());
+ 
+//			if(){
+//				
+//			}
+			
+			if (t instanceof KResult) {
+				System.out.println("11111111111");
 				KResult kResult = (KResult) t;
 				if (kResult != null && kResult.isSuccess()) {
+					System.out.println("22222222222222");
 					Entry entry = new Entry();
+//					request.cacheControl().
+					System.out.println("request.cacheControl()=="+request.cacheControl());
 
-					entry.data = string.getBytes("UTF-8");
+					entry.data = string.getBytes(UTF8);
 					entry.mimeType = value.contentType().toString();
 					cache.put(request.urlString(), entry);
 				}
@@ -99,7 +118,7 @@ public final class KGsonConverter<T> implements Converter<T> {
 	@Override
 	public RequestBody toBody(T value) {
 		Buffer buffer = new Buffer();
-		Writer writer = new OutputStreamWriter(buffer.outputStream(), UTF_8);
+		Writer writer = new OutputStreamWriter(buffer.outputStream(), Util.UTF_8);
 		try {
 			typeAdapter.toJson(writer, value);
 			writer.flush();
