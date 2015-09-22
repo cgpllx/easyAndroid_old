@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kubeiwu.easyandroid.core.CustomDeserializer;
 import com.kubeiwu.easyandroid.kretrofit.KRetrofitApiFactory;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
@@ -20,7 +21,6 @@ import com.kubeiwu.easyandroid.text.Api;
 import com.kubeiwu.easyandroid.text.ApiPrivider;
 import com.kubeiwu.easyandroid.text.AreaInfo;
 import com.kubeiwu.easyandroid.text.JsonResult;
-import com.kubeiwu.easyandroid.utils.CustomDeserializer;
 
 public class MainActivity extends FragmentActivity implements ISimpleNetWorkView<JsonResult<List<AreaInfo>>> {
 	TextView hello;
