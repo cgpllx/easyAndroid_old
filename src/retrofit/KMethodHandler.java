@@ -31,7 +31,7 @@ final class KMethodHandler<T> {
     Converter<Object> responseConverter =
         (Converter<Object>) createResponseConverter(method, callAdapter.responseType(),
             converterFactories);
-    RequestFactory requestFactory = RequestFactoryParser.parse(method, baseUrl, converterFactories);
+    KRequestFactory requestFactory = KRequestFactoryParser.parse(method, baseUrl, converterFactories);
     return new KMethodHandler<>(client, requestFactory, callAdapter, responseConverter);
   }
 
@@ -69,11 +69,11 @@ final class KMethodHandler<T> {
   }
 
   private final OkHttpClient client;
-  private final RequestFactory requestFactory;
+  private final KRequestFactory requestFactory;
   private final CallAdapter<T> callAdapter;
   private final Converter<T> responseConverter;
 
-  private KMethodHandler(OkHttpClient client, RequestFactory requestFactory,
+  private KMethodHandler(OkHttpClient client, KRequestFactory requestFactory,
       CallAdapter<T> callAdapter, Converter<T> responseConverter) {
     this.client = client;
     this.requestFactory = requestFactory;

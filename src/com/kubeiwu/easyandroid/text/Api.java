@@ -5,6 +5,7 @@ import java.util.List;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
+import retrofit.CacheModeSettings;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -13,6 +14,7 @@ import retrofit.http.Headers;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
+import retrofit.http.CacheMode;
 import rx.Observable;
 
 public interface Api {
@@ -32,8 +34,8 @@ public interface Api {
 	@GET("/xpt/area/city")
 	JsonResult<List<AreaInfo>> getCity();
 
-
-//	@Headers("Cache-Control : max-stale=3600")
+	@CacheMode(value=CacheModeSettings.LOAD_NETWORK_ELSE_CACHE)
+	// @Headers("Cache-Control : max-stale=3600")
 	@Headers("Cache-Control: max-age=640000")
 	@GET("/xpt/area/city")
 	Observable<JsonResult<List<AreaInfo>>> getCity1();
