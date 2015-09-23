@@ -218,17 +218,19 @@ public final class KOkHttpCall<T> implements Call<T> {
 			executed = true;
 		}
 		final Request request = createRequest();
-		String cacheMode = getCacheMode(request);
+		
+		com.squareup.okhttp.Call rawCall = client.newCall(request);
+		if (canceled) {
+			rawCall.cancel();
+		}
+		this.rawCall = rawCall;
+		
 		// ----------------------------------------------------------------------cgp
+		String cacheMode = getCacheMode(request);
 		if (!TextUtils.isEmpty(cacheMode)) {
 			cacheMode = cacheMode.trim().toLowerCase(Locale.CHINA);
 			switch (cacheMode) {
 			case CacheMode.LOAD_NETWORK_ELSE_CACHE:// 先网络然后再缓存
-				com.squareup.okhttp.Call rawCall = client.newCall(request);
-				if (canceled) {
-					rawCall.cancel();
-				}
-				this.rawCall = rawCall;
 				Response<T> response;
 				try {
 					response = parseResponse(rawCall.execute(), request);
@@ -251,11 +253,6 @@ public final class KOkHttpCall<T> implements Call<T> {
 			}
 		}
 		// ----------------------------------------------------------------------cgp
-		com.squareup.okhttp.Call rawCall = client.newCall(request);
-		if (canceled) {
-			rawCall.cancel();
-		}
-		this.rawCall = rawCall;
 
 		return parseResponse(rawCall.execute(), request);
 	}

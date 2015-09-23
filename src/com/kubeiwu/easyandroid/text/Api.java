@@ -26,7 +26,9 @@ public interface Api {
 
 	// @CacheMode(value=CacheMode.LOAD_CACHE_ELSE_NETWORK)
 	// @Headers("Cache-Control : max-stale=3600")
-	@Headers({ "Cache-Control: max-age=640000", "Cache-Mode:cache-else-network" })
+	@Headers({ "Cache-Control: max-age=340000" //
+			, "Cache-Mode:cache-else-network"//
+	})
 	@GET("/xpt/area/city")
 	Observable<JsonResult<List<AreaInfo>>> getCity1();
 
