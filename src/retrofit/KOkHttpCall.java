@@ -19,6 +19,7 @@ import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static retrofit.Utils.closeQuietly;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -39,7 +40,7 @@ import com.squareup.okhttp.ResponseBody;
 
 public final class KOkHttpCall<T> implements Call<T> {
 	private final OkHttpClient client;
-	private final KRequestFactory requestFactory;
+	private final RequestFactory requestFactory;
 	private final Converter<T> responseConverter;
 	private final Object[] args;
 
@@ -47,7 +48,7 @@ public final class KOkHttpCall<T> implements Call<T> {
 	private boolean executed; // Guarded by this.
 	private volatile boolean canceled;
 
-	KOkHttpCall(OkHttpClient client, KRequestFactory requestFactory, Converter<T> responseConverter, Object[] args) {
+	KOkHttpCall(OkHttpClient client, RequestFactory requestFactory, Converter<T> responseConverter, Object[] args) {
 		this.client = client;
 		this.requestFactory = requestFactory;
 		this.responseConverter = responseConverter;
@@ -59,7 +60,6 @@ public final class KOkHttpCall<T> implements Call<T> {
 	public KOkHttpCall<T> clone() {
 		return new KOkHttpCall<>(client, requestFactory, responseConverter, args);
 	}
-
 
 	static final String THREAD_PREFIX = "Retrofit-";
 	static final String IDLE_THREAD_NAME = THREAD_PREFIX + "Idle";
@@ -99,7 +99,13 @@ public final class KOkHttpCall<T> implements Call<T> {
 				return null;
 			}
 			Entry entry = cache.get(request.urlString());// 充缓存中获取entry
-			if (entry != null && entry.data != null) {// 如果有数据就使用缓存
+			if (entry == null) {
+				return null;
+			}
+			if (entry.isExpired()) {// 缓存过期了
+				return null;
+			}
+			if (entry.data != null) {// 如果有数据就使用缓存
 				MediaType contentType = MediaType.parse(entry.mimeType);
 				byte[] bytes = entry.data;
 				try {
@@ -121,28 +127,28 @@ public final class KOkHttpCall<T> implements Call<T> {
 				throw new IllegalStateException("Already executed");
 			executed = true;
 		}
-		final KRetrofitRequest kRetrofitRequest = createRequest();
-		final Request request = kRetrofitRequest.getRequest();
-		final int cacheMode = kRetrofitRequest.getCacheMode();
-
+		final Request request = createRequest();
+		String cacheMode = getCacheMode(request);
 		// ----------------------------------------------------------------------cgp
-		switch (cacheMode) {
-		case CacheModeSettings.LOAD_NETWORK_ELSE_CACHE:// 先网络然后再缓存
-			exeRequest(callback, request, true);
-			return;
-		case CacheModeSettings.LOAD_CACHE_ELSE_NETWORK:// 先缓存再网络
-			// ---------------------充缓存中取
-			Response<T> response = execCacheRequest(request);
-			if (response != null) {
-				callback.onResponse(response);
+		if (!TextUtils.isEmpty(cacheMode)) {
+			switch (cacheMode) {
+			case CacheMode.LOAD_NETWORK_ELSE_CACHE:// 先网络然后再缓存
+				exeRequest(callback, request, true);
 				return;
+			case CacheMode.LOAD_CACHE_ELSE_NETWORK:// 先缓存再网络
+				// ---------------------从缓存中取
+				Response<T> response = execCacheRequest(request);
+				if (response != null) {
+					callback.onResponse(response);
+					return;
+				}
+				// ---------------------从缓存中取
+				// 如果缓存没有就跳出，执行网络请求
+			case CacheMode.LOAD_DEFAULT:
+			case CacheMode.LOAD_NETWORK_ONLY:
+			default:
+				break;// 直接跳出
 			}
-			// ---------------------充缓存中取
-			// 如果缓存没有就跳出，执行网络请求
-		case CacheModeSettings.LOAD_DEFAULT:
-		case CacheModeSettings.LOAD_NETWORK_ONLY:
-		default:
-			break;// 直接跳出
 		}
 		// ----------------------------------------------------------------------cgp
 		exeRequest(callback, request, false);
@@ -211,40 +217,40 @@ public final class KOkHttpCall<T> implements Call<T> {
 				throw new IllegalStateException("Already executed");
 			executed = true;
 		}
-		final KRetrofitRequest kRetrofitRequest = createRequest();
-		final Request request = kRetrofitRequest.getRequest();
-		final int cacheMode = kRetrofitRequest.getCacheMode();
+		final Request request = createRequest();
+		String cacheMode = getCacheMode(request);
 		// ----------------------------------------------------------------------cgp
-		switch (cacheMode) {
-		case CacheModeSettings.LOAD_NETWORK_ELSE_CACHE:// 先网络然后再缓存
-
-			com.squareup.okhttp.Call rawCall = client.newCall(request);
-			if (canceled) {
-				rawCall.cancel();
-			}
-			this.rawCall = rawCall;
-			Response<T> response;
-			try {
-				response = parseResponse(rawCall.execute(), request);
-			} catch (Exception e) {
-				response = execCacheRequest(request);
-			}
-			return response;
-		case CacheModeSettings.LOAD_CACHE_ELSE_NETWORK:// 先缓存再网络
-			// ---------------------充缓存中取
-			response = execCacheRequest(request);
-			if (response != null) {
+		if (!TextUtils.isEmpty(cacheMode)) {
+			cacheMode = cacheMode.trim().toLowerCase(Locale.CHINA);
+			switch (cacheMode) {
+			case CacheMode.LOAD_NETWORK_ELSE_CACHE:// 先网络然后再缓存
+				com.squareup.okhttp.Call rawCall = client.newCall(request);
+				if (canceled) {
+					rawCall.cancel();
+				}
+				this.rawCall = rawCall;
+				Response<T> response;
+				try {
+					response = parseResponse(rawCall.execute(), request);
+				} catch (Exception e) {
+					response = execCacheRequest(request);
+				}
 				return response;
+			case CacheMode.LOAD_CACHE_ELSE_NETWORK:// 先缓存再网络
+				// ---------------------充缓存中取
+				response = execCacheRequest(request);
+				if (response != null) {
+					return response;
+				}
+				// ---------------------充缓存中取
+				// 如果缓存没有就跳出，执行网络请求
+			case CacheMode.LOAD_DEFAULT:
+			case CacheMode.LOAD_NETWORK_ONLY:
+			default:
+				break;// 直接跳出
 			}
-			// ---------------------充缓存中取
-			// 如果缓存没有就跳出，执行网络请求
-		case CacheModeSettings.LOAD_DEFAULT:
-		case CacheModeSettings.LOAD_NETWORK_ONLY:
-		default:
-			break;// 直接跳出
 		}
 		// ----------------------------------------------------------------------cgp
-
 		com.squareup.okhttp.Call rawCall = client.newCall(request);
 		if (canceled) {
 			rawCall.cancel();
@@ -257,8 +263,12 @@ public final class KOkHttpCall<T> implements Call<T> {
 	// private com.squareup.okhttp.Call createRawCall() {
 	// return client.newCall(requestFactory.create(args));
 	// }
-	private KRetrofitRequest createRequest() {
+	private Request createRequest() {
 		return requestFactory.create(args);
+	}
+
+	private String getCacheMode(Request request) {
+		return request.header("Cache-Mode");
 	}
 
 	private Response<T> parseResponse(com.squareup.okhttp.Response rawResponse, com.squareup.okhttp.Request request) throws IOException {

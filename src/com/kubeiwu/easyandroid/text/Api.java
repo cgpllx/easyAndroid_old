@@ -2,19 +2,9 @@ package com.kubeiwu.easyandroid.text;
 
 import java.util.List;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
-
-import retrofit.CacheModeSettings;
 import retrofit.Call;
-import retrofit.http.Body;
 import retrofit.http.GET;
-import retrofit.http.Header;
 import retrofit.http.Headers;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.CacheMode;
 import rx.Observable;
 
 public interface Api {
@@ -30,13 +20,13 @@ public interface Api {
 	@GET("/xpt/loginProcess?j_username=15889797548&j_password=20090705&appType=Android")
 	Observable<JsonResult<?>> login1();
 
-	// @Headers(CacheMode.LOAD_CACHE_ELSE_NETWORK)
+	@Headers("CacheMode: ")
 	@GET("/xpt/area/city")
 	JsonResult<List<AreaInfo>> getCity();
 
-	@CacheMode(value=CacheModeSettings.LOAD_NETWORK_ELSE_CACHE)
+	// @CacheMode(value=CacheMode.LOAD_CACHE_ELSE_NETWORK)
 	// @Headers("Cache-Control : max-stale=3600")
-	@Headers("Cache-Control: max-age=640000")
+	@Headers({ "Cache-Control: max-age=640000", "Cache-Mode:cache-else-network" })
 	@GET("/xpt/area/city")
 	Observable<JsonResult<List<AreaInfo>>> getCity1();
 
