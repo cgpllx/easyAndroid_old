@@ -18,7 +18,7 @@ import com.kubeiwu.easyandroid.kretrofit.KRetrofitApiFactory;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
 import com.kubeiwu.easyandroid.text.Api;
-import com.kubeiwu.easyandroid.text.ApiPrivider;
+import com.kubeiwu.easyandroid.text.ApiProvider;
 import com.kubeiwu.easyandroid.text.AreaInfo;
 import com.kubeiwu.easyandroid.text.JsonResult;
 
@@ -48,7 +48,7 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 			e1.printStackTrace();
 		}
 		presenter.attachView(this);
-		api = ApiPrivider.getInstance();
+		api = ApiProvider.getInstance();
 		System.out.println("111开始");
 		api.login().enqueue(new Callback<JsonResult<String>>() {
 
