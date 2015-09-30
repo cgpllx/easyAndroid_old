@@ -79,7 +79,7 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 	@Override
 	public void onError(int presenterId, String errorDesc) {
 		System.out.println("handleError");
-		Toast.makeText(getApplicationContext(), "dddd=" + errorDesc, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), errorDesc, Toast.LENGTH_SHORT).show();
 
 	}
 
