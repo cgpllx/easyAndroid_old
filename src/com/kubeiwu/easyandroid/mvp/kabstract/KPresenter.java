@@ -1,14 +1,13 @@
 package com.kubeiwu.easyandroid.mvp.kabstract;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 
 public abstract class KPresenter<V extends ISimpleView<T>, T> implements Presenter<V> {
-	 private V iView;
-//	private WeakReference<V> viewRef;
+	private V iView;
+	// private WeakReference<V> viewRef;
 	protected final IController<T> mController = new IController<T>() {
 
 		@Override
@@ -138,7 +137,29 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 		if (this.mType != null) {
 			return;
 		}
+		// 从本类的接口中查找
 		Type[] interfacesTypes = iView.getClass().getGenericInterfaces();// 获取接口类型
+
+		if (idFind(interfacesTypes)) {
+			return;
+		}
+		// 从父类的接口中查找
+		findSuperClass(iView.getClass());
+	}
+
+	private void findSuperClass(Class<?> clazz) {
+		Type superType = clazz.getGenericSuperclass();
+		if (superType instanceof Class) {
+			Class<?> superClazz = (Class<?>) superType;
+			Type[] superclassinterfacesTypes = superClazz.getGenericInterfaces();// 获取父类中的接口
+			if (idFind(superclassinterfacesTypes)) {
+				return;
+			}
+			findSuperClass(superClazz);
+		}
+	}
+
+	private boolean idFind(Type[] interfacesTypes) {
 		for (Type t : interfacesTypes) {
 			if (t instanceof ParameterizedType) {// 判断接口的类型是否是ParameterizedType类型，因为只有泛型的接口才是ParameterizedType的类型
 				ParameterizedType parameterizedType = (ParameterizedType) t;// 泛型类型都放在ParameterizedType中
@@ -151,12 +172,12 @@ public abstract class KPresenter<V extends ISimpleView<T>, T> implements Present
 							Type guessType = types[0];// 取第一个
 							// 这里还可以进行其他判断，这个guessType有可能是一个泛型
 							this.mType = guessType;// 取到结果直接返回，
-							return;
+							return true;// -----------------找到就返回了
 						}
 					}
 				}
 			}
 		}
-
+		return false;
 	}
 }
