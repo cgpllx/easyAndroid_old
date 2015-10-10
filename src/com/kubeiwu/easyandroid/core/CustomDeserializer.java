@@ -7,6 +7,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.kubeiwu.easyandroid.text.JsonResult;
 
 public class CustomDeserializer implements JsonDeserializer<JsonResult<?>> {
@@ -20,21 +21,25 @@ public class CustomDeserializer implements JsonDeserializer<JsonResult<?>> {
 			JsonElement jecode = json.getAsJsonObject().get("code");
 			JsonElement jedesc = json.getAsJsonObject().get("desc");
 
-			if (jecode != null && jecode.isJsonPrimitive() && jecode.getAsString() instanceof String) {
-				String code = jecode.getAsString();
-				String desc = jedesc.getAsString();
-				System.out.println("desc=" + desc);
-				System.out.println("code=" + code);
-				if ("C0000".equals(code)) {
+			if (jecode != null && jecode.isJsonPrimitive() && jedesc != null && jedesc.isJsonPrimitive()) {
+				try {
 					return gson.fromJson(json, typeOfT);
-				} else {
+				} catch (JsonSyntaxException e) {
+					e.printStackTrace();
 					JsonResult<?> jsonResult = new JsonResult<>();
+					String code = jecode.getAsString();
+					String desc = jedesc.getAsString();
+					
+					System.out.println("desc=" + desc);
+					System.out.println("code=" + code);
+					
 					jsonResult.setCode(code);
 					jsonResult.setDesc(desc);
+					
 					return jsonResult;
 				}
 			}
-			return null;  
+			return null;
 		}
 	}
 }
