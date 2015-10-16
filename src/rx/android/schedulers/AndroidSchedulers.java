@@ -14,9 +14,9 @@
 package rx.android.schedulers;
 
 import rx.Scheduler;
+import rx.android.plugins.RxAndroidPlugins;
 import android.os.Handler;
 import android.os.Looper;
-import rx.android.plugins.RxAndroidPlugins;
 
 /** Android-specific Schedulers. */
 public final class AndroidSchedulers {

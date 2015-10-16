@@ -1,6 +1,5 @@
 package retrofit;
 
-import retrofit.Response;
 
 /** Exception for an unexpected, non-2xx HTTP response. */
 public final class KHttpException extends Exception {

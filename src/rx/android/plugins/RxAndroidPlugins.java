@@ -13,8 +13,9 @@
  */
 package rx.android.plugins;
 
-import rx.annotations.Beta;
 import java.util.concurrent.atomic.AtomicReference;
+
+import rx.annotations.Beta;
 
 /**
  * Registry for plugin implementations that allows global override and handles the retrieval of

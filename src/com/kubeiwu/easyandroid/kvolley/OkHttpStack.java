@@ -53,6 +53,7 @@ import com.squareup.okhttp.ResponseBody;
  * OkHttp backed {@link com.android.volley.toolbox.HttpStack HttpStack} that does not
  * use okhttp-urlconnection
  */
+@SuppressWarnings("deprecation")
 public class OkHttpStack implements HttpStack {
 
     private final OkHttpClient mClient;
@@ -61,7 +62,7 @@ public class OkHttpStack implements HttpStack {
         this.mClient = client;
     }
 
-    @Override
+	@Override
     public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
             throws IOException, AuthFailureError {
 
@@ -103,7 +104,7 @@ public class OkHttpStack implements HttpStack {
         return response;
     }
 
-    private static HttpEntity entityFromOkHttpResponse(Response r) throws IOException {
+	private static HttpEntity entityFromOkHttpResponse(Response r) throws IOException {
         BasicHttpEntity entity = new BasicHttpEntity();
         ResponseBody body = r.body();
 
@@ -156,7 +157,7 @@ public class OkHttpStack implements HttpStack {
         }
     }
 
-    private static ProtocolVersion parseProtocol(final Protocol p) {
+	private static ProtocolVersion parseProtocol(final Protocol p) {
         switch (p) {
             case HTTP_1_0:
                 return new ProtocolVersion("HTTP", 1, 0);

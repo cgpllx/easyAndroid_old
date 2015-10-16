@@ -15,10 +15,9 @@
  */
 package retrofit;
 
-import java.io.IOException;
-
-import retrofit.Response;
 import static retrofit.Utils.checkNotNull;
+
+import java.io.IOException;
 
 /** The result of executing an HTTP request. */
 public final class Result<T> {

@@ -18,15 +18,14 @@ package retrofit;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import com.kubeiwu.easyandroid.core.KResult;
-import com.kubeiwu.easyandroid.mvp.exception.MvpException;
-
-import retrofit.CallAdapter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.subscriptions.Subscriptions;
+
+import com.kubeiwu.easyandroid.core.KResult;
+import com.kubeiwu.easyandroid.mvp.exception.MvpException;
 
 /**
  * TODO docs

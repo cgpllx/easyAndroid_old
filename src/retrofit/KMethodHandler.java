@@ -15,12 +15,14 @@
  */
 package retrofit;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.ResponseBody;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
+
 import retrofit.http.Streaming;
+
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.ResponseBody;
 
 final class KMethodHandler<T> {
 	@SuppressWarnings("unchecked")

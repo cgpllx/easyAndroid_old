@@ -17,7 +17,6 @@ package retrofit;
 
 import java.lang.reflect.Type;
 
-import retrofit.CallAdapter;
 import rx.Observable;
 import rx.Single;
 

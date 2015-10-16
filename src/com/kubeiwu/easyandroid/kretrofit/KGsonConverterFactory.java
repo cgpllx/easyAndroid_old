@@ -15,16 +15,14 @@
  */
 package com.kubeiwu.easyandroid.kretrofit;
 
+import java.lang.reflect.Type;
+
+import retrofit.Converter;
+
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache;
-import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
-
-import java.lang.reflect.Type;
-
-import retrofit.Converter;
-import retrofit.Converter.Factory;
 
 /** A {@linkplain Converter.Factory converter} which uses Gson for JSON. */
 public final class KGsonConverterFactory implements Converter.Factory {

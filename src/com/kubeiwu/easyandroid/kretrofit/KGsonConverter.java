@@ -26,11 +26,9 @@ import java.io.Writer;
 
 import okio.Buffer;
 import retrofit.Converter;
-import retrofit.Result;
 
 import com.google.gson.TypeAdapter;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache;
-import com.kubeiwu.easyandroid.cache.volleycache.Cache.Entry;
 import com.kubeiwu.easyandroid.core.KResult;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;

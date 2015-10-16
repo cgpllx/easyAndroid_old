@@ -15,10 +15,8 @@
  */
 package retrofit;
 
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.ResponseBody;
+import static retrofit.Utils.checkNotNull;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -29,10 +27,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
+
 import retrofit.http.HTTP;
 import retrofit.http.Header;
 
-import static retrofit.Utils.checkNotNull;
+import com.squareup.okhttp.HttpUrl;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.ResponseBody;
 
 /**
  * Adapts a Java interface to a REST API.
