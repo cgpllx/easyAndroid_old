@@ -42,6 +42,16 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 		cancel();// 先取消之前的事件
 		subscriber = new KSubscriber(this.mController);
 		observable.subscribe(subscriber);
+	}  
+	public void executeRequest(Bundle bundle) {
+		cancel();// 先取消之前的事件
+		Observable<T> observable = creatObservable(bundle).subscribeOn(Schedulers.io())//
+				.observeOn(AndroidSchedulers.mainThread());
+		if (observable == null) {
+			throw new IllegalArgumentException("please Override onCreatObservable method, And can not be null，");
+		}
+		subscriber = new KSubscriber(this.mController);
+		observable.subscribe(subscriber);
 	}
 
 	public void loadData() {

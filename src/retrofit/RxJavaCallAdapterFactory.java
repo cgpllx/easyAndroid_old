@@ -159,10 +159,10 @@ public final class RxJavaCallAdapterFactory implements CallAdapter.Factory {
 		}
 	}
 
-	static final class SimpleCallAdapter<T> implements CallAdapter<T> {
+	public static final class SimpleCallAdapter<T> implements CallAdapter<T> {
 		private final Type responseType;
 
-		SimpleCallAdapter(Type responseType) {
+		public SimpleCallAdapter(Type responseType) {
 			this.responseType = responseType;
 		}
 

@@ -38,7 +38,7 @@ import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.ResponseBody;
 
-public final class KOkHttpCall<T> implements Call<T> {
+public   class KOkHttpCall<T> implements Call<T> {
 	private final OkHttpClient client;
 	private final RequestFactory requestFactory;
 	private final Converter<T> responseConverter;
@@ -48,7 +48,7 @@ public final class KOkHttpCall<T> implements Call<T> {
 	private boolean executed; // Guarded by this.
 	private volatile boolean canceled;
 
-	KOkHttpCall(OkHttpClient client, RequestFactory requestFactory, Converter<T> responseConverter, Object[] args) {
+	public KOkHttpCall(OkHttpClient client, RequestFactory requestFactory, Converter<T> responseConverter, Object[] args) {
 		this.client = client;
 		this.requestFactory = requestFactory;
 		this.responseConverter = responseConverter;
@@ -218,13 +218,13 @@ public final class KOkHttpCall<T> implements Call<T> {
 			executed = true;
 		}
 		final Request request = createRequest();
-		
+
 		com.squareup.okhttp.Call rawCall = client.newCall(request);
 		if (canceled) {
 			rawCall.cancel();
 		}
 		this.rawCall = rawCall;
-		
+
 		// ----------------------------------------------------------------------cgp
 		String cacheMode = getCacheMode(request);
 		if (!TextUtils.isEmpty(cacheMode)) {
@@ -260,7 +260,7 @@ public final class KOkHttpCall<T> implements Call<T> {
 	// private com.squareup.okhttp.Call createRawCall() {
 	// return client.newCall(requestFactory.create(args));
 	// }
-	private Request createRequest() {
+	public Request createRequest() {
 		return requestFactory.create(args);
 	}
 
@@ -310,6 +310,7 @@ public final class KOkHttpCall<T> implements Call<T> {
 		}
 	}
 
+	@Override
 	public void cancel() {
 		canceled = true;
 		com.squareup.okhttp.Call rawCall = this.rawCall;

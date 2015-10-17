@@ -42,7 +42,7 @@ public final class KGsonConverter<T> implements Converter<T> {
 	private final TypeAdapter<T> typeAdapter;
 	private final Cache cache;
 
-	KGsonConverter(TypeAdapter<T> adapter, Cache cache) {
+	public KGsonConverter(TypeAdapter<T> adapter, Cache cache) {
 		this.typeAdapter = adapter;
 		this.cache = cache;
 	}
