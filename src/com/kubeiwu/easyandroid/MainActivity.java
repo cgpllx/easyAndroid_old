@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kubeiwu.easyandroid.config.EAConfiguration;
 import com.kubeiwu.easyandroid.core.CustomDeserializer;
 import com.kubeiwu.easyandroid.kretrofit.KRetrofitApiFactory;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
@@ -40,10 +41,10 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 			gb.registerTypeAdapter(JsonResult.class, new CustomDeserializer());
 			Gson customGson = gb.create();
 			// KRetrofitApiFactory.getInstance().init(this );
-			KRetrofitApiFactory.getInstance().init(this, customGson);
+			KRetrofitApiFactory.getInstance().init(new EAConfiguration.Builder(getApplicationContext()).setGson(customGson).build());
 
 			// return;
-		} catch (IOException e1) {
+		} catch ( Exception e1) {
 
 			e1.printStackTrace();
 		}

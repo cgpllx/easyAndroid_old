@@ -1,23 +1,12 @@
 package com.kubeiwu.easyandroid.kretrofit;
 
-import java.io.IOException;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.util.concurrent.TimeUnit;
-
 import retrofit.KRetrofit;
 import retrofit.RxJavaCallAdapterFactory;
-import android.content.Context;
 
-import com.google.gson.Gson;
-import com.kubeiwu.easyandroid.cache.Utils;
-import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
-import com.kubeiwu.easyandroid.manager.cookiesmanager.PersistentCookieStore;
-import com.squareup.okhttp.Cache;
+import com.kubeiwu.easyandroid.config.EAConfiguration;
 import com.squareup.okhttp.OkHttpClient;
 
 public class KRetrofitApiFactory {
-	public static final String UNIQUENAME = "okhttpcache";
 	private final static KRetrofitApiFactory kRetrofitManager = new KRetrofitApiFactory();
 
 	private OkHttpClient client;
@@ -27,34 +16,13 @@ public class KRetrofitApiFactory {
 		return kRetrofitManager;
 	}
 
-	/**
-	 * 初始化配置
-	 * 
-	 * @param context
-	 * @throws IOException
-	 */
-	public void init(Context context) throws IOException {
-		init(context, new Gson());
-	}
+	public void init(EAConfiguration config) {
+		if (config == null) {
+			new IllegalArgumentException("EAConfiguration config 不能为null");
+		}
+		client = config.getOkHttpClient();
 
-	/**
-	 * 初始化配置
-	 * 
-	 * @param context
-	 * @throws IOException
-	 */
-	public void init(Context context, Gson gson) throws IOException {
-		DiskBasedCache cache = new DiskBasedCache(Utils.getDiskCacheDir(context.getApplicationContext(), "volleycache"));// retrofit缓存
-		cache.initialize();
-
-		client = new OkHttpClient();
-		client.setConnectTimeout(15 * 1000, TimeUnit.MILLISECONDS);
-		client.setFollowRedirects(true);
-		client.setReadTimeout(20 * 1000, TimeUnit.MILLISECONDS);
-		client.setCookieHandler(new CookieManager(new PersistentCookieStore(context.getApplicationContext()), CookiePolicy.ACCEPT_ORIGINAL_SERVER));
-		client.setCache(new Cache(Utils.getDiskCacheDir(context.getApplicationContext(), UNIQUENAME), 10 * 1024 * 1024));// OkHttpClient缓存
-
-		kGsonConverterFactory = KGsonConverterFactory.create(gson, cache);
+		kGsonConverterFactory = KGsonConverterFactory.create(config.getGson(), config.getCache());
 	}
 
 	public OkHttpClient getOkHttpClient() {

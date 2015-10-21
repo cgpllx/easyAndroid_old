@@ -12,7 +12,6 @@ public class EAOkHttpCall<T> extends KOkHttpCall<T> {
 	public EAOkHttpCall(OkHttpClient client, Converter<T> responseConverter, Request request) {
 		super(client, null, responseConverter, null);
 		this.request = request;
-
 	}
 
 	@Override
