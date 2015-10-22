@@ -107,7 +107,9 @@ public class EasyHttpUtils {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> Observable<T> executeHttpRequestToObservable(Request request, Type type) {
-	 
+		checkNull(mGson);
+		checkNull(cache);
+		checkNull(mOkHttpClient);
 		Converter responseConverter = KGsonConverterFactory.create(mGson, cache).get(type);
 		Call<T> call = new EAOkHttpCall<T>(mOkHttpClient, responseConverter, request);
 		SimpleCallAdapter<T> simpleCallAdapter = new SimpleCallAdapter<T>(type);
@@ -117,7 +119,9 @@ public class EasyHttpUtils {
 		return observable;
 	}
 
-	private void checkNull(Object cache2) {
-		
+	private void checkNull(Object object) {
+		if(object==null){
+			new IllegalArgumentException("请先初始化EasyHttpUtils");
+		}
 	}
 }
