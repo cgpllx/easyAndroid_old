@@ -1,4 +1,4 @@
-package com.kubeiwu.easyandroid.kretrofit;
+package com.kubeiwu.easyandroid.easycore.converter;
 
 import retrofit.KRetrofit;
 import retrofit.RxJavaCallAdapterFactory;

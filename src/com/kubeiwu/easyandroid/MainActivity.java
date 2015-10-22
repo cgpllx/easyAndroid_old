@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kubeiwu.easyandroid.config.EAConfiguration;
 import com.kubeiwu.easyandroid.core.CustomDeserializer;
-import com.kubeiwu.easyandroid.kretrofit.KRetrofitApiFactory;
+import com.kubeiwu.easyandroid.easycore.converter.KRetrofitApiFactory;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
 import com.kubeiwu.easyandroid.text.Api;

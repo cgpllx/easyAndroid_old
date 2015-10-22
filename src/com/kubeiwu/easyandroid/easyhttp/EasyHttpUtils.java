@@ -13,12 +13,12 @@ import rx.Observable;
 import com.google.gson.Gson;
 import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
 import com.kubeiwu.easyandroid.config.EAConfiguration;
+import com.kubeiwu.easyandroid.easycore.converter.KGsonConverterFactory;
 import com.kubeiwu.easyandroid.easyhttp.core.EAOkHttpCall;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpDownloadUtils;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpGetUtils;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpPostUtils;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpUpLoadUtil;
-import com.kubeiwu.easyandroid.kretrofit.KGsonConverterFactory;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 

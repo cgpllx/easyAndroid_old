@@ -31,7 +31,7 @@ import android.text.TextUtils;
 
 import com.kubeiwu.easyandroid.cache.volleycache.Cache;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache.Entry;
-import com.kubeiwu.easyandroid.kretrofit.KGsonConverter;
+import com.kubeiwu.easyandroid.easycore.converter.KGsonConverter;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Protocol;
