@@ -6,13 +6,13 @@ import retrofit.RxJavaCallAdapterFactory;
 import com.kubeiwu.easyandroid.config.EAConfiguration;
 import com.squareup.okhttp.OkHttpClient;
 
-public class KRetrofitApiFactory {
-	private final static KRetrofitApiFactory kRetrofitManager = new KRetrofitApiFactory();
+public class EasyHttpApiFactory {
+	private final static EasyHttpApiFactory kRetrofitManager = new EasyHttpApiFactory();
 
 	private OkHttpClient client;
 	KGsonConverterFactory kGsonConverterFactory;
 
-	public static KRetrofitApiFactory getInstance() {
+	public static EasyHttpApiFactory getInstance() {
 		return kRetrofitManager;
 	}
 

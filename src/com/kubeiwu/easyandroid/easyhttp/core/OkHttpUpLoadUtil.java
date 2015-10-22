@@ -1,4 +1,4 @@
-package com.kubeiwu.easyandroid.http;
+package com.kubeiwu.easyandroid.easyhttp.core;
 
 import java.io.File;
 import java.io.IOException;

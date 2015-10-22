@@ -81,7 +81,6 @@ public class EAConfiguration {
 				okHttpClient.setCookieHandler(new CookieManager(cookieStore, CookiePolicy.ACCEPT_ORIGINAL_SERVER));
 				okHttpClient.setCache(okHttpCache);// OkHttpClient缓存
 			}
-
 			return new EAConfiguration(this);
 		}
 	}
