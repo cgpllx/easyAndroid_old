@@ -1,4 +1,4 @@
-package com.kubeiwu.easyandroid.db;
+package com.kubeiwu.easyandroid.easydb;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
