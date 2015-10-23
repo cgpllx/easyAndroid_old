@@ -14,8 +14,7 @@ import com.kubeiwu.easyandroid.mvp.view.ISimpleLoaderView;
  * @param <T>
  * @param <D>
  */
-@Deprecated
-public class KSimpleLoaderPresenter<T> extends KLoaderPresenterAbstract<ISimpleLoaderView<T>, T> {
+public class EasyLoaderPresenter<T> extends KLoaderPresenterAbstract<ISimpleLoaderView<T>, T> {
 
 	@Override
 	public Loader<T> onCreateLoader(int arg0, Bundle bundle) {

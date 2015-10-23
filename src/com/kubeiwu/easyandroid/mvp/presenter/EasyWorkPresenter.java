@@ -6,12 +6,11 @@ import android.os.Bundle;
 import com.kubeiwu.easyandroid.mvp.kabstract.KRxJavaPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
 
-@Deprecated()
-public class KSimpleNetWorkPresenter<T> extends KRxJavaPresenter<ISimpleNetWorkView<T>, T> {
+public class EasyWorkPresenter<T> extends KRxJavaPresenter<ISimpleNetWorkView<T>, T> {
 
 	@Override
 	public Observable<T> creatObservable(Bundle bundle) {
 		return getView().onCreatObservable(getPresenterId(), bundle);
 	}
-
+	
 }
