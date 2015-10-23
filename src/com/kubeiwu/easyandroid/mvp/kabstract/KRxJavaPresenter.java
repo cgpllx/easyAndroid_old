@@ -55,7 +55,7 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 
 	@Deprecated
 	public void loadData() {
-		loadData(null);
+		startWork(null);
 	}
 
 	public class KSubscriber extends Subscriber<T> {
