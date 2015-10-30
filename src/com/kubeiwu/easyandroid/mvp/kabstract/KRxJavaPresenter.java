@@ -35,10 +35,10 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 	// observable.cache() //观察者 会回调多次，但是只会调用一次网络
 	@Deprecated
 	public void loadData(Bundle bundle) {
-		startWork(bundle);
+		execute(bundle);
 	}
 
-	public void startWork(Bundle bundle) {
+	public void execute(Bundle bundle) {
 		cancel();// 先取消之前的事件
 		Observable<T> observable = creatObservable(bundle).subscribeOn(Schedulers.io())//
 				.observeOn(AndroidSchedulers.mainThread());
@@ -49,13 +49,13 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 		observable.subscribe(subscriber);
 	}
 
-	public void startWork() {
-		startWork(null);
+	public void execute() {
+		execute(null);
 	}
 
 	@Deprecated
 	public void loadData() {
-		startWork(null);
+		execute(null);
 	}
 
 	public class KSubscriber extends Subscriber<T> {

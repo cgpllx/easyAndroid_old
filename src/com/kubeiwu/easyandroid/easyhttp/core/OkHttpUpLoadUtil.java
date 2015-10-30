@@ -65,7 +65,15 @@ public class OkHttpUpLoadUtil extends OkHttpUtils {
 		return new Request.Builder().url(url).post(requestBody).build();
 	}
 
-	private Request buildMultipartFormRequest1(String url, Map<String, File> files, Map<String, String> params) {
+	/**
+	 * 比较原始的方法，暂时不用
+	 * 
+	 * @param url
+	 * @param files
+	 * @param params
+	 * @return
+	 */
+	public Request buildMultipartFormRequest1(String url, Map<String, File> files, Map<String, String> params) {
 		MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
 
 		for (String key : params.keySet()) {
