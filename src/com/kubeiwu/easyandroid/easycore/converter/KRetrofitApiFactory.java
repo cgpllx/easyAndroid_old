@@ -1,5 +1,6 @@
 package com.kubeiwu.easyandroid.easycore.converter;
 
+import retrofit.KGsonConverterFactory;
 import retrofit.KRetrofit;
 import retrofit.RxJavaCallAdapterFactory;
 
