@@ -1,6 +1,5 @@
 package com.kubeiwu.easyandroid;
 
-import java.io.IOException;
 import java.util.List;
 
 import rx.Observable;
@@ -25,6 +24,7 @@ import com.kubeiwu.easyandroid.text.JsonResult;
 
 public class MainActivity extends FragmentActivity implements ISimpleNetWorkView<JsonResult<List<AreaInfo>>> {
 	TextView hello;
+	@SuppressWarnings("deprecation")
 	KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>> presenter = new KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>>();
 	Api api;
 
@@ -63,7 +63,8 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 
 			}
 		});
-		presenter.loadData();
+//		presenter.loadData();
+		presenter.execute();
 	}
 
 	@Override
