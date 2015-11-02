@@ -5,20 +5,20 @@ import java.lang.reflect.Type;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
-import retrofit.Call;
-import retrofit.Converter;
-import retrofit.RxJavaCallAdapterFactory.SimpleCallAdapter;
 import rx.Observable;
 
 import com.google.gson.Gson;
 import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
 import com.kubeiwu.easyandroid.config.EAConfiguration;
-import com.kubeiwu.easyandroid.easycore.converter.KGsonConverterFactory;
 import com.kubeiwu.easyandroid.easyhttp.core.EAOkHttpCall;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpDownloadUtils;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpGetUtils;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpPostUtils;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpUpLoadUtil;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Call;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Converter;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.GsonConverterFactory;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.EACallAdapterFactory.SimpleCallAdapter;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
@@ -107,11 +107,10 @@ public class EasyHttpUtils {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> Observable<T> executeHttpRequestToObservable(Request request, Type type) {
-		checkNull(mGson);
-		checkNull(cache);
 		checkNull(mOkHttpClient);
-		Converter responseConverter = KGsonConverterFactory.create(mGson, cache).get(type);
+		Converter responseConverter = getConverterFactory().get(type);
 		Call<T> call = new EAOkHttpCall<T>(mOkHttpClient, responseConverter, request);
+
 		SimpleCallAdapter<T> simpleCallAdapter = new SimpleCallAdapter<T>(type);
 
 		Observable<T> observable = simpleCallAdapter.adapt(call);
@@ -119,8 +118,24 @@ public class EasyHttpUtils {
 		return observable;
 	}
 
+	GsonConverterFactory converterFactory;// =KGsonConverterFactory.create(mGson,
+											// cache);
+
+	public GsonConverterFactory getConverterFactory() {
+		if (converterFactory == null) {
+			synchronized (EasyHttpUtils.class) {
+				if (converterFactory == null) {
+					checkNull(mGson);
+					checkNull(cache);
+					converterFactory = GsonConverterFactory.create(mGson, cache);
+				}
+			}
+		}
+		return converterFactory;
+	}
+
 	private void checkNull(Object object) {
-		if(object==null){
+		if (object == null) {
 			new IllegalArgumentException("请先初始化EasyHttpUtils");
 		}
 	}

@@ -29,7 +29,7 @@ import com.kubeiwu.easyandroid.mvp.exception.MvpException;
 /**
  * TODO docs
  */
-public class RxJavaCallAdapterFactory {
+public class EACallAdapterFactory {
 
 	static final class CallOnSubscribe<T> implements Observable.OnSubscribe<Response<T>> {
 		private final Call<T> originalCall;

@@ -2,7 +2,8 @@ package com.kubeiwu.easyandroid.text;
 
 import java.util.List;
 
-import retrofit.Call;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Call;
+
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import rx.Observable;

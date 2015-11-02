@@ -3,8 +3,6 @@ package com.kubeiwu.easyandroid;
 import java.io.IOException;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.Response;
 import rx.Observable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +14,8 @@ import com.google.gson.GsonBuilder;
 import com.kubeiwu.easyandroid.config.EAConfiguration;
 import com.kubeiwu.easyandroid.core.CustomDeserializer;
 import com.kubeiwu.easyandroid.easycore.converter.KRetrofitApiFactory;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Callback;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Response;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
 import com.kubeiwu.easyandroid.text.Api;
