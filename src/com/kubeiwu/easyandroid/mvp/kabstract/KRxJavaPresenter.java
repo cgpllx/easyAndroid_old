@@ -88,7 +88,6 @@ public abstract class KRxJavaPresenter<V extends ISimpleView<T>, T> extends KPre
 			} else {
 				this.mController.error("服务器或网络异常");
 			}
-			// this.mController.hideLoading();
 		}
 	}
 }

@@ -10,7 +10,7 @@ import com.kubeiwu.easyandroid.mvp.PresenterLoader;
 import com.kubeiwu.easyandroid.mvp.kabstract.KRxJavaPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleThreadView;
 
-public class EasyThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadView<T>, T> {
+public class EasyRxThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadView<T>, T> {
 
 	@Override
 	public Observable<T> creatObservable(Bundle bundle) {

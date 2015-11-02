@@ -33,4 +33,5 @@ public interface Call<T> extends Cloneable {
   void enqueue(Callback<T> callback);
   void cancel();
   Call<T> clone();
+  boolean isCancel();
 }

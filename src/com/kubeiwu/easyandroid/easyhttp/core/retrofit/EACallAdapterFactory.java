@@ -82,6 +82,11 @@ public class EACallAdapterFactory {
 					}
 					subscriber.onError(t);
 				}
+
+				@Override
+				public void onstart() {
+					
+				}
 			});
 		}
 	}

@@ -1,16 +1,17 @@
 package com.kubeiwu.easyandroid.mvp.presenter;
 
-import rx.Observable;
 import android.os.Bundle;
 
-import com.kubeiwu.easyandroid.mvp.kabstract.KRxJavaPresenter;
-import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Call;
+import com.kubeiwu.easyandroid.mvp.kabstract.KOKHttpPresenter;
+import com.kubeiwu.easyandroid.mvp.view.ISimpleCallView;
 
-public class EasyWorkPresenter<T> extends KRxJavaPresenter<ISimpleNetWorkView<T>, T> {
+public class EasyWorkPresenter<T> extends KOKHttpPresenter<ISimpleCallView<T>, T> {
 
 	@Override
-	public Observable<T> creatObservable(Bundle bundle) {
-		return getView().onCreatObservable(getPresenterId(), bundle);
+	public Call<T> createCall(Bundle bundle) {
+		return getView().onCreateCall(getPresenterId(), bundle);
 	}
+
 	
 }

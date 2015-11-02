@@ -62,6 +62,12 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 			public void onFailure(Throwable arg0) {
 
 			}
+
+			@Override
+			public void onstart() {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 //		presenter.loadData();
 		presenter.execute();

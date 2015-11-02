@@ -41,17 +41,17 @@ public class KOkHttpCall<T> implements Call<T> {
 	private final OkHttpClient client;
 	// private final RequestFactory requestFactory;
 	private final Converter<T> responseConverter;
-//	private final Object[] args;
+	// private final Object[] args;
 
 	private volatile com.squareup.okhttp.Call rawCall;
 	private boolean executed; // Guarded by this.
 	private volatile boolean canceled;
 
-	public KOkHttpCall(OkHttpClient client, Converter<T> responseConverter ) {
+	public KOkHttpCall(OkHttpClient client, Converter<T> responseConverter) {
 		this.client = client;
 		// this.requestFactory = requestFactory;
 		this.responseConverter = responseConverter;
-//		this.args = args;
+		// this.args = args;
 	}
 
 	// We are a final type & this saves clearing state.
@@ -165,6 +165,7 @@ public class KOkHttpCall<T> implements Call<T> {
 			rawCall.cancel();
 		}
 		this.rawCall = rawCall;
+		callback.onstart();
 		rawCall.enqueue(new com.squareup.okhttp.Callback() {
 			private void callFailure(Throwable e) {
 				try {
@@ -184,11 +185,17 @@ public class KOkHttpCall<T> implements Call<T> {
 
 			@Override
 			public void onFailure(Request request, IOException e) {
+				if (canceled) {
+					return;
+				}
 				callFailure(e);
 			}
 
 			@Override
 			public void onResponse(com.squareup.okhttp.Response rawResponse) {
+				if (canceled) {
+					return;
+				}
 				Response<T> response;
 				try {
 					response = parseResponse(rawResponse, request);
@@ -269,7 +276,7 @@ public class KOkHttpCall<T> implements Call<T> {
 
 	private Response<T> parseResponse(com.squareup.okhttp.Response rawResponse, com.squareup.okhttp.Request request) throws IOException {
 		ResponseBody rawBody = rawResponse.body();
-//		rawResponse.r
+		// rawResponse.r
 		// Remove the body's source (the only stateful object) so we can pass
 		// the response along.
 		rawResponse = rawResponse.newBuilder().body(new NoContentResponseBody(rawBody.contentType(), rawBody.contentLength())).build();
@@ -316,5 +323,10 @@ public class KOkHttpCall<T> implements Call<T> {
 		if (rawCall != null) {
 			rawCall.cancel();
 		}
+	}
+
+	@Override
+	public boolean isCancel() {
+		return canceled;
 	}
 }

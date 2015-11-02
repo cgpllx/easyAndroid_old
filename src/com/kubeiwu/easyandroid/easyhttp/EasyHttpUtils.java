@@ -117,6 +117,16 @@ public class EasyHttpUtils {
 
 		return observable;
 	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public <T> Call<T> executeHttpRequestToCall(Request request, Type type) {
+		checkNull(mOkHttpClient);
+		Converter responseConverter = getConverterFactory().get(type);
+		Call<T> call = new EAOkHttpCall<T>(mOkHttpClient, responseConverter, request);
+		
+		 
+		
+		return call;
+	}
 
 	GsonConverterFactory converterFactory;// =KGsonConverterFactory.create(mGson,
 											// cache);
