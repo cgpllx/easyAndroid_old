@@ -99,7 +99,7 @@ public final class RxJavaCallAdapterFactory implements CallAdapter.Factory {
 			final Call<T> call = originalCall.clone();
 
 			// Attempt to cancel the call if it is still in-flight on
-			// unsubscription.
+			// unsubscription. 如果取消注册，这里也包call也取消
 			subscriber.add(Subscriptions.create(new Action0() {
 				@Override
 				public void call() {
