@@ -1,10 +1,7 @@
 package com.kubeiwu.easyandroid;
 
-import java.io.IOException;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.Response;
 import rx.Observable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -13,8 +10,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kubeiwu.easyandroid.config.EAConfiguration;
 import com.kubeiwu.easyandroid.core.CustomDeserializer;
-import com.kubeiwu.easyandroid.kretrofit.KRetrofitApiFactory;
+import com.kubeiwu.easyandroid.easycore.converter.KRetrofitApiFactory;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Callback;
+import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Response;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleNetWorkView;
 import com.kubeiwu.easyandroid.text.Api;
@@ -24,6 +24,7 @@ import com.kubeiwu.easyandroid.text.JsonResult;
 
 public class MainActivity extends FragmentActivity implements ISimpleNetWorkView<JsonResult<List<AreaInfo>>> {
 	TextView hello;
+	@SuppressWarnings("deprecation")
 	KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>> presenter = new KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>>();
 	Api api;
 
@@ -40,10 +41,10 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 			gb.registerTypeAdapter(JsonResult.class, new CustomDeserializer());
 			Gson customGson = gb.create();
 			// KRetrofitApiFactory.getInstance().init(this );
-			KRetrofitApiFactory.getInstance().init(this, customGson);
+			KRetrofitApiFactory.getInstance().init(new EAConfiguration.Builder(getApplicationContext()).setGson(customGson).build());
 
 			// return;
-		} catch (IOException e1) {
+		} catch ( Exception e1) {
 
 			e1.printStackTrace();
 		}
@@ -61,8 +62,15 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 			public void onFailure(Throwable arg0) {
 
 			}
+
+			@Override
+			public void onstart() {
+				// TODO Auto-generated method stub
+				
+			}
 		});
-		presenter.loadData();
+//		presenter.loadData();
+		presenter.execute();
 	}
 
 	@Override

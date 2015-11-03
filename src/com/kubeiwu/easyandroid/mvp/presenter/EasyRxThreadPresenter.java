@@ -10,8 +10,7 @@ import com.kubeiwu.easyandroid.mvp.PresenterLoader;
 import com.kubeiwu.easyandroid.mvp.kabstract.KRxJavaPresenter;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleThreadView;
 
-@Deprecated
-public class KSimpleThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadView<T>, T> {
+public class EasyRxThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadView<T>, T> {
 
 	@Override
 	public Observable<T> creatObservable(Bundle bundle) {
@@ -37,4 +36,4 @@ public class KSimpleThreadPresenter<T> extends KRxJavaPresenter<ISimpleThreadVie
 		}).subscribeOn(Schedulers.io())//
 				.observeOn(AndroidSchedulers.mainThread());
 	}
-}
+}  

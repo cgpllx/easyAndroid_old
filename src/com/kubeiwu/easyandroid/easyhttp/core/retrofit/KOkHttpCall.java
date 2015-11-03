@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package retrofit;
+package com.kubeiwu.easyandroid.easyhttp.core.retrofit;
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
-import static retrofit.Utils.closeQuietly;
+import static com.kubeiwu.easyandroid.easyhttp.core.retrofit.Utils.closeQuietly;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -37,27 +37,27 @@ import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.ResponseBody;
 
-public   class KOkHttpCall<T> implements Call<T> {
+public class KOkHttpCall<T> implements Call<T> {
 	private final OkHttpClient client;
-	private final RequestFactory requestFactory;
+	// private final RequestFactory requestFactory;
 	private final Converter<T> responseConverter;
-	private final Object[] args;
+	// private final Object[] args;
 
 	private volatile com.squareup.okhttp.Call rawCall;
 	private boolean executed; // Guarded by this.
 	private volatile boolean canceled;
 
-	public KOkHttpCall(OkHttpClient client, RequestFactory requestFactory, Converter<T> responseConverter, Object[] args) {
+	public KOkHttpCall(OkHttpClient client, Converter<T> responseConverter) {
 		this.client = client;
-		this.requestFactory = requestFactory;
+		// this.requestFactory = requestFactory;
 		this.responseConverter = responseConverter;
-		this.args = args;
+		// this.args = args;
 	}
 
 	// We are a final type & this saves clearing state.
 	@Override
 	public KOkHttpCall<T> clone() {
-		return new KOkHttpCall<>(client, requestFactory, responseConverter, args);
+		return new KOkHttpCall<>(client, responseConverter);
 	}
 
 	static final String THREAD_PREFIX = "Retrofit-";
@@ -91,8 +91,8 @@ public   class KOkHttpCall<T> implements Call<T> {
 	}
 
 	private Response<T> execCacheRequest(Request request) {
-		if (responseConverter instanceof KGsonConverter) {
-			KGsonConverter<T> converter = (KGsonConverter<T>) responseConverter;
+		if (responseConverter instanceof GsonConverter) {
+			GsonConverter<T> converter = (GsonConverter<T>) responseConverter;
 			Cache cache = converter.getCache();
 			if (cache == null) {
 				return null;
@@ -165,6 +165,7 @@ public   class KOkHttpCall<T> implements Call<T> {
 			rawCall.cancel();
 		}
 		this.rawCall = rawCall;
+		callback.onstart();
 		rawCall.enqueue(new com.squareup.okhttp.Callback() {
 			private void callFailure(Throwable e) {
 				try {
@@ -184,11 +185,17 @@ public   class KOkHttpCall<T> implements Call<T> {
 
 			@Override
 			public void onFailure(Request request, IOException e) {
+				if (canceled) {
+					return;
+				}
 				callFailure(e);
 			}
 
 			@Override
 			public void onResponse(com.squareup.okhttp.Response rawResponse) {
+				if (canceled) {
+					return;
+				}
 				Response<T> response;
 				try {
 					response = parseResponse(rawResponse, request);
@@ -260,7 +267,7 @@ public   class KOkHttpCall<T> implements Call<T> {
 	// return client.newCall(requestFactory.create(args));
 	// }
 	public Request createRequest() {
-		return requestFactory.create(args);
+		return null;
 	}
 
 	private String getCacheMode(Request request) {
@@ -269,7 +276,7 @@ public   class KOkHttpCall<T> implements Call<T> {
 
 	private Response<T> parseResponse(com.squareup.okhttp.Response rawResponse, com.squareup.okhttp.Request request) throws IOException {
 		ResponseBody rawBody = rawResponse.body();
-
+		// rawResponse.r
 		// Remove the body's source (the only stateful object) so we can pass
 		// the response along.
 		rawResponse = rawResponse.newBuilder().body(new NoContentResponseBody(rawBody.contentType(), rawBody.contentLength())).build();
@@ -293,8 +300,8 @@ public   class KOkHttpCall<T> implements Call<T> {
 		try {
 
 			T body;
-			if (responseConverter instanceof KGsonConverter) {
-				KGsonConverter<T> converter = (KGsonConverter<T>) responseConverter;
+			if (responseConverter instanceof GsonConverter) {
+				GsonConverter<T> converter = (GsonConverter<T>) responseConverter;
 				body = converter.fromBody(catchingBody, request);
 			} else {
 				body = responseConverter.fromBody(catchingBody);
@@ -316,5 +323,10 @@ public   class KOkHttpCall<T> implements Call<T> {
 		if (rawCall != null) {
 			rawCall.cancel();
 		}
+	}
+
+	@Override
+	public boolean isCancel() {
+		return canceled;
 	}
 }

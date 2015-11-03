@@ -27,7 +27,7 @@ public class IOUtils {
             throw new EOFException();
         }
         return b;
-    }
+    } 
 
     public static void writeInt(OutputStream os, int n) throws IOException {
         os.write((n >> 0) & 0xff);
