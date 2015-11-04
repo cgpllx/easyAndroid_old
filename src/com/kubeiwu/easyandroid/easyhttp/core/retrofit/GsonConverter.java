@@ -19,24 +19,19 @@ import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-
-import okio.Buffer;
 
 import com.google.gson.TypeAdapter;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache;
 import com.kubeiwu.easyandroid.easyhttp.pojo.EAResult;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
 import com.squareup.okhttp.internal.Util;
 
 public final class GsonConverter<T> implements Converter<T> {
-	private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
+	public static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
 	public static final String UTF8 = "UTF-8";
 	private final TypeAdapter<T> typeAdapter;
 	private final Cache cache;
@@ -110,16 +105,5 @@ public final class GsonConverter<T> implements Converter<T> {
 		}
 	}
 
-	@Override
-	public RequestBody toBody(T value) {
-		Buffer buffer = new Buffer();
-		Writer writer = new OutputStreamWriter(buffer.outputStream(), Util.UTF_8);
-		try {
-			typeAdapter.toJson(writer, value);
-			writer.flush();
-		} catch (IOException e) {
-			throw new AssertionError(e); // Writing to Buffer does no I/O.
-		}
-		return RequestBody.create(MEDIA_TYPE, buffer.readByteString());
-	}
+
 }

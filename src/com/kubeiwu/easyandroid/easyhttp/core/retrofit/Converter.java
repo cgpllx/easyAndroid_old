@@ -15,25 +15,30 @@
  */
 package com.kubeiwu.easyandroid.easyhttp.core.retrofit;
 
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
- * Convert objects to and from their representation as HTTP bodies. Register a converter with
- * Retrofit using {@link Retrofit.Builder#addConverter(Type, Converter)} or {@link
- * Retrofit.Builder#addConverterFactory(Factory)}.
+ * Convert objects to and from their representation as HTTP bodies. Register a
+ * converter with Retrofit using
+ * {@link Retrofit.Builder#addConverter(Type, Converter)} or
+ * {@link Retrofit.Builder#addConverterFactory(Factory)}.
  */
 public interface Converter<T> {
-  /** Convert an HTTP response body to a concrete object of the specified type. */
-  T fromBody(ResponseBody body) throws IOException;
+	/**
+	 * Convert an HTTP response body to a concrete object of the specified type.
+	 */
+	T fromBody(ResponseBody body) throws IOException;
 
-  /** Convert an object to an appropriate representation for HTTP transport. */
-  RequestBody toBody(T value);
+	/** Convert an object to an appropriate representation for HTTP transport. */
+	// RequestBody toBody1(T value);
 
-  interface Factory {
-    /** Create a converter for {@code type}. Returns null if the type cannot be handled. */
-    Converter<?> get(Type type);
-  }
+	interface Factory {
+		/**
+		 * Create a converter for {@code type}. Returns null if the type cannot
+		 * be handled.
+		 */
+		Converter<?> get(Type type);
+	}
 }
