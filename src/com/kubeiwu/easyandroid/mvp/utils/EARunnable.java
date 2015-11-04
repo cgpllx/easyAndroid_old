@@ -23,12 +23,12 @@ import android.os.AsyncTask;
 import com.kubeiwu.easyandroid.mvp.PresenterLoader;
 import com.kubeiwu.easyandroid.mvp.kabstract.IController;
 
-public abstract class EAThreadRunnable<T> implements Runnable {
+public abstract class EARunnable<T> implements Runnable {
 	private final IController<T> callback;
 	private final Executor callbackExecutor;
 	private final AtomicBoolean mCancelled = new AtomicBoolean();
 
-	public EAThreadRunnable(IController<T> callback, Executor callbackExecutor) {
+	public EARunnable(IController<T> callback, Executor callbackExecutor) {
 		this.callback = callback;
 		this.callbackExecutor = callbackExecutor;
 	}

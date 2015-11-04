@@ -11,11 +11,11 @@ import android.os.Process;
 
 import com.kubeiwu.easyandroid.mvp.PresenterLoader;
 import com.kubeiwu.easyandroid.mvp.kabstract.KPresenter;
-import com.kubeiwu.easyandroid.mvp.utils.EAThreadRunnable;
+import com.kubeiwu.easyandroid.mvp.utils.EARunnable;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleThreadView;
 
 public class EasyThreadPresenter<T> extends KPresenter<ISimpleThreadView<T>, T> {
-	protected EAThreadRunnable<T> eaThreadRunnable;
+	protected EARunnable<T> eaRunnable;
 
 	@Override
 	protected void onCancel() {
@@ -30,21 +30,21 @@ public class EasyThreadPresenter<T> extends KPresenter<ISimpleThreadView<T>, T> 
 	}
 
 	private void cancelRequest() {
-		if (eaThreadRunnable != null) {
-			eaThreadRunnable.cancel();
+		if (eaRunnable != null && !eaRunnable.isCancel()) {
+			eaRunnable.cancel();
 		}
 	}
 
 	public void execute(final Bundle bundle) {
 		cancel();// 先取消之前的事件
 
-		eaThreadRunnable = new EAThreadRunnable<T>(mController, mainExecutor) {
+		eaRunnable = new EARunnable<T>(mController, mainExecutor) {
 			@Override
 			public PresenterLoader<T> creatPresenterLoader() {
 				return getView().onCreatPresenterLoader(getPresenterId(), bundle);
 			}
 		};
-		ioExecutor.execute(eaThreadRunnable);
+		ioExecutor.execute(eaRunnable);
 	}
 
 	public void execute() {
