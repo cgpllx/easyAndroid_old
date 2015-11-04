@@ -28,8 +28,7 @@ import okio.Buffer;
 
 import com.google.gson.TypeAdapter;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache;
-import com.kubeiwu.easyandroid.core.KResult;
-import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Converter;
+import com.kubeiwu.easyandroid.easyhttp.pojo.EAResult;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -80,8 +79,8 @@ public final class GsonConverter<T> implements Converter<T> {
 		com.squareup.okhttp.CacheControl cacheControl = request.cacheControl();
 		if (cacheControl != null) {
 			if (!cacheControl.noCache() && !cacheControl.noStore()) {
-				if (object instanceof KResult) {
-					KResult kResult = (KResult) object;
+				if (object instanceof EAResult) {
+					EAResult kResult = (EAResult) object;
 					if (kResult != null && kResult.isSuccess()) {
 						long now = System.currentTimeMillis();
 						long maxAge = cacheControl.maxAgeSeconds();

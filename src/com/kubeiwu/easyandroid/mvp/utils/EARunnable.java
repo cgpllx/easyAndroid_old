@@ -18,8 +18,6 @@ package com.kubeiwu.easyandroid.mvp.utils;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import android.os.AsyncTask;
-
 import com.kubeiwu.easyandroid.mvp.PresenterLoader;
 import com.kubeiwu.easyandroid.mvp.kabstract.IController;
 

@@ -2,10 +2,10 @@ package com.kubeiwu.easyandroid.mvp.kabstract;
 
 import android.os.Bundle;
 
-import com.kubeiwu.easyandroid.core.KResult;
 import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Call;
 import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Callback;
 import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Response;
+import com.kubeiwu.easyandroid.easyhttp.pojo.EAResult;
 import com.kubeiwu.easyandroid.mvp.view.ISimpleView;
 
 public abstract class KOKHttpPresenter<V extends ISimpleView<T>, T> extends KPresenter<V, T> {
@@ -58,8 +58,8 @@ public abstract class KOKHttpPresenter<V extends ISimpleView<T>, T> extends KPre
 		@Override
 		public void onResponse(Response<T> response) {
 			T t = response.body();
-			if (t != null && t instanceof KResult) {
-				KResult kResult = (KResult) t;
+			if (t != null && t instanceof EAResult) {
+				EAResult kResult = (EAResult) t;
 				if (kResult == null || !kResult.isSuccess()) {
 					mController.error(kResult != null ? kResult.getFailureDesc() : "服务器或网络异常");
 					return;

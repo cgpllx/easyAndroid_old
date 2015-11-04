@@ -24,7 +24,7 @@ import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.subscriptions.Subscriptions;
 
-import com.kubeiwu.easyandroid.core.KResult;
+import com.kubeiwu.easyandroid.easyhttp.pojo.EAResult;
 import com.kubeiwu.easyandroid.mvp.exception.MvpException;
 
 /**
@@ -115,8 +115,8 @@ public final class RxJavaCallAdapterFactory implements CallAdapter.Factory {
 					}
 					try {
 						T t = response.body();
-						if (t != null && t instanceof KResult) {
-							KResult kResult = (KResult) t;
+						if (t != null && t instanceof EAResult) {
+							EAResult kResult = (EAResult) t;
 							if (kResult == null || !kResult.isSuccess()) {
 								subscriber.onError(new MvpException(kResult != null ? kResult.getFailureDesc() : "服务器或网络异常"));
 								return;

@@ -1,6 +1,6 @@
 package com.kubeiwu.easyandroid.text;
 
-import com.kubeiwu.easyandroid.core.KResult;
+import com.kubeiwu.easyandroid.easyhttp.pojo.EAResult;
 
 /**
  * 用来解析登录的返回结果
@@ -11,7 +11,7 @@ import com.kubeiwu.easyandroid.core.KResult;
  * @param <T>
  * 
  */
-public class JsonResult<T> implements KResult {
+public class JsonResult<T> implements EAResult {
 
 	private String code;
 	private String desc;

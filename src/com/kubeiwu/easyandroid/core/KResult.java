@@ -1,17 +1,12 @@
 package com.kubeiwu.easyandroid.core;
 
+import com.kubeiwu.easyandroid.easyhttp.pojo.EAResult;
+
 /**
  * 
- * @author Administrator
- *
+ * 请使用EasyResult
  */
-public interface KResult {
-	/**
-	 * 解析成功的标识
-	 * 
-	 * @return
-	 */
-	public boolean isSuccess();
+@Deprecated
+public interface KResult extends EAResult {
 
-	public String getFailureDesc();
 }
