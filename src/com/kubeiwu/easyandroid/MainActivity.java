@@ -12,7 +12,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kubeiwu.easyandroid.config.EAConfiguration;
 import com.kubeiwu.easyandroid.core.CustomDeserializer;
-import com.kubeiwu.easyandroid.easycore.converter.KRetrofitApiFactory;
 import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Callback;
 import com.kubeiwu.easyandroid.easyhttp.core.retrofit.Response;
 import com.kubeiwu.easyandroid.mvp.presenter.KSimpleNetWorkPresenter;
@@ -41,7 +40,7 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 			gb.registerTypeAdapter(JsonResult.class, new CustomDeserializer());
 			Gson customGson = gb.create();
 			// KRetrofitApiFactory.getInstance().init(this );
-			KRetrofitApiFactory.getInstance().init(new EAConfiguration.Builder(getApplicationContext()).setGson(customGson).build());
+			EasyHttpApiFactory.getInstance().init(new EAConfiguration.Builder(getApplicationContext()).setGson(customGson).build());
 
 			// return;
 		} catch ( Exception e1) {
