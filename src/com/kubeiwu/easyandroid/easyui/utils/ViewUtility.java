@@ -1,4 +1,4 @@
-package com.kubeiwu.easyandroid.easyutils;
+package com.kubeiwu.easyandroid.easyui.utils;
 
 import android.app.Activity;
 import android.view.View;
