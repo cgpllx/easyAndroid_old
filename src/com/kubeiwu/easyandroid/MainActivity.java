@@ -21,9 +21,9 @@ import com.kubeiwu.easyandroid.text.ApiProvider;
 import com.kubeiwu.easyandroid.text.AreaInfo;
 import com.kubeiwu.easyandroid.text.JsonResult;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends FragmentActivity implements ISimpleNetWorkView<JsonResult<List<AreaInfo>>> {
 	TextView hello;
-	@SuppressWarnings("deprecation")
 	KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>> presenter = new KSimpleNetWorkPresenter<JsonResult<List<AreaInfo>>>();
 	Api api;
 
@@ -43,7 +43,7 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 			EasyHttpApiFactory.getInstance().init(new EAConfiguration.Builder(getApplicationContext()).setGson(customGson).build());
 
 			// return;
-		} catch ( Exception e1) {
+		} catch (Exception e1) {
 
 			e1.printStackTrace();
 		}
@@ -65,10 +65,10 @@ public class MainActivity extends FragmentActivity implements ISimpleNetWorkView
 			@Override
 			public void onstart() {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-//		presenter.loadData();
+		// presenter.loadData();
 		presenter.execute();
 	}
 
