@@ -10,7 +10,7 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 
 import com.kubeiwu.easyandroid.easyui.EasyR;
-import com.kubeiwu.easyandroid.easyui.fragment.KFragmentBase.TabConfig.TabGravity;
+import com.kubeiwu.easyandroid.easyui.config.TabConfig.TabGravity;
 import com.kubeiwu.easyandroid.easyui.view.KFragmentTabHostSaveState;
 
 /**

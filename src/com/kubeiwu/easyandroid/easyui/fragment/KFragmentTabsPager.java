@@ -14,6 +14,7 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 
 import com.kubeiwu.easyandroid.easyui.EasyR;
+import com.kubeiwu.easyandroid.easyui.config.TabConfig;
 import com.kubeiwu.easyandroid.easyui.utils.ViewFactory;
 
 /**

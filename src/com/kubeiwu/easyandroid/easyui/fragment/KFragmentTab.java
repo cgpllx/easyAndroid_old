@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kubeiwu.easyandroid.easyui.EasyR;
+import com.kubeiwu.easyandroid.easyui.config.TabConfig;
 import com.kubeiwu.easyandroid.easyui.utils.ViewFactory;
 
 /**
