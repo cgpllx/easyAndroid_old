@@ -4,7 +4,7 @@ import retrofit.KGsonConverterFactory;
 import retrofit.KRetrofit;
 import retrofit.RxJavaCallAdapterFactory;
 
-import com.kubeiwu.easyandroid.config.EAConfiguration;
+import com.kubeiwu.easyandroid.easyhttp.config.EAConfiguration;
 import com.squareup.okhttp.OkHttpClient;
 
 public class EasyHttpApiFactory {

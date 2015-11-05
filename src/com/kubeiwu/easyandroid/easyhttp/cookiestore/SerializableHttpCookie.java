@@ -1,4 +1,4 @@
-package com.kubeiwu.easyandroid.easycore.cookiestore;
+package com.kubeiwu.easyandroid.easyhttp.cookiestore;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

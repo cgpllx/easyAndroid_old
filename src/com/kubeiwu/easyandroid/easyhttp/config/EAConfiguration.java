@@ -1,4 +1,4 @@
-package com.kubeiwu.easyandroid.config;
+package com.kubeiwu.easyandroid.easyhttp.config;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -10,7 +10,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.kubeiwu.easyandroid.cache.Utils;
 import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
-import com.kubeiwu.easyandroid.easycore.cookiestore.PersistentCookieStore;
+import com.kubeiwu.easyandroid.easyhttp.cookiestore.PersistentCookieStore;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 

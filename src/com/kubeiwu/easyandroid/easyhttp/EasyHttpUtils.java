@@ -9,7 +9,7 @@ import rx.Observable;
 
 import com.google.gson.Gson;
 import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
-import com.kubeiwu.easyandroid.config.EAConfiguration;
+import com.kubeiwu.easyandroid.easyhttp.config.EAConfiguration;
 import com.kubeiwu.easyandroid.easyhttp.core.EAOkHttpCall;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpDownloadUtils;
 import com.kubeiwu.easyandroid.easyhttp.core.OkHttpGetUtils;
