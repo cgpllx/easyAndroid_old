@@ -9,7 +9,7 @@ import com.kubeiwu.easyandroid.easyui.EasyR;
 import com.kubeiwu.easyandroid.easyui.config.TabConfig;
 import com.kubeiwu.easyandroid.easyui.pojo.EasyTab;
 import com.kubeiwu.easyandroid.easyui.utils.ViewFactory;
-import com.kubeiwu.easyandroid.easyui.view.KFragmentTabHostSaveState;
+import com.kubeiwu.easyandroid.easyui.view.EasyFragmentTabHostSaveState;
 
 /**
  * Tab+Fragment
@@ -18,7 +18,7 @@ import com.kubeiwu.easyandroid.easyui.view.KFragmentTabHostSaveState;
  *
  */
 public abstract class EasyFragmentTabsSaveState extends EasyTabBaseFragment {
-	protected KFragmentTabHostSaveState mFragmentTabHost;
+	protected EasyFragmentTabHostSaveState mFragmentTabHost;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public abstract class EasyFragmentTabsSaveState extends EasyTabBaseFragment {
 		}
 		
 		View view = ViewFactory.getKFragmentTabHostSaveStateView(inflater.getContext(), tabConfig.getTabGravity());
-		mFragmentTabHost = (KFragmentTabHostSaveState) view.findViewById(android.R.id.tabhost);
+		mFragmentTabHost = (EasyFragmentTabHostSaveState) view.findViewById(android.R.id.tabhost);
 		mFragmentTabHost.setup(view.getContext(), getChildFragmentManager(), EasyR.id.realtabcontent);
 
 		creatTab();

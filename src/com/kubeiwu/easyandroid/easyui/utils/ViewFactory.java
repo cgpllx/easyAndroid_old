@@ -11,7 +11,7 @@ import android.widget.TabWidget;
 
 import com.kubeiwu.easyandroid.easyui.EasyR;
 import com.kubeiwu.easyandroid.easyui.config.TabConfig.TabGravity;
-import com.kubeiwu.easyandroid.easyui.view.KFragmentTabHostSaveState;
+import com.kubeiwu.easyandroid.easyui.view.EasyFragmentTabHostSaveState;
 
 /**
  * @author 耳东 www.kubeiwu.com
@@ -26,9 +26,9 @@ public class ViewFactory {
 	 *            tabs的位置，上面TOP 下面BOTTOM，目前只支持两个
 	 * @return
 	 */
-	public static KFragmentTabHostSaveState getKFragmentTabHostSaveStateView(Context mContext, int gravity) {
+	public static EasyFragmentTabHostSaveState getKFragmentTabHostSaveStateView(Context mContext, int gravity) {
 		// init FragmentTabHost
-		KFragmentTabHostSaveState tabhost = new KFragmentTabHostSaveState(mContext);
+		EasyFragmentTabHostSaveState tabhost = new EasyFragmentTabHostSaveState(mContext);
 		tabhost.setId(android.R.id.tabhost);
 		tabhost.setLayoutParams(new FragmentTabHost.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 

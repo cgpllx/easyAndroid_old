@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 
-public class KFragmentTabHostSaveState extends TabHost implements TabHost.OnTabChangeListener {
+public class EasyFragmentTabHostSaveState extends TabHost implements TabHost.OnTabChangeListener {
 	private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 	private FrameLayout mRealTabContent;
 	private Context mContext;
@@ -91,14 +91,14 @@ public class KFragmentTabHostSaveState extends TabHost implements TabHost.OnTabC
 		};
 	}
 
-	public KFragmentTabHostSaveState(Context context) {
+	public EasyFragmentTabHostSaveState(Context context) {
 		// Note that we call through to the version that takes an AttributeSet,
 		// because the simple Context construct can result in a broken object!
 		super(context, null);
 		initFragmentTabHost(context, null);
 	}
 
-	public KFragmentTabHostSaveState(Context context, AttributeSet attrs) {
+	public EasyFragmentTabHostSaveState(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initFragmentTabHost(context, attrs);
 	}
