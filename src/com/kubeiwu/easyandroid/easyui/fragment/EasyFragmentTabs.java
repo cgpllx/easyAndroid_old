@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.kubeiwu.easyandroid.easyui.EasyR;
 import com.kubeiwu.easyandroid.easyui.config.TabConfig;
+import com.kubeiwu.easyandroid.easyui.pojo.EasyTab;
 import com.kubeiwu.easyandroid.easyui.utils.ViewFactory;
 
 /**
@@ -16,12 +17,12 @@ import com.kubeiwu.easyandroid.easyui.utils.ViewFactory;
  * @author 耳东
  *
  */
-public abstract class KFragmentTab extends KFragmentBase {
+public abstract class EasyFragmentTabs extends EasyTabBaseFragment {
 	protected FragmentTabHost mFragmentTabHost;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		TabConfig tabConfig = getTabConfig();
+		TabConfig tabConfig = onCreatTabConfig();
 
 		if (tabConfig == null) {
 			tabConfig = TabConfig.getSimpleInstance();
@@ -29,17 +30,20 @@ public abstract class KFragmentTab extends KFragmentBase {
 		View view = ViewFactory.getFragmentTabHostView(inflater.getContext(), tabConfig.getTabGravity());
 		mFragmentTabHost = (FragmentTabHost) view.findViewById(android.R.id.tabhost);
 		mFragmentTabHost.setup(view.getContext(), getChildFragmentManager(), EasyR.id.realtabcontent);
-		initTab(mFragmentTabHost);
+		creatTab();
 		int tabcount = mFragmentTabHost.getTabWidget().getChildCount();
 		if (tabcount == 0) {
-			throw new IllegalArgumentException("Please in the initTab method to add Tab Fragment");
+			throw new IllegalArgumentException("Please in the onCreatTab() method to addTab ");
 		}
 		mFragmentTabHost.getTabWidget().setBackgroundResource(tabConfig.getWidgetBackgroundResource());
 		return view;
 	}
-
 	/**
-	 * eg:mTabHost.addTab(mTabHost.newTabSpec("simple").setIndicator( getTabItemView(0)), IndexFragment.class, null);
+	 * eg:EATab eaTab=new EATab(tabSpec, tabView, yourFragment.class, bundle);
 	 */
-	protected abstract void initTab(FragmentTabHost mTabHost);
+	  void addTab(EasyTab eaTab) {
+		mFragmentTabHost.addTab(mFragmentTabHost.newTabSpec(eaTab.getTabSpec())//
+				.setIndicator(eaTab.getTabView()), eaTab.getClass(), eaTab.getBundle());
+	}
+
 }

@@ -15,6 +15,7 @@ import android.widget.TabWidget;
 
 import com.kubeiwu.easyandroid.easyui.EasyR;
 import com.kubeiwu.easyandroid.easyui.config.TabConfig;
+import com.kubeiwu.easyandroid.easyui.pojo.EasyTab;
 import com.kubeiwu.easyandroid.easyui.utils.ViewFactory;
 
 /**
@@ -22,13 +23,14 @@ import com.kubeiwu.easyandroid.easyui.utils.ViewFactory;
  * 
  * @author 耳东 www.kubeiwu.com
  */
-public abstract class KFragmentTabsPager extends KFragmentBase {
+public abstract class EasyFragmentTabsPager extends EasyTabBaseFragment {
 	private TabHost mTabHost;
 	private ViewPager mViewPager;
+	private TabsPagerAdapter mTabsAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		TabConfig tabConfig = getTabConfig();
+		TabConfig tabConfig = onCreatTabConfig();
 		if (tabConfig == null) {
 			tabConfig = TabConfig.getSimpleInstance();
 		}
@@ -36,16 +38,17 @@ public abstract class KFragmentTabsPager extends KFragmentBase {
 		mTabHost.setup();
 
 		mViewPager = (ViewPager) mTabHost.findViewById(EasyR.id.pager);
-		TabsPagerAdapter mTabsAdapter = new TabsPagerAdapter(this, mTabHost, mViewPager);
-		initTab(mTabsAdapter, mTabHost);
+		mTabsAdapter = new TabsPagerAdapter(this, mTabHost, mViewPager);
+
+		creatTab();
 		int tabcount = mTabHost.getTabWidget().getChildCount();
 		if (tabcount == 0) {
-			throw new IllegalArgumentException("Please in the initTab method to add Tab Fragment");
+			throw new IllegalArgumentException("Please in the onCreatTab() method to addTab");
 		}
 		if (tabConfig.getWidgetBackgroundResource() != 0) {
 			mTabHost.getTabWidget().setBackgroundResource(tabConfig.getWidgetBackgroundResource());
 		}
-		if(tabConfig.getWidgetDividerDrawableResId() != 0){
+		if (tabConfig.getWidgetDividerDrawableResId() != 0) {
 			mTabHost.getTabWidget().setDividerDrawable(tabConfig.getWidgetDividerDrawableResId());
 		}
 		return mTabHost;
@@ -56,13 +59,17 @@ public abstract class KFragmentTabsPager extends KFragmentBase {
 	}
 
 	public ViewPager getViewPager() {
+
 		return mViewPager;
 	}
 
 	/**
-	 * eg:mTabsAdapter.addTab(mTabHost.newTabSpec("TabSpec").setIndicator( getTabItemView(0)), YourFragment.class, null);
+	 * eg:EATab eaTab=new EATab(tabSpec, tabView, yourFragment.class, bundle);
 	 */
-	protected abstract void initTab(TabsPagerAdapter mTabsAdapter, TabHost mTabHost);
+	void addTab(EasyTab eaTab) {
+		mTabsAdapter.addTab(mTabHost.newTabSpec(eaTab.getTabSpec())//
+				.setIndicator(eaTab.getTabView()), eaTab.getClass(), eaTab.getBundle());
+	}
 
 	/**
 	 * 适配器

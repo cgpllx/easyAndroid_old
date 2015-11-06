@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.kubeiwu.easyandroid.easyui.EasyR;
 import com.kubeiwu.easyandroid.easyui.config.TabConfig;
+import com.kubeiwu.easyandroid.easyui.pojo.EasyTab;
 import com.kubeiwu.easyandroid.easyui.utils.ViewFactory;
 import com.kubeiwu.easyandroid.easyui.view.KFragmentTabHostSaveState;
 
@@ -16,31 +17,37 @@ import com.kubeiwu.easyandroid.easyui.view.KFragmentTabHostSaveState;
  * @author 耳东
  *
  */
-public abstract class KFragmentTabSaveState extends KFragmentBase {
+public abstract class EasyFragmentTabsSaveState extends EasyTabBaseFragment {
 	protected KFragmentTabHostSaveState mFragmentTabHost;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		TabConfig tabConfig = getTabConfig();
+		TabConfig tabConfig = onCreatTabConfig();
 
 		if (tabConfig == null) {
 			tabConfig = TabConfig.getSimpleInstance();
 		}
+		
 		View view = ViewFactory.getKFragmentTabHostSaveStateView(inflater.getContext(), tabConfig.getTabGravity());
 		mFragmentTabHost = (KFragmentTabHostSaveState) view.findViewById(android.R.id.tabhost);
 		mFragmentTabHost.setup(view.getContext(), getChildFragmentManager(), EasyR.id.realtabcontent);
-		initTab(mFragmentTabHost);
+
+		creatTab();
+
 		int tabcount = mFragmentTabHost.getTabWidget().getChildCount();
 		if (tabcount == 0) {
-			throw new IllegalArgumentException("Please in the initTab method to add Tab Fragment");
+			throw new IllegalArgumentException("Please in the onCreatTab() method to addTab");
 		}
 		mFragmentTabHost.getTabWidget().setBackgroundResource(tabConfig.getWidgetBackgroundResource());
 		return view;
 	}
 
+
 	/**
-	 * eg:mTabHost.addTab(mTabHost.newTabSpec("simple").setIndicator(
-	 * getTabItemView(0)), IndexFragment.class, null);
+	 * eg:EATab eaTab=new EATab(tabSpec, tabView, yourFragment.class, bundle);
 	 */
-	protected abstract void initTab(KFragmentTabHostSaveState mTabHost);
+	  void addTab(EasyTab eaTab) {
+		mFragmentTabHost.addTab(mFragmentTabHost.newTabSpec(eaTab.getTabSpec())//
+				.setIndicator(eaTab.getTabView()), eaTab.getClass(), eaTab.getBundle());
+	}
 }
